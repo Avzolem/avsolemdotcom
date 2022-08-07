@@ -4,10 +4,10 @@ import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
 const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
+  { name: "Portfolio", href: "#" },
+  { name: "CV", href: "#" },
+  { name: "Products", href: "#" },
+  { name: "Examples", href: "#" },
 ];
 
 export default function Example() {
@@ -37,8 +37,8 @@ export default function Example() {
                       <span className="sr-only">Workflow</span>
                       <img
                         alt="Workflow"
-                        className="h-8 w-auto sm:h-10"
-                        src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                        className="h-8 w-auto sm:h-10 fill-primary"
+                        src="/svg-2.svg"
                       />
                     </a>
                     <div className="-mr-2 flex items-center md:hidden">
@@ -61,9 +61,9 @@ export default function Example() {
                   ))}
                   <a
                     href="#"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                    className="font-medium text-primary hover:text-accent"
                   >
-                    Log in
+                    Price
                   </a>
                 </div>
               </nav>
