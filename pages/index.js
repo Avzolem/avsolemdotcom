@@ -1,21 +1,19 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Hero from "../components/Hero";
-import Footer from "../components/Footer";
+import MainLayout from "@/components/layouts/MainLayout";
+import Hero from "@/components/common/Hero";
+
+import ParticlesBackground from "../components/common/ParticlesBackground";
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+}
 
 export default function Home() {
-  return (
-    <>
-      <Head>
-        <title> Avsolem 🦈 </title>
-        <meta name="Online CV Maker" content="A Web Develop in Web" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Hero />
-
-      <Footer />
-    </>
-  );
+    return (
+        <div>
+            <ParticlesBackground />
+            <MainLayout>
+                <Hero />
+            </MainLayout>
+        </div>
+    );
 }
