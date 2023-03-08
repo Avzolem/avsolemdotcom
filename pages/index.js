@@ -9,8 +9,8 @@ function classNames(...classes) {
 
 export default function Home() {
     return (
-        <div>
-            <ParticlesBackground />
+        <div data-theme="">
+            {/* <ParticlesBackground /> */}
             <MainLayout>
                 <Hero />
             </MainLayout>

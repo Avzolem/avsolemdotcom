@@ -8,16 +8,18 @@ import classNames from "@/utils/classNames";
 import { useEffect } from "react";
 import { Router, useRouter } from "next/router";
 import Image from "next/image";
+import { themeChange } from "theme-change";
 
 //HEADER SETUP
 const logoUrl = "/logo.png";
 const navigation = {
     categories: [],
     pages: [
-        { name: "EVENTS", href: "/eventos" },
-        { name: "MY TICKETS", href: "/mistickets" },
-        { name: "CONTACT US", href: "/contact" },
+        { name: "PORTFOLIO", href: "/portfolio" },
+        { name: "CV", href: "/cv" },
+        { name: "CONTACT", href: "/contact" },
         { name: "CANDY MACHINE", href: "/candymachine" },
+        { name: "UTILITIES", href: "/utilities" },
     ],
 };
 let phantom;
@@ -28,6 +30,8 @@ const Header = () => {
     const [publicKey, setPublicKey] = useState(null);
 
     useEffect(() => {
+        themeChange(false);
+
         if ("phantom" in window) {
             const provider = window.phantom?.solana;
             let key = window.localStorage.getItem("publicKey");
@@ -82,23 +86,25 @@ const Header = () => {
     };
 
     return (
-        <Popover className="relative bg-black">
+        <Popover className="relative ">
             <div
-                className="pointer-events-none absolute inset-0 z-20 shadow"
+                className="pointer-events-none absolute inset-0 z-20 shadow "
                 aria-hidden="true"
             />
-            <div className="relative z-20">
+            <div className="relative z-20  bg-base-100">
                 {/* DESKTOP */}
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 sm:py-4 md:justify-start md:space-x-10 lg:px-8">
                     <div>
-                        <Link href="/">
-                            <a className="flex">
-                                <img
-                                    className="h-8 w-auto sm:h-10"
-                                    src={logoUrl}
-                                    alt="aucoin logo"
-                                />
-                            </a>
+                        <Link href="/" className="flex">
+                            <img
+                                className="h-8 mx-2 w-auto sm:h-10"
+                                src={logoUrl}
+                                alt="Avsolem logo"
+                            />
+                            <div className="font-bold text-primary inline-flex text-lg transition-all duration-200 md:text-3xl">
+                                <span className="">Avso</span>
+                                <span className="text-base-content">lem</span>
+                            </div>
                         </Link>
                     </div>
                     <div className="-my-2 -mr-2 md:hidden">
@@ -107,17 +113,137 @@ const Header = () => {
                             <MenuIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
                     </div>
-                    <div className="hidden md:flex md:flex-1 md:items-center md:justify-between">
-                        <Popover.Group as="nav" className="flex space-x-10">
+                    <div className="hidden md:flex md:flex-1 md:items-center md:justify-between ">
+                        <Popover.Group as="nav" className="flex space-x-5">
                             {navigation.pages.map((page) => (
-                                <Link key={page.name} href={page.href}>
-                                    <a className="text-base font-medium text-white hover:text-purple-500">
-                                        {page.name}
-                                    </a>
+                                <Link
+                                    key={page.name}
+                                    href={page.href}
+                                    className="text-base font-medium text-primary"
+                                >
+                                    {page.name}
                                 </Link>
                             ))}
                         </Popover.Group>
-                        {/* HEADER DEKTOP RIGHT SECTION BUTTONS */}
+                        {/* HEADER DESKTOP RIGHT SECTION BUTTONS */}
+
+                        {/* CHANGE THEME BUTTON  */}
+                        <div className="flex justify-end flex-1 px-2">
+                            <div className="flex items-stretch">
+                                <div className="dropdown dropdown-end">
+                                    <div tabindex="0" class="m-1 btn">
+                                        Change Color
+                                    </div>
+                                    <ul
+                                        tabindex="0"
+                                        class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+                                        data-choose-theme=""
+                                    >
+                                        <li>
+                                            <a data-set-theme="masum">Masum</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="emerald">
+                                                emerald
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="light">light</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="dark">dark</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="cupcake">
+                                                cupcake
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="bumblebee">
+                                                bumblebee
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="aqua">aqua</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="corporate">
+                                                corporate
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="synthwave">
+                                                synthwave
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="retro">retro</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="cyberpunk">
+                                                cyberpunk
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="valentine">
+                                                valentine
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="halloween">
+                                                halloween
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="garden">
+                                                garden
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="forest">
+                                                forest
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="lofi">lofi</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="pastel">
+                                                pastel
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="fantasy">
+                                                fantasy
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="wireframe">
+                                                wireframe
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="black">black</a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="luxury">
+                                                luxury
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="dracula">
+                                                dracula
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-set-theme="cmyk">cmyk</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* WALLET BUTTON */}
                         <div className="flex items-center md:ml-12">
                             {publicKey ? (
                                 <Menu as="div" className="relative ml-3">
@@ -151,34 +277,32 @@ const Header = () => {
                                         <Menu.Items className="absolute right-0 z-40 mt-2 w-48 origin-top-right rounded-md bg-black py-1 shadow-lg ring-1 ring-white ring-opacity-5 focus:outline-none">
                                             <Menu.Item>
                                                 {({ active }) => (
-                                                    <Link href="/user/profile">
-                                                        <a
-                                                            className={classNames(
-                                                                active
-                                                                    ? "bg-gray-100"
-                                                                    : "",
-                                                                "block px-4 py-2 text-sm text-white"
-                                                            )}
-                                                        >
-                                                            Mi Cuenta
-                                                        </a>
+                                                    <Link
+                                                        href="/user/profile"
+                                                        className={classNames(
+                                                            active
+                                                                ? "bg-gray-100"
+                                                                : "",
+                                                            "block px-4 py-2 text-sm text-white"
+                                                        )}
+                                                    >
+                                                        Mi Cuenta
                                                     </Link>
                                                 )}
                                             </Menu.Item>
                                             {true && (
                                                 <Menu.Item>
                                                     {({ active }) => (
-                                                        <Link href="/admin/dashboard">
-                                                            <a
-                                                                className={classNames(
-                                                                    active
-                                                                        ? "bg-black"
-                                                                        : "",
-                                                                    "block px-4 py-2 text-sm text-white"
-                                                                )}
-                                                            >
-                                                                Admin Dashboard
-                                                            </a>
+                                                        <Link
+                                                            href="/admin/dashboard"
+                                                            className={classNames(
+                                                                active
+                                                                    ? "bg-black"
+                                                                    : "",
+                                                                "block px-4 py-2 text-sm text-white"
+                                                            )}
+                                                        >
+                                                            Admin Dashboard
                                                         </Link>
                                                     )}
                                                 </Menu.Item>
@@ -211,7 +335,7 @@ const Header = () => {
                                         connectWallet();
                                     }}
                                 >
-                                    <a>Conectar cartera </a>
+                                    <a>Conect Wallet</a>
                                 </button>
                             )}
                         </div>
@@ -238,14 +362,12 @@ const Header = () => {
                             <div className="flex items-center justify-between">
                                 <div>
                                     <Link href="/">
-                                        <a>
-                                            {" "}
-                                            <img
-                                                className="h-8 w-auto"
-                                                src={logoUrl}
-                                                alt="logo"
-                                            />
-                                        </a>
+                                        {" "}
+                                        <img
+                                            className="h-8 w-auto"
+                                            src={logoUrl}
+                                            alt="logo"
+                                        />
                                     </Link>
                                 </div>
                                 <div className="-mr-2">
@@ -261,10 +383,12 @@ const Header = () => {
                         <div className="py-6 px-5">
                             <div className="grid grid-cols-2 gap-4">
                                 {navigation.pages.map((page) => (
-                                    <Link key={page.name} href={page.href}>
-                                        <a className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700">
-                                            {page.name}
-                                        </a>
+                                    <Link
+                                        key={page.name}
+                                        href={page.href}
+                                        className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700"
+                                    >
+                                        {page.name}
                                     </Link>
                                 ))}
                             </div>

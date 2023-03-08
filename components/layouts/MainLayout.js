@@ -12,7 +12,7 @@ const Layout = ({
     ...rest
 }) => {
     return (
-        <div className="flex flex-col h-screen justify-between">
+        <div className="relative flex flex-col h-screen justify-between">
             <Head>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
