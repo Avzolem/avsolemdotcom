@@ -1,12 +1,7 @@
 import SocialIcon from "@/components/icons/Social";
 //EDIT ME PLEASE
-const copyrightLabel = `©${new Date().getFullYear()} HackDogs. All rights reserved.`;
+const copyrightLabel = `©${new Date().getFullYear()} Avsolem. A web made in the web.`;
 const socialLink = [
-    {
-        name: "Facebook",
-        href: "#",
-        icon: "facebook",
-    },
     {
         name: "Instagram",
         href: "https://www.instagram.com/avsolem/",
@@ -38,16 +33,16 @@ const Footer = () => {
                         <a
                             key={item.name}
                             href={item.href}
-                            className="text-white "
+                            className="text-primary "
                         >
-                            <div className="iconcontainer h-6 w-6 cursor-pointer text-white hover:text-purple-500">
+                            <div className="iconcontainer h-6 w-6 cursor-pointer text-primary hover:text-accent">
                                 <SocialIcon type={item.icon} />
                             </div>
                         </a>
                     ))}
                 </div>
                 <div className="mt-8 md:order-1 md:mt-0">
-                    <p className="text-center text-base text-white hover:text-purple-500">
+                    <p className="text-center text-primary hover:text-accent">
                         {copyrightLabel}
                     </p>
                 </div>

@@ -12,6 +12,7 @@ import { themeChange } from "theme-change";
 
 //HEADER SETUP
 const logoUrl = "/logo.png";
+
 const navigation = {
     categories: [],
     pages: [
@@ -96,14 +97,16 @@ const Header = () => {
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 sm:py-4 md:justify-start md:space-x-10 lg:px-8">
                     <div>
                         <Link href="/" className="flex">
-                            <img
+                            {/* <img
                                 className="h-8 mx-2 w-auto sm:h-10"
                                 src={logoUrl}
                                 alt="Avsolem logo"
-                            />
+                            /> */}
                             <div className="font-bold text-primary inline-flex text-lg transition-all duration-200 md:text-3xl">
                                 <span className="">Avso</span>
-                                <span className="text-base-content">lem</span>
+                                <span className="text-base-content">
+                                    lem 🦈
+                                </span>
                             </div>
                         </Link>
                     </div>
@@ -330,7 +333,7 @@ const Header = () => {
                                 </Menu>
                             ) : (
                                 <button
-                                    className="rounded-md bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700"
+                                    className="rounded-md btn px-4 py-2 text-sm font-medium text-base-100 hover:bg-accent"
                                     onClick={() => {
                                         connectWallet();
                                     }}
