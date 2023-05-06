@@ -19,7 +19,7 @@ const socialLink = [
     },
     {
         name: "Discord",
-        href: "https://discord.gg/cvQyBHF2Dz",
+        href: "https://discord.gg/AhSERBy467",
         icon: "discord",
     },
 ];

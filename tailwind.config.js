@@ -18,8 +18,30 @@ module.exports = {
         logs: true,
         rtl: false,
         prefix: "",
-        darkTheme: "dark",
+        darkTheme: "avsolem",
         themes: [
+            {
+                avsolem: {
+                    primary: "#ffffff",
+
+                    secondary: "#9ca3af",
+
+                    accent: "#f59e0b",
+
+                    neutral: "#9ca3af",
+
+                    "base-100": "#000000",
+
+                    info: "#1888F2",
+
+                    success: "#71EAAB",
+
+                    warning: "#9B7F0D",
+
+                    error: "#ED706E",
+                },
+            },
+            "lofi",
             "light",
             "dark",
             "cupcake",
@@ -34,7 +56,7 @@ module.exports = {
             "garden",
             "forest",
             "aqua",
-            "lofi",
+
             "pastel",
             "fantasy",
             "wireframe",

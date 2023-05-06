@@ -12,16 +12,17 @@ const Layout = ({
     ...rest
 }) => {
     return (
-        <div className="relative flex flex-col h-screen justify-between">
+        <div className="">
             <Head>
+                <title>Avsolem</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Seo subtitle={title} description={description} />
-            <div {...rest}>
+            <div className="flex min-h-screen w-full flex-col " {...rest}>
                 <Header />
                 <Toaster position="bottom-center" reverseOrder={false} />
                 <div className={`my-0 ${childrenClassName}`}>{children}</div>
-                <Footer />
+                <Footer className="bottom-0" />
             </div>
         </div>
     );

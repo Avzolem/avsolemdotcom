@@ -1,14 +1,20 @@
 import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
+import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import AuthContextProvider from "@/components/AuthProvider";
+
+const activeChainId = ChainId.SolanaDevnet;
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     return (
         <>
             <SessionProvider session={session}>
-                <Component {...pageProps} />
+                <ThirdwebProvider desiredChainId={activeChainId}>
+                    <AuthContextProvider>
+                        <Component {...pageProps} />
+                    </AuthContextProvider>
+                </ThirdwebProvider>
             </SessionProvider>
         </>
     );

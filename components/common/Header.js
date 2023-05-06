@@ -16,11 +16,13 @@ const logoUrl = "/logo.png";
 const navigation = {
     categories: [],
     pages: [
-        { name: "PORTFOLIO", href: "/portfolio" },
-        { name: "CV", href: "/cv" },
+        // { name: "CV", href: "/cv" },
         { name: "CONTACT", href: "/contact" },
-        { name: "CANDY MACHINE", href: "/candymachine" },
-        { name: "UTILITIES", href: "/utilities" },
+        // { name: "CANDY MACHINE", href: "/candymachine" },
+        // { name: "UTILITIES", href: "/utilities" },
+        { name: "TOOLBOX", href: "/" },
+        { name: "PROJECTS", href: "https://github.com/Avzolem" },
+        { name: "NFTS", href: "/nfts" },
     ],
 };
 let phantom;
@@ -94,7 +96,7 @@ const Header = () => {
             />
             <div className="relative z-20  bg-base-100">
                 {/* DESKTOP */}
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 sm:py-4 md:justify-start md:space-x-10 lg:px-8">
+                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 sm:py-4   md:justify-start md:space-x-10 lg:px-8">
                     <div>
                         <Link href="/" className="flex">
                             {/* <img
@@ -104,9 +106,7 @@ const Header = () => {
                             /> */}
                             <div className="font-bold text-primary inline-flex text-lg transition-all duration-200 md:text-3xl">
                                 <span className="">Avso</span>
-                                <span className="text-base-content">
-                                    lem 🦈
-                                </span>
+                                <span className="text-secondary">lem 🦈</span>
                             </div>
                         </Link>
                     </div>
@@ -122,7 +122,7 @@ const Header = () => {
                                 <Link
                                     key={page.name}
                                     href={page.href}
-                                    className="text-base font-medium text-primary"
+                                    className="text-base hover:text-accent font-medium text-primary"
                                 >
                                     {page.name}
                                 </Link>
@@ -134,14 +134,19 @@ const Header = () => {
                         <div className="flex justify-end flex-1 px-2">
                             <div className="flex items-stretch">
                                 <div className="dropdown dropdown-end">
-                                    <div tabindex="0" class="m-1 btn">
+                                    <div tabIndex="0" class="m-1 btn">
                                         Change Color
                                     </div>
                                     <ul
-                                        tabindex="0"
+                                        tabIndex="0"
                                         class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
                                         data-choose-theme=""
                                     >
+                                        <li>
+                                            <a data-set-theme="avsolem">
+                                                Avsolem
+                                            </a>
+                                        </li>
                                         <li>
                                             <a data-set-theme="masum">Masum</a>
                                         </li>
@@ -244,103 +249,6 @@ const Header = () => {
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* WALLET BUTTON */}
-                        <div className="flex items-center md:ml-12">
-                            {publicKey ? (
-                                <Menu as="div" className="relative ml-3">
-                                    <div>
-                                        <Menu.Button className="flex rounded-full bg-purple-500 text-sm focus:outline-none focus:ring-white  focus:ring-offset-2">
-                                            <span className="sr-only">
-                                                Open user menu
-                                            </span>
-
-                                            <Image
-                                                className="rounded-full px-1 py-2"
-                                                width={32}
-                                                height={32}
-                                                src="/images/phantom.png"
-                                                alt=""
-                                            />
-                                            <div className="px-1 py-2 text-white">
-                                                {publicKey}
-                                            </div>
-                                        </Menu.Button>
-                                    </div>
-                                    <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-100"
-                                        enterFrom="transform opacity-0 scale-95"
-                                        enterTo="transform opacity-100 scale-100"
-                                        leave="transition ease-in duration-75"
-                                        leaveFrom="transform opacity-100 scale-100"
-                                        leaveTo="transform opacity-0 scale-95"
-                                    >
-                                        <Menu.Items className="absolute right-0 z-40 mt-2 w-48 origin-top-right rounded-md bg-black py-1 shadow-lg ring-1 ring-white ring-opacity-5 focus:outline-none">
-                                            <Menu.Item>
-                                                {({ active }) => (
-                                                    <Link
-                                                        href="/user/profile"
-                                                        className={classNames(
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm text-white"
-                                                        )}
-                                                    >
-                                                        Mi Cuenta
-                                                    </Link>
-                                                )}
-                                            </Menu.Item>
-                                            {true && (
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <Link
-                                                            href="/admin/dashboard"
-                                                            className={classNames(
-                                                                active
-                                                                    ? "bg-black"
-                                                                    : "",
-                                                                "block px-4 py-2 text-sm text-white"
-                                                            )}
-                                                        >
-                                                            Admin Dashboard
-                                                        </Link>
-                                                    )}
-                                                </Menu.Item>
-                                            )}
-
-                                            <Menu.Item>
-                                                {({ active }) => (
-                                                    <div
-                                                        className={classNames(
-                                                            active
-                                                                ? "bg-black"
-                                                                : "",
-                                                            "block cursor-pointer px-4 py-2 text-sm text-white"
-                                                        )}
-                                                        onClick={() =>
-                                                            signOutWallet()
-                                                        }
-                                                    >
-                                                        Salir
-                                                    </div>
-                                                )}
-                                            </Menu.Item>
-                                        </Menu.Items>
-                                    </Transition>
-                                </Menu>
-                            ) : (
-                                <button
-                                    className="rounded-md btn px-4 py-2 text-sm font-medium text-base-100 hover:bg-accent"
-                                    onClick={() => {
-                                        connectWallet();
-                                    }}
-                                >
-                                    <a>Conect Wallet</a>
-                                </button>
-                            )}
                         </div>
                     </div>
                 </div>

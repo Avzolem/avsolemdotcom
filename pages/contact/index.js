@@ -372,7 +372,7 @@ const ContactPage = () => {
                                 <div className="sm:col-span-2">
                                     <button
                                         type="submit"
-                                        className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 font-medium text-base-content shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent-focus focus:ring-offset-2"
+                                        className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 font-medium text-secondary shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-accent-focus focus:ring-offset-2"
                                     >
                                         ¡Let's Talk!
                                     </button>
