@@ -3,7 +3,6 @@ import classNames from "@/utils/classNames";
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
 import { useForm } from "react-hook-form";
-import ParticlesBackground from "../../components/common/ParticlesBackground";
 
 const ContactPage = () => {
     const [agreed, setAgreed] = useState(false);

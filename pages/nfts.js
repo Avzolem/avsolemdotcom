@@ -229,7 +229,7 @@ const WalletStep = () => {
                     </button>
                     <br />
                     <h1 className="text-white text-center text-base mt-4">
-                        <a href="/" className="text-emerald-400 underline">
+                        <a href="/" className="text-purple-400 underline">
                             Regresar a la página principal
                         </a>
                     </h1>

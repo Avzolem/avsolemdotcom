@@ -3,12 +3,6 @@ import { Fragment, useState } from "react";
 import Link from "next/link";
 import { Popover, Transition, Menu } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { useSession, signOut } from "next-auth/react";
-import classNames from "@/utils/classNames";
-import { useEffect } from "react";
-import { Router, useRouter } from "next/router";
-import Image from "next/image";
-import { themeChange } from "theme-change";
 
 //HEADER SETUP
 const logoUrl = "/logo.png";
@@ -28,66 +22,6 @@ const navigation = {
 let phantom;
 
 const Header = () => {
-    const { data: session } = useSession();
-    const router = useRouter();
-    const [publicKey, setPublicKey] = useState(null);
-
-    useEffect(() => {
-        themeChange(false);
-
-        if ("phantom" in window) {
-            const provider = window.phantom?.solana;
-            let key = window.localStorage.getItem("publicKey");
-            if (key) {
-                let firstFour = key?.substring(0, 4);
-                let lastFour = key?.substring(key?.length - 4);
-                key = firstFour + "..." + lastFour;
-                setPublicKey(key);
-            }
-
-            if (provider?.isPhantom) {
-                console.log(provider);
-                phantom = provider;
-            }
-        }
-    }, []);
-
-    const connectWallet = async () => {
-        if ("phantom" in window) {
-            const provider = window.phantom?.solana;
-            if (provider?.isPhantom) {
-                phantom = provider;
-                try {
-                    const { solana } = window;
-
-                    if (solana.isPhantom) {
-                        console.log("Phantom wallet is installed");
-                        const response = await phantom.connect();
-                        console.log(response.publicKey.toString());
-                        //loginWithPhantom();
-                        router.push("/auth/signin");
-                    } else {
-                        console.log("Phantom wallet is not installed");
-                        window.open("https://phantom.app/", "_blank");
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-            } else {
-                console.log("Phantom wallet is not installed");
-            }
-        } else {
-            window.open("https://phantom.app/", "_blank");
-        }
-    };
-
-    const signOutWallet = () => {
-        console.log("sign out");
-        window.localStorage.removeItem("publicKey");
-        window.localStorage.removeItem("signature");
-        router.reload(window.location.pathname);
-    };
-
     return (
         <Popover className="relative ">
             <div
