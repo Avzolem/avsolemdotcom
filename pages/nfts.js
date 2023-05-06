@@ -52,7 +52,7 @@ const WalletStep = () => {
             let file = null;
 
             setStatusText("Generando tu NFT 📃 ");
-            const cloudinaryURL = `https://res.cloudinary.com/dyalnhdcl/image/upload/v1683363478/redshark_k42apo.png`;
+            const cloudinaryURL = `https://res.cloudinary.com/dyalnhdcl/image/upload/v1683376579/Design_n_Blockchain_riguu0.png`;
 
             await fetch(cloudinaryURL)
                 .then((res) => res.blob())
