@@ -6,13 +6,13 @@ const activeChainId = ChainId.SolanaDevnet;
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     return (
-        <>
+        <div data-theme="">
             <ThirdwebProvider desiredChainId={activeChainId}>
                 <AuthContextProvider>
                     <Component {...pageProps} />
                 </AuthContextProvider>
             </ThirdwebProvider>
-        </>
+        </div>
     );
 }
 

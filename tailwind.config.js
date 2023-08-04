@@ -19,6 +19,7 @@ module.exports = {
         rtl: false,
         prefix: "",
         darkTheme: "avsolem",
+        default: "avsolem",
         themes: [
             {
                 avsolem: {

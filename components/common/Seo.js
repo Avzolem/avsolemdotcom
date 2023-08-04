@@ -3,7 +3,7 @@ import { NextSeo } from "next-seo";
 //EDIT ME PLEASE
 const data = {
     siteName: "avsolem.com",
-    title: "Avsolem",
+    title: "⧍VSOLEM",
     description: "I'm Andrés Aguilar ☠ Tech Enthusiast & Amateur Web Developer",
     url: "https://avsolem.com",
     imageUrl: "/og.png",
