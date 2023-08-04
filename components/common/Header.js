@@ -67,9 +67,8 @@ const Header = () => {
                         <div
                             title="Change Theme"
                             class=" dropdown dropdown-end"
-                            
                         >
-                            <div tabindex="0" class="btn normal-case btn-ghost" >
+                            <div tabindex="0" class="btn normal-case btn-ghost">
                                 <svg
                                     width="20"
                                     height="20"
@@ -98,14 +97,10 @@ const Header = () => {
                                     <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
                                 </svg>
                             </div>{" "}
-                            <div
-                                
-                                class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[70vh] max-h-96 w-56 overflow-y-auto shadow mt-16"
-                            >
+                            <div class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[70vh] max-h-96 w-56 overflow-y-auto shadow mt-16">
                                 <div
                                     class="grid grid-cols-1 gap-3 p-3"
                                     tabindex="0"
-                                    
                                 >
                                     <button
                                         class="outline-base-content overflow-hidden rounded-lg text-left"
