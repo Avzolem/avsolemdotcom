@@ -20,7 +20,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "@thirdweb-dev/react": "^3.11.9",
     "autoprefixer": "^10.4.13",
-    "axios": "^1.4.0",
+    "axios": "^1.5.1",
     "cloudinary": "^1.35.0",
     "daisyui": "^2.51.3",
     "date-fns": "^2.29.3",
@@ -36,12 +36,13 @@
     "react-countdown": "^2.3.5",
     "react-countdown-circle-timer": "^3.1.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.4",
+    "react-hook-form": "^7.47.0",
     "react-hot-toast": "^2.4.1",
     "react-scripts": "^5.0.1",
     "react-tsparticles": "^2.7.1",
     "theme-change": "^2.5.0",
-    "tsparticles": "^2.7.1"
+    "tsparticles": "^2.7.1",
+    "whatsapp-cloud-api": "^0.3.1"
   },
   "devDependencies": {
     "eslint": "8.21.0",
