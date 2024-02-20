@@ -8,18 +8,34 @@ export default async function handler(req, res) {
 
     const waData = {
         to: to,
-        template: "notificacionesdgv",
+        template: "mensajesmasivospan",
         locale: "es_MX",
         components: [
             {
-                type: "body",
+                type: "header",
                 parameters: [
                     {
+
+                        type: "image",
+                        image: {
+                            link: "https://www.avsolem.com/images/maracashark.png", 
+                          }
+                    },
+                    
+                ],
+
+
+                
+            },
+            {type: "body",
+                parameters: [
+                    {
+
                         type: "text",
                         text: message,
                     },
-                ],
-            },
+                    
+                ],}
         ],
     };
     const response = await notifications.sendWhatsappTemplate(waData);
