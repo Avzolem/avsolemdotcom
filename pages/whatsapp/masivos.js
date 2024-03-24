@@ -3,7 +3,45 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import axios from "axios";
 
-const WhatsappIndex = () => {
+const handleDownload = (jsonData) => () => {
+    const jsonContent = JSON.stringify(jsonData, null, 2);
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "datos.json");
+    document.body.appendChild(link);
+
+    link.click();
+
+    // Limpiar después de la descarga
+    URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+};
+
+function readJsonFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            try {
+                const jsonData = JSON.parse(event.target.result);
+                resolve(jsonData);
+            } catch (error) {
+                reject(error);
+            }
+        };
+
+        reader.onerror = (error) => {
+            reject(error);
+        };
+
+        reader.readAsText(file);
+    });
+}
+
+const Masivos = () => {
     const {
         register,
         handleSubmit,
@@ -11,26 +49,51 @@ const WhatsappIndex = () => {
         formState: { errors },
     } = useForm();
 
+    const [successfulPhones, setSuccessfulPhones] = useState([]);
+    const [failedPhones, setFailedPhones] = useState([]);
+    const [totalPhonesNumber, setTotalPhonesNumber] = useState(0);
+    const successfulCounter = successfulPhones.length;
+    const failedCounter = failedPhones.length;
+    const totalCounter = successfulCounter + failedCounter;
+
     const [loading, setLoading] = useState(false);
 
     const onSubmit = async (data) => {
+        // clear old data
+        setSuccessfulPhones([]);
+        setFailedPhones([]);
+
         console.log("data =>", data);
         setLoading(true);
-        //todo: format phone
 
         const { to, message } = data;
 
-        try {
-            const waData = {
-                to,
-                message,
-            };
-            await axios.post("/api/sendwhatsapp", waData);
-            toast.success("Mensaje enviado");
-        } catch (error) {
-            console.error("ocurrio un error", error);
-            toast.error("Ocurrio un error");
+        const phones = await readJsonFile(to[0]);
+        console.log("phones =>", phones);
+        setTotalPhonesNumber(phones.length);
+
+        for (const [index, phone] of phones.entries()) {
+            try {
+                // Simulate a request to the API
+                const { data: response, error } = await axios.post(
+                    "/api/sendwhatsapp",
+                    {
+                        to: phone,
+                        message,
+                    }
+                );
+                if (error) {
+                    console.log(error);
+                    throw error;
+                }
+                console.log("Exitoso✅", response);
+                setSuccessfulPhones((prev) => [...prev, phone]);
+                // ["123123", "exitoso"]
+            } catch (error) {
+                setFailedPhones((prev) => [...prev, { phone, error }]);
+            }
         }
+
         setLoading(false);
     };
 
@@ -53,11 +116,12 @@ const WhatsappIndex = () => {
                     {/* register your input into the hook by invoking the "register" function */}
                     <div className="my-5 flex flex-col items-center">
                         <label className="font-bold text-white text-2xl my-2">
-                            Numero de destino
+                            Numeros de destino
                         </label>
                         <input
-                            placeholder="+526141707685"
                             name="to"
+                            type="file"
+                            accept=".json"
                             {...register("to", { required: true })}
                         />
                         {errors.to && (
@@ -93,7 +157,7 @@ const WhatsappIndex = () => {
                             >
                                 <span class="flex items-center">
                                     <span class="pr-6 font-bold text-gray-100">
-                                        {loading ? "Cargando.." : "Enviar "}
+                                        {loading ? "Cargando..." : "Enviar "}
                                     </span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -107,6 +171,39 @@ const WhatsappIndex = () => {
                                 </span>
                             </button>
                         </div>
+                        {totalPhonesNumber > 0 && (
+                            <h4>
+                                Process:{" "}
+                                {(
+                                    (totalCounter / totalPhonesNumber) *
+                                    100
+                                ).toFixed(2)}
+                                %
+                            </h4>
+                        )}
+
+                        {successfulPhones.length > 0 && (
+                            <>
+                                <p>exitosos: {successfulCounter}</p>
+                                <button
+                                    type="button"
+                                    onClick={handleDownload(successfulPhones)}
+                                >
+                                    Descargar telefonos exitosos
+                                </button>
+                            </>
+                        )}
+                        {failedPhones.length > 0 && (
+                            <>
+                                <p>fallidos: {failedCounter}</p>
+                                <button
+                                    type="button"
+                                    onClick={handleDownload(failedPhones)}
+                                >
+                                    Descargar telefonos fallidos
+                                </button>
+                            </>
+                        )}
                     </div>
                 </form>
             </div>
@@ -114,4 +211,4 @@ const WhatsappIndex = () => {
     );
 };
 
-export default WhatsappIndex;
+export default Masivos;
