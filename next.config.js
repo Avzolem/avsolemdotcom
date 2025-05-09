@@ -15,6 +15,11 @@ const nextConfig = {
                 destination: "http://lptutoriales.es/henlo",
                 permanent: true,
             },
+            {
+                source: "/roms",
+                destination: "https://r-roms.github.io/",
+                permanent: true,
+            },
         ];
     },
 
