@@ -1,8 +1,12 @@
+'use client'
+
 import { AuthContext } from "@/components/AuthProvider";
 import { useContext } from "react";
 import LoadingCircle from "@/components/common/LoadingCircle";
 import { useState } from "react";
 import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
 
 import { useStorageUpload } from "@thirdweb-dev/react";
 import toast, { Toaster } from "react-hot-toast";
@@ -30,7 +34,7 @@ const WalletStep = () => {
 
     const { mutateAsync: upload } = useStorageUpload();
 
-    const uploadToIpfs = async (file) => {
+    const uploadToIpfs = async (file: File) => {
         const uploadUrl = await upload({
             data: [file],
             options: {
@@ -44,11 +48,7 @@ const WalletStep = () => {
     const generateCertificate = async () => {
         setIsLoading(true);
 
-        //update in db the user is minted
-
         try {
-            // setStatusText("Por favor confirma la transacción en tu wallet 👻 ");
-            // const explorerLink = await sendTransaction(price);
             let file = null;
 
             setStatusText("Generando tu NFT 📃 ");
@@ -57,8 +57,6 @@ const WalletStep = () => {
             await fetch(cloudinaryURL)
                 .then((res) => res.blob())
                 .then((myBlob) => {
-                    // logs: Blob { size: 1024, type: "image/jpeg" }
-
                     myBlob.name = "certificado.png";
 
                     file = new File([myBlob], "image.png", {
@@ -66,7 +64,7 @@ const WalletStep = () => {
                     });
                 });
 
-            const uploadUrl = await uploadToIpfs(file);
+            const uploadUrl = await uploadToIpfs(file!);
 
             const mintedData = {
                 name,
@@ -103,7 +101,7 @@ const WalletStep = () => {
             <span className="text-white text-8xl pb-7 font-bold">
                 Design n' Blockchain
             </span>{" "}
-            <img src="/images/cubos.png" className="w-[300px] h-[300px] mb-4" />
+            <Image src="/images/cubos.png" className="w-[300px] h-[300px] mb-4" alt="cubos" width={300} height={300} />
             <br />
             {publicKey ? (
                 <>
@@ -112,11 +110,12 @@ const WalletStep = () => {
                             {solanaExplorerLink ? (
                                 <div className="successcontainer text-center">
                                     {uploadUrl && (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img
+                                        <Image
                                             src={uploadUrl}
                                             alt="Certificado"
                                             className="w-[400px] h-[400px] mb-4"
+                                            width={400}
+                                            height={400}
                                         />
                                     )}
                                     <p className="text-white text-3xl font-bold">
@@ -229,9 +228,9 @@ const WalletStep = () => {
                     </button>
                     <br />
                     <h1 className="text-white text-center text-base mt-4">
-                        <a href="/" className="text-purple-400 underline">
+                        <Link href="/" className="text-purple-400 underline">
                             Regresar a la página principal
-                        </a>
+                        </Link>
                     </h1>
                 </>
             )}

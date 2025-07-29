@@ -1,5 +1,8 @@
+'use client'
+
 import MainLayout from "@/components/layouts/MainLayout";
-import ParticlesBackground from "../components/common/ParticlesBackground";
+import ParticlesBackground from "@/components/common/ParticlesBackground";
+import Image from "next/image";
 
 export default function Candymachine() {
     return (
@@ -15,11 +18,13 @@ export default function Candymachine() {
                         </h2>
 
                         <div className="mt-8 flex justify-center">
-                            <div class="w-full">
-                                <img
+                            <div className="w-full">
+                                <Image
                                     src="/images/boletos.png"
-                                    class="w-[40rem] "
+                                    className="w-[40rem] "
                                     alt="boletos"
+                                    width={640}
+                                    height={400}
                                 />
                             </div>
                         </div>

@@ -1,3 +1,5 @@
+'use client'
+
 import MainLayout from "@/components/layouts/MainLayout";
 import classNames from "@/utils/classNames";
 import { useState } from "react";
@@ -13,21 +15,18 @@ const ContactPage = () => {
         formState: { errors },
     } = useForm();
 
-    // SUBMIT FUNCTION
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: any) => {
         setGlobalError("");
         if (!agreed) {
             setGlobalError("You must agree to the terms and conditions");
             return;
         }
 
-        //DO WHATEVER YOU WANT HERE
         console.log("SUBMITED DATA =>", data);
     };
 
     return (
         <div>
-            {/* <ParticlesBackground /> */}
             <MainLayout className="relative">
                 <div className="overflow-hidden py-16 px-4 sm:px-6 lg:px-8 lg:py-24">
                     <div className="relative mx-auto max-w-xl">

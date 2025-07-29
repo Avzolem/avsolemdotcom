@@ -7,7 +7,7 @@ import {
     LAMPORTS_PER_SOL,
     clusterApiUrl,
 } from "@solana/web3.js";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 export const AuthContext = createContext();
 import toast from "react-hot-toast";
 const treasuryPublicKey = process.env.NEXT_PUBLIC_PAYER_PUBLIC;
@@ -80,7 +80,7 @@ const AuthContextProvider = (props) => {
             solana.disconnect();
             toast.error("Wallet disconnected 💀");
             setTimeout(() => {
-                router.reload(window?.location?.pathname);
+                router.refresh();
             }, 2000);
         }
     };

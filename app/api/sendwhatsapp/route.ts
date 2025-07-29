@@ -1,11 +1,10 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { NextRequest, NextResponse } from 'next/server';
 import notifications from "@/lib/bulker";
 
-export default async function handler(req, res) {
+export async function POST(request: NextRequest) {
     try {
-        const { to, message } = req.body;
-
-        //todo: validate to and message
+        const body = await request.json();
+        const { to, message } = body;
 
         const waData = {
             to: to,
@@ -36,8 +35,8 @@ export default async function handler(req, res) {
         };
         const response = await notifications.sendWhatsappTemplate(waData);
 
-        res.status(200).json({ response });
+        return NextResponse.json({ response });
     } catch (error) {
-        res.status(500).json({ error });
+        return NextResponse.json({ error }, { status: 500 });
     }
 }

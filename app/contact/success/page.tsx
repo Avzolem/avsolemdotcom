@@ -1,7 +1,11 @@
+'use client'
+
 import MainLayout from "@/components/layouts/MainLayout";
 import ParticlesBackground from "@/components/common/ParticlesBackground";
+import Image from "next/image";
+import Link from "next/link";
 
-const ContactPage = () => {
+const ContactSuccessPage = () => {
     return (
         <div>
             <ParticlesBackground />
@@ -17,7 +21,7 @@ const ContactPage = () => {
                                 <h2 className="text-hybrida-fuchsia pt-20 text-3xl font-bold tracking-tight sm:text-4xl">
                                     ¡Gracias por tu compra!
                                 </h2>
-                                <p className="mt-4 pb-6  text-lg leading-6 text-black">
+                                <div className="mt-4 pb-6  text-lg leading-6 text-black">
                                     <h2>
                                         Tu boleto ha sido enviado a tu historial
                                         de transferencias de tu wallet.
@@ -39,7 +43,7 @@ const ContactPage = () => {
                                                 href="mailto:hybrida@uach.mx"
                                                 target="_blank"
                                             >
-                                                <p class="font-bold text-sky-400/100">
+                                                <p className="font-bold text-sky-400/100">
                                                     eztickets@proton.me
                                                 </p>
                                             </a>
@@ -51,7 +55,7 @@ const ContactPage = () => {
                                                 href="https://www.instagram.com/avsolem"
                                                 target="_blank"
                                             >
-                                                <p class="font-bold text-pink-400/100">
+                                                <p className="font-bold text-pink-400/100">
                                                     @avsolem
                                                 </p>
                                             </a>
@@ -63,28 +67,31 @@ const ContactPage = () => {
                                                 href="https://discord.gg/cvQyBHF2Dz"
                                                 target="_blank"
                                             >
-                                                <p class="font-bold text-purple-600">
+                                                <p className="font-bold text-purple-600">
                                                     @etherfuse
                                                 </p>
                                             </a>
                                             &nbsp;
                                         </div>
                                     </div>
-                                </p>
+                                </div>
 
                                 <div className="img">
-                                    <img
+                                    <Image
                                         src="/images/sobre.png"
                                         className="h mx-auto w-64"
+                                        alt="sobre"
+                                        width={256}
+                                        height={256}
                                     />
                                 </div>
 
                                 <div className="pt-6 pb-20">
-                                    <a href="/">
+                                    <Link href="/">
                                         <button className="inline-flex items-center rounded-full border border-transparent bg-black px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
                                             Regresar a la página principal
                                         </button>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -95,4 +102,4 @@ const ContactPage = () => {
     );
 };
 
-export default ContactPage;
+export default ContactSuccessPage;

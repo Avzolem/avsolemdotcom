@@ -1,7 +1,10 @@
+'use client'
+
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import axios from "axios";
+import Image from "next/image";
 
 const WhatsappIndex = () => {
     const {
@@ -13,10 +16,9 @@ const WhatsappIndex = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: any) => {
         console.log("data =>", data);
         setLoading(true);
-        //todo: format phone
 
         const { to, message } = data;
 
@@ -38,10 +40,12 @@ const WhatsappIndex = () => {
         <div className="megacontainer">
             <Toaster position="bottom-center" reverseOrder={false} />
             <div className="header flex w-full justify-center items-center my-2">
-                <img
+                <Image
                     src="/images/maracashark.png"
                     className="w-24"
                     alt="whatsapp"
+                    width={96}
+                    height={96}
                 />
                 <p className=" font-bold text-white text-6xl">
                     {" "}
@@ -50,14 +54,12 @@ const WhatsappIndex = () => {
             </div>
             <div className="formcontainer flex flex-col items-center justify-center">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    {/* register your input into the hook by invoking the "register" function */}
                     <div className="my-5 flex flex-col items-center">
                         <label className="font-bold text-white text-2xl my-2">
                             Numero de destino
                         </label>
                         <input
                             placeholder="+526141707685"
-                            name="to"
                             {...register("to", { required: true })}
                         />
                         {errors.to && (
@@ -74,30 +76,29 @@ const WhatsappIndex = () => {
                         <textarea
                             className="block w-96 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="Escribe tu aviso"
-                            name="message"
                             {...register("message", { required: true })}
                         />
-                        {errors.to && (
+                        {errors.message && (
                             <span className="text-red-400">
                                 This field is required
                             </span>
                         )}
                         <br />
                         <br />
-                        <div class="relative group">
-                            <div class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+                        <div className="relative group">
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
                             <button
-                                class="relative px-7 py-4 bg-black rounded-lg leading-none flex items-center divide-x divide-gray-600"
+                                className="relative px-7 py-4 bg-black rounded-lg leading-none flex items-center divide-x divide-gray-600"
                                 type="submit"
                                 disabled={loading}
                             >
-                                <span class="flex items-center">
-                                    <span class="pr-6 font-bold text-gray-100">
+                                <span className="flex items-center">
+                                    <span className="pr-6 font-bold text-gray-100">
                                         {loading ? "Cargando.." : "Enviar "}
                                     </span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-7 w-7 text-pink-600 -rotate-6"
+                                        className="h-7 w-7 text-pink-600 -rotate-6"
                                         fill="none"
                                         viewBox="0 0 20 20"
                                         stroke="currentColor"
