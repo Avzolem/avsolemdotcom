@@ -26,16 +26,6 @@ const skillCategories = [
         ]
     },
     {
-        title: "Web3 & Blockchain",
-        skills: [
-            { name: "Solana", level: 80 },
-            { name: "Web3.js", level: 75 },
-            { name: "Metaplex", level: 70 },
-            { name: "Smart Contracts", level: 65 },
-            { name: "NFTs", level: 85 }
-        ]
-    },
-    {
         title: "Herramientas",
         skills: [
             { name: "Git/GitHub", level: 90 },

@@ -1,34 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Avsolem.com
+
+Personal portfolio website built with Next.js 15, React 19, and TypeScript.
+
+## Features
+
+- ⚡ Fast and optimized with Next.js App Router
+- 📱 Fully responsive design optimized for mobile
+- 🎨 Beautiful UI with Tailwind CSS and DaisyUI
+- 🌙 Multiple theme support
+- 📧 Contact form integration
+- 💬 Real-time chat functionality
+- 📲 WhatsApp API integration
+- 🔒 Secure authentication system
+- 🚀 Optimized for Vercel deployment
+
+## Tech Stack
+
+- **Frontend**: React 19, Next.js 15 (App Router), TypeScript
+- **Styling**: Tailwind CSS, DaisyUI
+- **Backend**: Next.js API Routes, MongoDB
+- **Integrations**: WhatsApp Cloud API, Cloudinary
+- **Animations**: Framer Motion, tsParticles
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
+git clone https://github.com/avsolem/avsolemdotcom.git
+cd avsolemdotcom
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install --legacy-peer-deps
+```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+3. Copy the environment variables:
+```bash
+cp .env.example .env.local
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+4. Configure your environment variables in `.env.local`
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+5. Run the development server:
+```bash
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) to see the result.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is optimized for deployment on Vercel:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Push your code to GitHub
+2. Import your repository in Vercel
+3. Configure environment variables
+4. Deploy!
 
-## Deploy on Vercel
+## Performance Optimizations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Lazy loading for components
+- Optimized images with Next.js Image component
+- Dynamic imports for heavy components
+- Proper meta tags for SEO
+- Mobile-first responsive design
+- Fast page loads with proper code splitting
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## License
+
+MIT License - feel free to use this project for your own portfolio!

@@ -1,8 +1,10 @@
+'use client'
+
 /* eslint-disable @next/next/no-img-element */
 import { Fragment, useState } from "react";
 import Link from "next/link";
 import { Popover, Transition, Menu } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 //HEADER SETUP
 const logoUrl = "/logo.png";
@@ -16,7 +18,6 @@ const navigation = {
         // { name: "UTILITIES", href: "/utilities" },
         { name: "TOOLBOX", href: "/" },
         { name: "PROJECTS", href: "https://github.com/Avzolem" },
-        { name: "NFTS", href: "/nfts" },
     ],
 };
 let phantom;
@@ -47,7 +48,7 @@ const Header = () => {
                     <div className="-my-2 -mr-2 md:hidden">
                         <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                             <span className="sr-only">Open menu</span>
-                            <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
                     </div>
                     <div className="hidden md:flex md:flex-1 md:items-center md:justify-between  ">
@@ -1395,7 +1396,7 @@ const Header = () => {
                                 </div>
                                 <div className="-mr-2">
                                     <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                                        <XIcon
+                                        <XMarkIcon
                                             className="h-6 w-6"
                                             aria-hidden="true"
                                         />

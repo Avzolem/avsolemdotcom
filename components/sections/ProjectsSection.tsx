@@ -8,40 +8,22 @@ import Image from "next/image";
 const projects = [
     {
         id: 1,
-        title: "EZ Tickets - NFT Ticketing Platform",
-        description: "Plataforma de tickets NFT en Solana para eventos, con mint dinámico y verificación blockchain.",
-        image: "/images/placeholder.png",
-        technologies: ["React", "Next.js", "Solana", "Web3.js", "Metaplex"],
-        github: "https://github.com/avsolem/eztickets",
-        live: "https://eztickets.vercel.app",
-        featured: true
-    },
-    {
-        id: 2,
         title: "ChatSolem - Real-time Chat App",
         description: "Aplicación de chat en tiempo real con autenticación y salas privadas.",
         image: "/images/placeholder.png",
         technologies: ["React", "Node.js", "Socket.io", "MongoDB"],
         github: "https://github.com/avsolem/chatsolem",
-        live: "/chat"
+        live: "/chat",
+        featured: true
     },
     {
-        id: 3,
+        id: 2,
         title: "WhatsApp Bulk Sender",
         description: "Herramienta para envío masivo de mensajes a través de WhatsApp Cloud API.",
         image: "/images/placeholder.png",
         technologies: ["Next.js", "WhatsApp API", "Node.js"],
         github: "https://github.com/avsolem/wa-bulker",
         live: "/whatsapp/masivos"
-    },
-    {
-        id: 4,
-        title: "NFT Candy Machine",
-        description: "Implementación de Candy Machine v3 para mint de NFTs en Solana.",
-        image: "/images/placeholder.png",
-        technologies: ["React", "Solana", "Metaplex", "TypeScript"],
-        github: "https://github.com/avsolem/candy-machine",
-        live: "/candymachine"
     }
 ];
 

@@ -1,3 +1,5 @@
+'use client'
+
 //component to display a single date
 
 import React, { useState, useEffect } from "react";
