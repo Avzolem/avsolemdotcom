@@ -11,6 +11,7 @@ const ContactSuccessPage = () => {
             <ParticlesBackground />
             <MainLayout
                 title="Gracias! :D"
+                description="Thank you for your purchase. Your ticket has been sent to your wallet's transaction history."
                 childrenClassName="h-screen"
                 className="relative"
             >

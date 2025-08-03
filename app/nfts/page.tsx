@@ -49,7 +49,7 @@ const WalletStep = () => {
         setIsLoading(true);
 
         try {
-            let file = null;
+            let file: File | null = null;
 
             setStatusText("Generando tu NFT 📃 ");
             const cloudinaryURL = `https://res.cloudinary.com/dyalnhdcl/image/upload/v1683376579/Design_n_Blockchain_riguu0.png`;
@@ -57,8 +57,6 @@ const WalletStep = () => {
             await fetch(cloudinaryURL)
                 .then((res) => res.blob())
                 .then((myBlob) => {
-                    myBlob.name = "certificado.png";
-
                     file = new File([myBlob], "image.png", {
                         type: myBlob.type,
                     });
@@ -162,7 +160,7 @@ const WalletStep = () => {
                     {isLoading && statusText && (
                         <div className="wrapersin flex flex-col items-center justify-center">
                             <div className="loading flex">
-                                <LoadingCircle className="m-0 p-0" />
+                                <LoadingCircle />
                             </div>
                             <div className="statustextcontainer mt-4">
                                 <p className="text-white text-2xl font-bold mb-8">

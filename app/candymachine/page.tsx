@@ -8,7 +8,11 @@ export default function Candymachine() {
     return (
         <div>
             <ParticlesBackground />
-            <MainLayout className="relative">
+            <MainLayout 
+                title="Candy Machine - Get Your NFT"
+                description="Get your first NFT with our Candy Machine. Claim your EzTicket NFT and save it in your Solana wallet."
+                childrenClassName="relative"
+            >
                 <div className="">
                     <div className="mx-auto max-w-2xl justify-center py-16 px-4 text-center sm:py-20 ">
                         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">

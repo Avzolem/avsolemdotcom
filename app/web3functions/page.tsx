@@ -152,14 +152,10 @@ const Home = () => {
             );
             console.info(`Transaccion con numero de id ${txid} enviada`);
 
-            const confirmation = await connection.confirmTransaction(txid, {
-                commitment: "singleGossip",
-            });
-
-            const { slot } = confirmation.value;
+            const confirmation = await connection.confirmTransaction(txid, "confirmed");
 
             console.info(
-                `Transaccion con numero de id ${txid} confirmado en el bloque ${slot}`
+                `Transaccion con numero de id ${txid} confirmado`
             );
 
             const solanaExplorerLink = `https://explorer.solana.com/tx/${txid}?cluster=${SOLANA_NETWORK}`;
@@ -196,13 +192,11 @@ const Home = () => {
         if (!url) return;
         
         setStatusText("Transformando url...");
-        let file = null;
+        let file: File | null = null;
         
         await fetch(url)
             .then((res) => res.blob())
             .then((myBlob) => {
-                myBlob.name = "blob.png";
-
                 file = new File([myBlob], "image.png", {
                     type: myBlob.type,
                 });

@@ -27,7 +27,11 @@ const ContactPage = () => {
 
     return (
         <div>
-            <MainLayout className="relative">
+            <MainLayout 
+                title="Contact - Get in Touch"
+                description="Contact us for collaborations, inquiries, or just to say hi. Fill out our contact form and we'll get back to you."
+                childrenClassName="relative"
+            >
                 <div className="overflow-hidden py-16 px-4 sm:px-6 lg:px-8 lg:py-24">
                     <div className="relative mx-auto max-w-xl">
                         <svg
@@ -121,7 +125,6 @@ const ContactPage = () => {
                                     <div className="mt-1">
                                         <input
                                             type="text"
-                                            name="firstName"
                                             id="firstName"
                                             autoComplete="given-name"
                                             className="block w-full rounded-md border border-secondary py-3 px-4 shadow-sm focus:border-accent focus:ring-accent"
@@ -135,7 +138,7 @@ const ContactPage = () => {
                                         />
                                         {errors.firstName && (
                                             <div className="mt-3 text-sm text-red-600">
-                                                {errors.firstName.message}
+                                                {errors.firstName.message as string}
                                             </div>
                                         )}
                                     </div>
@@ -150,7 +153,6 @@ const ContactPage = () => {
                                     <div className="mt-1">
                                         <input
                                             type="text"
-                                            name="lastName"
                                             id="lastName"
                                             autoComplete="family-name"
                                             className="block w-full rounded-md border border-secondary py-3 px-4 shadow-sm focus:border-accent focus:ring-accent"
@@ -164,7 +166,7 @@ const ContactPage = () => {
                                         />
                                         {errors.lastName && (
                                             <div className="mt-3 text-sm text-red-600">
-                                                {errors.lastName.message}
+                                                {errors.lastName.message as string}
                                             </div>
                                         )}
                                     </div>
@@ -179,7 +181,6 @@ const ContactPage = () => {
                                     <div className="mt-1">
                                         <input
                                             type="text"
-                                            name="company"
                                             id="company"
                                             autoComplete="organization"
                                             className="block w-full rounded-md border border-secondary py-3 px-4 shadow-sm focus:border-accent focus:ring-accent"
@@ -193,7 +194,7 @@ const ContactPage = () => {
                                         />
                                         {errors.company && (
                                             <div className="mt-3 text-sm text-red-600">
-                                                {errors.company.message}
+                                                {errors.company.message as string}
                                             </div>
                                         )}
                                     </div>
@@ -208,7 +209,6 @@ const ContactPage = () => {
                                     <div className="mt-1">
                                         <input
                                             id="email"
-                                            name="email"
                                             type="email"
                                             autoComplete="email"
                                             className="block w-full rounded-md border border-secondary py-3 px-4 shadow-sm focus:border-accent focus:ring-accent"
@@ -222,7 +222,7 @@ const ContactPage = () => {
                                         />
                                         {errors.email && (
                                             <div className="mt-3 text-sm text-red-600">
-                                                {errors.email.message}
+                                                {errors.email.message as string}
                                             </div>
                                         )}
                                     </div>
@@ -254,7 +254,6 @@ const ContactPage = () => {
                                         </div>
                                         <input
                                             type="text"
-                                            name="phone"
                                             id="phone"
                                             autoComplete="tel"
                                             className="block w-full rounded-md border border-secondary py-3 px-4 pl-20 focus:border-emerald-500 focus:ring-emerald-500"
@@ -270,7 +269,7 @@ const ContactPage = () => {
                                     </div>
                                     {errors.phone && (
                                         <div className="mt-3 text-sm text-red-600">
-                                            {errors.phone.message}
+                                            {errors.phone.message as string}
                                         </div>
                                     )}
                                 </div>
@@ -284,7 +283,6 @@ const ContactPage = () => {
                                     <div className="mt-1">
                                         <textarea
                                             id="message"
-                                            name="message"
                                             rows={4}
                                             className="block w-full rounded-md border border-secondary py-3 px-4 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
                                             defaultValue={""}
@@ -308,7 +306,7 @@ const ContactPage = () => {
                                         />
                                         {errors.message && (
                                             <div className="mt-3 text-sm text-red-600">
-                                                {errors.message.message}
+                                                {errors.message.message as string}
                                             </div>
                                         )}
                                     </div>
