@@ -1,12 +1,21 @@
-'use client'
+'use client';
 
-import Head from "next/head";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
-import Seo from "@/components/common/Seo";
-import { Toaster } from "react-hot-toast";
+import React from 'react';
+import Head from 'next/head';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
+import Seo from '@/components/common/Seo';
+import { Toaster } from 'react-hot-toast';
 
-const Layout = ({
+interface LayoutProps {
+    title?: string;
+    description?: string;
+    children: React.ReactNode;
+    childrenClassName?: string;
+    [key: string]: any; // For rest props
+}
+
+const Layout: React.FC<LayoutProps> = ({
     title,
     description,
     children,

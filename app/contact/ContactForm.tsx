@@ -34,20 +34,48 @@ export default function ContactForm() {
     const onSubmit = async (data: FormData) => {
         setGlobalError("");
         if (!agreed) {
-            setGlobalError("You must agree to the terms and conditions");
+            setGlobalError("Debes aceptar los términos y condiciones");
             return;
         }
 
         setIsSubmitting(true);
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            console.log("SUBMITTED DATA =>", data);
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Error al enviar el formulario');
+            }
+
+            // Éxito - resetear formulario y mostrar mensaje
             reset();
             setAgreed(false);
-            // Show success message
+            
+            // Mostrar mensaje de éxito (podrías usar react-hot-toast aquí)
+            const successMessage = document.createElement('div');
+            successMessage.className = 'alert alert-success fixed top-4 right-4 z-50 max-w-md';
+            successMessage.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>¡Mensaje enviado correctamente! Te contactaremos pronto.</span>
+            `;
+            document.body.appendChild(successMessage);
+            
+            setTimeout(() => {
+                successMessage.remove();
+            }, 5000);
+            
         } catch (error) {
-            setGlobalError("Something went wrong. Please try again.");
+            console.error('Error:', error);
+            setGlobalError(error instanceof Error ? error.message : "Algo salió mal. Por favor intenta de nuevo.");
         } finally {
             setIsSubmitting(false);
         }

@@ -1,30 +1,38 @@
-import SocialIcon from "@/components/icons/Social";
-//EDIT ME PLEASE
+import React from 'react';
+import SocialIcon from '@/components/icons/Social';
+
+interface SocialLinkItem {
+    name: string;
+    href: string;
+    icon: 'instagram' | 'tiktok' | 'twitter' | 'discord';
+}
+
+// EDIT ME PLEASE
 const copyrightLabel = `©${new Date().getFullYear()} Avsolem. A web made in the web.`;
-const socialLink = [
+const socialLink: SocialLinkItem[] = [
     {
-        name: "Instagram",
-        href: "https://www.instagram.com/avsolem/",
-        icon: "instagram",
+        name: 'Instagram',
+        href: 'https://www.instagram.com/avsolem/',
+        icon: 'instagram',
     },
     {
-        name: "TikTok",
-        href: "https://www.tiktok.com/@avsolem",
-        icon: "tiktok",
+        name: 'TikTok',
+        href: 'https://www.tiktok.com/@avsolem',
+        icon: 'tiktok',
     },
     {
-        name: "Twitter",
-        href: "https://twitter.com/avsolem",
-        icon: "twitter",
+        name: 'Twitter',
+        href: 'https://twitter.com/avsolem',
+        icon: 'twitter',
     },
     {
-        name: "Discord",
-        href: "https://discord.gg/AhSERBy467",
-        icon: "discord",
+        name: 'Discord',
+        href: 'https://discord.gg/AhSERBy467',
+        icon: 'discord',
     },
 ];
 
-const Footer = () => {
+const Footer: React.FC = () => {
     return (
         <footer className="z-[100] mt-auto ">
             <div className="mx-auto max-w-7xl py-12 px-6 md:flex md:items-center md:justify-between lg:px-8">

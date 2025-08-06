@@ -1,4 +1,10 @@
-const SocialIcons = ({ type }) => {
+import React from 'react';
+
+interface SocialIconsProps {
+    type: 'twitch' | 'twitter' | 'tiktok' | 'youtube' | 'instagram' | 'discord' | 'facebook';
+}
+
+const SocialIcons: React.FC<SocialIconsProps> = ({ type }) => {
     if (type === "twitch") {
         return (
             <svg

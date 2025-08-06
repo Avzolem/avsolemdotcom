@@ -93,8 +93,11 @@ const WhatsappIndex = () => {
                                 disabled={loading}
                             >
                                 <span className="flex items-center">
+                                    {loading && (
+                                        <span className="loading loading-spinner loading-sm mr-2"></span>
+                                    )}
                                     <span className="pr-6 font-bold text-gray-100">
-                                        {loading ? "Cargando.." : "Enviar "}
+                                        {loading ? "Enviando..." : "Enviar"}
                                     </span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

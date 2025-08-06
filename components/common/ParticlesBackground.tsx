@@ -1,11 +1,12 @@
-'use client'
+'use client';
 
-import { useCallback } from "react";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import React, { useCallback } from 'react';
+import Particles from 'react-tsparticles';
+import { loadFull } from 'tsparticles';
+import type { Engine, Container } from 'tsparticles-engine';
 
-const ParticlesBackground = () => {
-    const particlesInit = useCallback(async (engine) => {
+const ParticlesBackground: React.FC = () => {
+    const particlesInit = useCallback(async (engine: Engine) => {
         console.log(engine);
         // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
         // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
@@ -13,7 +14,7 @@ const ParticlesBackground = () => {
         await loadFull(engine);
     }, []);
 
-    const particlesLoaded = useCallback(async (container) => {
+    const particlesLoaded = useCallback(async (container?: Container) => {
         await console.log(container);
     }, []);
 
@@ -22,11 +23,11 @@ const ParticlesBackground = () => {
             id="tsparticles"
             init={particlesInit}
             loaded={particlesLoaded}
-            z-index={1}
+            style={{ zIndex: 1 }}
             options={{
                 background: {
                     color: {
-                        value: "#000",
+                        value: '#000',
                     },
                 },
                 fpsLimit: 120,
@@ -34,11 +35,11 @@ const ParticlesBackground = () => {
                     events: {
                         onClick: {
                             enable: true,
-                            mode: "push",
+                            mode: 'push',
                         },
                         onHover: {
                             enable: true,
-                            mode: "repulse",
+                            mode: 'repulse',
                         },
                         resize: true,
                     },
@@ -54,10 +55,10 @@ const ParticlesBackground = () => {
                 },
                 particles: {
                     color: {
-                        value: "#ffffff",
+                        value: '#ffffff',
                     },
                     links: {
-                        color: "#ffffff",
+                        color: '#ffffff',
                         distance: 150,
                         enable: true,
                         opacity: 0.5,
@@ -67,10 +68,10 @@ const ParticlesBackground = () => {
                         enable: true,
                     },
                     move: {
-                        directions: "none",
+                        direction: 'none',
                         enable: true,
                         outModes: {
-                            default: "bounce",
+                            default: 'bounce',
                         },
                         random: false,
                         speed: 1,
@@ -92,7 +93,7 @@ const ParticlesBackground = () => {
                         value: 0.5,
                     },
                     shape: {
-                        type: "circle",
+                        type: 'circle',
                     },
                     size: {
                         value: { min: 1, max: 5 },
