@@ -23,39 +23,34 @@ const protectedRoutes = {
   "/work/automate-design-handovers-with-a-figma-to-code-pipeline": true,
 };
 
-// Import and set font for each variant
+// Import and set font for each variant - OPTIMIZED to reduce font loading
 import { Geist } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 
-const heading = Geist({
-  variable: "--font-heading",
+// OPTIMIZATION: Use single Geist instance for all text variants to reduce font downloads
+const mainFont = Geist({
+  variable: "--font-main",
   subsets: ["latin"],
   display: "swap",
+  // Preload the most common weights
+  weight: ["400", "500", "600"],
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
 });
 
-const body = Geist({
-  variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const label = Geist({
-  variable: "--font-label",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const code = Geist_Mono({
+const codeFont = Geist_Mono({
   variable: "--font-code",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500"],
+  fallback: ['ui-monospace', 'SFMono-Regular', 'Monaco', 'Consolas', 'monospace'],
 });
 
+// Use the same font instance for all text variants to optimize loading
 const fonts = {
-  heading: heading,
-  body: body,
-  label: label,
-  code: code,
+  heading: mainFont,
+  body: mainFont, 
+  label: mainFont,
+  code: codeFont,
 };
 
 // default customization applied to the HTML in the main layout.tsx
