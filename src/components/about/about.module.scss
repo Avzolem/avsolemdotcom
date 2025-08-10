@@ -14,6 +14,15 @@
     top: var(--static-space-64);
 }
 
+// Social links responsive display
+.socialDesktop {
+    display: flex;
+}
+
+.socialMobile {
+    display: none;
+}
+
 @media (max-width: breakpoints.$s) {
     .avatar {
         top: auto;
@@ -25,5 +34,13 @@
 
     .blockAlign {
         align-self: center;
+    }
+
+    .socialDesktop {
+        display: none;
+    }
+
+    .socialMobile {
+        display: flex;
     }
 }

@@ -1,16 +1,16 @@
 import { Logo } from "@once-ui-system/core";
 
 const person = {
-  firstName: "Selene",
-  lastName: "Yu",
+  firstName: "Andrés",
+  lastName: "Aguilar",
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
-  role: "Design Engineer",
-  avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  role: "Web Developer",
+  avatar: "/images/andres.jpeg",
+  email: "andresaguilar.exe@gmail.com",
+  location: "America/Chihuahua", // Chihuahua, México
+  languages: ["Spanish", "English"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter = {
@@ -18,8 +18,8 @@ const newsletter = {
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
   description: (
     <>
-      I occasionally write about design, technology, and share thoughts on the intersection of
-      creativity and engineering.
+      I share my journey learning new technologies, Web3 experiments, VR projects,
+      and thoughts on the evolving landscape of web development.
     </>
   ),
 };
@@ -30,17 +30,17 @@ const social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system/nextjs-starter",
+    link: "https://github.com/Avzolem",
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/in/avsolem/",
   },
   {
-    name: "Threads",
-    icon: "threads",
-    link: "https://www.threads.com/@once_ui",
+    name: "Twitter",
+    icon: "x",
+    link: "https://twitter.com/avsolem",
   },
   {
     name: "Email",
@@ -55,16 +55,16 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Building the future with React & NextJS</>,  
   featured: {
     display: true,
-    title: <>Recent project: <strong className="ml-4">Once UI</strong></>,
-    href: "/work/building-once-ui-a-customizable-design-system",
+    title: <>Recent project: <strong className="ml-4">CoinchaShop</strong></>,
+    href: "/work/simple-portfolio-builder",
   },
   subline: (
     <>
-      I'm Selene, a design engineer at <Logo icon="/trademarks/wordmark-dark.svg" style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}/>, where I craft intuitive
-      <br /> user experiences. After hours, I build my own projects.
+      I'm Andrés, a web developer from Chihuahua, México! I specialize in React & NextJS 🚀
+      <br /> Currently exploring VR worlds and Web3 technologies 🦈
     </>
   ),
 };
@@ -90,9 +90,9 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        Andrés is a passionate web developer from Chihuahua, México, specializing in React and NextJS.
+        He's constantly learning new technologies and loves creating virtual worlds in VR
+        and building innovative Web3 applications. A true "web cowboy" always exploring the frontier of technology.
       </>
     ),
   },
@@ -101,41 +101,37 @@ const about = {
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Freelance Web Developer",
+        timeframe: "2020 - Present",
+        role: "Full Stack Developer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Developed multiple web applications using React and NextJS, including e-commerce platforms
+            and custom business solutions.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Built innovative Web3 applications and participated in hackathons, including
+            the Solana Mini Hackathon with CoinchaShop.
+          </>,
+          <>
+            Created VR experiences and interactive applications, combining traditional web development
+            with emerging technologies.
           </>,
         ],
-        images: [
-          // optional: leave the array empty if you don't want to display images
-          {
-            src: "/images/projects/project-01/cover-01.jpg",
-            alt: "Once UI Project",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "Open Source Contributor",
+        timeframe: "2019 - Present",
+        role: "JavaScript Developer",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
+            Maintained 34+ repositories on GitHub with various web development projects
+            and hardware programming experiments.
           </>,
           <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Developed projects ranging from web applications like Comimake and Calpic
+            to hardware projects using ESP8266.
           </>,
         ],
         images: [],
@@ -147,12 +143,12 @@ const about = {
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "Self-Taught Developer",
+        description: <>Continuously learning through online courses, documentation, and hands-on projects.</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "LivingLab CUU",
+        description: <>Part of the tech community in Chihuahua, collaborating on innovative projects.</>,
       },
     ],
   },
@@ -161,36 +157,24 @@ const about = {
     title: "Technical skills",
     skills: [
       {
-        title: "Figma",
-        description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        title: "React & NextJS",
+        description: <>Building modern web applications with React and NextJS. Always learning new patterns and best practices.</>,
+        images: [],
       },
       {
-        title: "Next.js",
-        description: <>Building next gen apps with Next.js + Once UI + Supabase.</>,
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        title: "Web3 Development",
+        description: <>Exploring blockchain technologies and building decentralized applications. Participated in Solana hackathons.</>,
+        images: [],
+      },
+      {
+        title: "VR Development",
+        description: <>Creating immersive virtual worlds and experiences, combining web technologies with VR platforms.</>,
+        images: [],
+      },
+      {
+        title: "JavaScript/TypeScript",
+        description: <>Strong foundation in JavaScript and TypeScript, with experience in both frontend and backend development.</>,
+        images: [],
       },
     ],
   },
@@ -199,7 +183,7 @@ const about = {
 const blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
+  title: "Writing about web dev and emerging tech...",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route
@@ -209,7 +193,7 @@ const work = {
   path: "/work",
   label: "Work",
   title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
+  description: `Web development and innovative tech projects by ${person.name}`,
   // Create new project pages by adding a new .mdx file to app/blog/posts
   // All projects will be listed on the /home and /work routes
 };

@@ -4,9 +4,10 @@ import '@/resources/custom.css'
 
 import classNames from "classnames";
 
-import { Background, Column, Flex, Meta, opacity, SpacingToken } from "@once-ui-system/core";
+import { Background, Flex, Meta, opacity, SpacingToken } from "@once-ui-system/core";
 import { Footer, Header, RouteGuard, Providers } from '@/components';
 import { baseURL, effects, fonts, style, dataStyle, home } from '@/resources';
+import { ClientWarningSuppress } from '@/components/ClientWarningSuppress';
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -24,11 +25,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Flex
+    <html
       suppressHydrationWarning
-      as="html"
       lang="en"
-      fillWidth
       className={classNames(
         fonts.heading.variable,
         fonts.body.variable,
@@ -95,8 +94,10 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <Providers>
-        <Column as="body" background="page" fillWidth style={{minHeight: "100vh"}} margin="0" padding="0" horizontal="center">
+      <body style={{margin: 0, padding: 0}}>
+        <ClientWarningSuppress />
+        <Providers>
+          <Flex fillWidth as="div" background="page" style={{minHeight: "100vh"}} direction="column" horizontal="center">
           <Background
             position="fixed"
             mask={{
@@ -154,8 +155,9 @@ export default async function RootLayout({
               </Flex>
             </Flex>
             <Footer/>
-          </Column>
+          </Flex>
         </Providers>
-      </Flex>
+      </body>
+    </html>
   );
 }
