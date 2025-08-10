@@ -23,35 +23,39 @@ const protectedRoutes = {
   "/work/automate-design-handovers-with-a-figma-to-code-pipeline": true,
 };
 
-// Import Apple-style fonts - Clean, modern, and elegant
-import { Inter } from "next/font/google";
-import { JetBrains_Mono } from "next/font/google";
+// Import and set font for each variant
+import { Geist } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 
-// Inter is very similar to Apple's SF Pro - clean and highly legible
-const mainFont = Inter({
-  variable: "--font-main",
+const heading = Geist({
+  variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
-  // Apple-style weights: Regular, Medium, Semibold, Bold
-  weight: ["400", "500", "600", "700"],
-  fallback: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'SF Pro Text', 'system-ui', 'Helvetica Neue', 'sans-serif'],
 });
 
-// JetBrains Mono for code - modern and clean like SF Mono
-const codeFont = JetBrains_Mono({
+const body = Geist({
+  variable: "--font-body",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const label = Geist({
+  variable: "--font-label",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const code = Geist_Mono({
   variable: "--font-code",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600"],
-  fallback: ['SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'ui-monospace', 'monospace'],
 });
 
-// Use the same font instance for all text variants for consistency
 const fonts = {
-  heading: mainFont,
-  body: mainFont, 
-  label: mainFont,
-  code: codeFont,
+  heading: heading,
+  body: body,
+  label: label,
+  code: code,
 };
 
 // default customization applied to the HTML in the main layout.tsx
