@@ -23,29 +23,30 @@ const protectedRoutes = {
   "/work/automate-design-handovers-with-a-figma-to-code-pipeline": true,
 };
 
-// Import and set font for each variant - OPTIMIZED to reduce font loading
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
+// Import Apple-style fonts - Clean, modern, and elegant
+import { Inter } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 
-// OPTIMIZATION: Use single Geist instance for all text variants to reduce font downloads
-const mainFont = Geist({
+// Inter is very similar to Apple's SF Pro - clean and highly legible
+const mainFont = Inter({
   variable: "--font-main",
   subsets: ["latin"],
   display: "swap",
-  // Preload the most common weights
-  weight: ["400", "500", "600"],
-  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+  // Apple-style weights: Regular, Medium, Semibold, Bold
+  weight: ["400", "500", "600", "700"],
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'SF Pro Text', 'system-ui', 'Helvetica Neue', 'sans-serif'],
 });
 
-const codeFont = Geist_Mono({
+// JetBrains Mono for code - modern and clean like SF Mono
+const codeFont = JetBrains_Mono({
   variable: "--font-code",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500"],
-  fallback: ['ui-monospace', 'SFMono-Regular', 'Monaco', 'Consolas', 'monospace'],
+  weight: ["400", "500", "600"],
+  fallback: ['SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'ui-monospace', 'monospace'],
 });
 
-// Use the same font instance for all text variants to optimize loading
+// Use the same font instance for all text variants for consistency
 const fonts = {
   heading: mainFont,
   body: mainFont, 
