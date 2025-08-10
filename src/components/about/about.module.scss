@@ -9,9 +9,7 @@
 }
 
 .avatar {
-    position: sticky;
     height: fit-content;
-    top: var(--static-space-64);
 }
 
 // Hide table of contents on mobile
@@ -39,9 +37,6 @@
 }
 
 @media (max-width: breakpoints.$s) {
-    .avatar {
-        top: auto;
-    }
 
     .textAlign {
         text-align: center;
@@ -73,5 +68,16 @@
 @media (max-width: breakpoints.$l) {
     .hideOnLarge {
         display: none;
+    }
+}
+
+// Skill cards hover effect
+.skillCard {
+    transition: all 0.2s ease;
+    cursor: default;
+
+    &:hover {
+        background: var(--brand-alpha-weak) !important;
+        transform: translateY(-2px);
     }
 }

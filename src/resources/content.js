@@ -6,11 +6,14 @@ const person = {
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
-  role: "Web Developer",
+  role: "Department Head & Web Developer",
   avatar: "/images/andres.jpeg",
   email: "andresaguilar.exe@gmail.com",
   location: "America/Chihuahua", // Chihuahua, México
-  languages: ["Spanish", "English"], // optional: Leave the array empty if you don't want to display languages
+  languages: [
+    { name: "Spanish", level: "Native" },
+    { name: "English", level: "Professional" }
+  ], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter = {
@@ -53,7 +56,7 @@ const home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name}&apos;s Portfolio`,
+  title: `△VSOLEM.`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
   headline: <>Building the future with React & NextJS</>,  
   featured: {
@@ -72,7 +75,7 @@ const home = {
 const about = {
   path: "/about",
   label: "About",
-  title: `About – ${person.name}`,
+  title: `About – △VSOLEM.`,
   description: `Meet ${person.name}, ${person.role} from ${person.location}`,
   tableOfContent: {
     display: true,
@@ -83,55 +86,126 @@ const about = {
   },
   calendar: {
     display: true,
-    link: "https://cal.com",
+    link: "https://cal.com/avsolem",
   },
   intro: {
     display: true,
-    title: "Introduction",
+    title: "👋 Introduction",
     description: (
       <>
-        Andrés is a passionate web developer from Chihuahua, México, specializing in React and NextJS.
-        He&apos;s constantly learning new technologies and loves creating virtual worlds in VR
-        and building innovative Web3 applications. A true &quot;web cowboy&quot; always exploring the frontier of technology.
+        I am a software developer and project manager with extensive experience in creating development and logistics departments, 
+        as well as managing tasks and projects. I&apos;ve had the fortune to work with multinational companies such as 
+        Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr, and Intermetro, in addition to the Government of the 
+        State of Chihuahua, Digital Policy, and municipal IT liaison offices.
+        <br /><br />
+        I&apos;m passionate about React+NextJS development 🚀, constantly learning new technologies, creating virtual worlds 
+        in VR, and building innovative Web3 applications 🦈. My goal is to combine my extensive project management 
+        experience with cutting-edge web development to deliver exceptional solutions.
       </>
     ),
   },
   work: {
     display: true, // set to false to hide this section
-    title: "Work Experience",
+    title: "💼 Work Experience",
     experiences: [
       {
-        company: "Freelance Web Developer",
-        timeframe: "2020 - Present",
-        role: "Full Stack Developer",
+        company: "🏛️ Gobierno del Estado de Chihuahua",
+        timeframe: "Sept 2023 - Present",
+        role: "Department Head (Jefe de Departamento)",
         achievements: [
           <>
-            Developed multiple web applications using React and NextJS, including e-commerce platforms
-            and custom business solutions.
+            Leading department operations and managing technology initiatives for the State Government of Chihuahua.
           </>,
           <>
-            Built innovative Web3 applications and participated in hackathons, including
-            the Solana Mini Hackathon with CoinchaShop.
+            Overseeing digital transformation projects and implementing modern web solutions for government services.
           </>,
           <>
-            Created VR experiences and interactive applications, combining traditional web development
-            with emerging technologies.
+            Coordinating with Digital Policy teams and municipal IT liaison offices to ensure seamless technology integration.
           </>,
         ],
         images: [],
       },
       {
-        company: "Open Source Contributor",
-        timeframe: "2019 - Present",
-        role: "JavaScript Developer",
+        company: "🎓 Universidad Autónoma de Chihuahua",
+        timeframe: "Jul 2022 - Sept 2023",
+        role: "Web Developer",
         achievements: [
           <>
-            Maintained 34+ repositories on GitHub with various web development projects
-            and hardware programming experiments.
+            Developed web applications using Next.js, Unity, and Vercel for university projects and internal systems.
           </>,
           <>
-            Developed projects ranging from web applications like Comimake and Calpic
-            to hardware projects using ESP8266.
+            Implemented MongoDB databases and TailwindCSS for responsive, modern user interfaces.
+          </>,
+          <>
+            Created interactive educational platforms and tools to enhance the learning experience for students.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "👥 Instituto Chihuahuense de la Juventud",
+        timeframe: "Jan 2019 - Jul 2022",
+        role: "Networks and Systems Area Coordinator",
+        achievements: [
+          <>
+            Managed the entire IT infrastructure and network systems for the Youth Institute of Chihuahua.
+          </>,
+          <>
+            Coordinated technology projects and implemented digital solutions to improve organizational efficiency.
+          </>,
+          <>
+            Led a team responsible for maintaining and upgrading the institute&apos;s technological capabilities.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "🚛 Transportes Borunda",
+        timeframe: "Jul 2017 - Jan 2019",
+        role: "Logistics and Operations Coordinator",
+        achievements: [
+          <>
+            Managed sales control, created commercial alliances, and handled departments of collection, administration, and human resources.
+          </>,
+          <>
+            Controlled member management, handled tenders, and coordinated logistics for national and international projects.
+          </>,
+          <>
+            Worked with multinational companies including Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr, and Intermetro.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "💻 Corelion LLC",
+        timeframe: "Aug 2015 - Jun 2017",
+        role: "Web Design Assistant Developer",
+        achievements: [
+          <>
+            Assisted in developing and designing web applications for various client projects.
+          </>,
+          <>
+            Collaborated with senior developers to implement responsive designs and user-friendly interfaces.
+          </>,
+          <>
+            Gained foundational experience in web development technologies and best practices.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "🔧 Black Shark",
+        timeframe: "Oct 2014 - Jul 2015",
+        role: "Computer Equipment Repair Technician",
+        achievements: [
+          <>
+            Diagnosed and repaired computer hardware issues, providing technical support to clients.
+          </>,
+          <>
+            Maintained and upgraded computer systems, ensuring optimal performance.
+          </>,
+          <>
+            Developed problem-solving skills and technical expertise in hardware troubleshooting.
           </>,
         ],
         images: [],
@@ -140,41 +214,73 @@ const about = {
   },
   studies: {
     display: true, // set to false to hide this section
-    title: "Studies",
+    title: "🎓 Education",
     institutions: [
       {
-        name: "Self-Taught Developer",
-        description: <>Continuously learning through online courses, documentation, and hands-on projects.</>,
+        name: "🏛️ Universidad Autónoma de Guadalajara",
+        description: <>Master of Architecture - MArch, CISCO Networks (2017 - 2018). Developed internal projects for the University Center of Exact Sciences.</>,
       },
       {
-        name: "LivingLab CUU",
-        description: <>Part of the tech community in Chihuahua, collaborating on innovative projects.</>,
+        name: "🎆 Instituto Tecnológico de Cd. Cuauhtémoc",
+        description: <>Systems Engineering (2013 - 2017). Thesis: &ldquo;Cognitive Through Genetic Algorithms: The way to the new A.I.&rdquo; Activities: Chess Club, Music Group, Programming Club.</>,
+      },
+      {
+        name: "🚀 LivingLab CUU",
+        description: <>Active member of the tech community in Chihuahua, collaborating on innovative projects and continuous learning.</>,
       },
     ],
   },
   technical: {
     display: true, // set to false to hide this section
-    title: "Technical skills",
+    title: "🛠️ Technical Skills & Expertise",
     skills: [
       {
-        title: "React & NextJS",
-        description: <>Building modern web applications with React and NextJS. Always learning new patterns and best practices.</>,
-        images: [],
+        icon: "⚛️",
+        title: "React & Next.js",
       },
       {
-        title: "Web3 Development",
-        description: <>Exploring blockchain technologies and building decentralized applications. Participated in Solana hackathons.</>,
-        images: [],
+        icon: "📱",
+        title: "JavaScript TypeScript",
       },
       {
-        title: "VR Development",
-        description: <>Creating immersive virtual worlds and experiences, combining web technologies with VR platforms.</>,
-        images: [],
+        icon: "🎨",
+        title: "TailwindCSS",
       },
       {
-        title: "JavaScript/TypeScript",
-        description: <>Strong foundation in JavaScript and TypeScript, with experience in both frontend and backend development.</>,
-        images: [],
+        icon: "🚀",
+        title: "Vercel",
+      },
+      {
+        icon: "🗄️",
+        title: "MongoDB",
+      },
+      {
+        icon: "🔧",
+        title: "Node.js",
+      },
+      {
+        icon: "🔗",
+        title: "Web3 & Blockchain",
+      },
+      {
+        icon: "🥽",
+        title: "VR/AR with Unity",
+      },
+      {
+        icon: "📊",
+        title: "Project Management",
+      },
+      {
+        icon: "💼",
+        title: "Business Strategy",
+      },
+      {
+        icon: "🤝",
+        title: "Team Leadership",
+      },
+      {
+        icon: "🌐",
+        title: "CISCO Networks",
       },
     ],
   },
@@ -183,8 +289,8 @@ const about = {
 const blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about web dev and emerging tech...",
-  description: `Read what ${person.name} has been up to recently`,
+  title: "Blog – △VSOLEM.",
+  description: `Hackathon wins, Web3 innovations, and metaverse projects by ${person.name}`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route
 };
@@ -192,16 +298,16 @@ const blog = {
 const work = {
   path: "/work",
   label: "Work",
-  title: `Projects – ${person.name}`,
-  description: `Web development and innovative tech projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/blog/posts
+  title: `Projects – △VSOLEM.`,
+  description: `Web3 platforms, IoT hardware, marketplaces, and hackathon-winning projects by ${person.name}`,
+  // Create new project pages by adding a new .mdx file to app/work/projects
   // All projects will be listed on the /home and /work routes
 };
 
 const gallery = {
   path: "/gallery",
   label: "Gallery",
-  title: `Photo gallery – ${person.name}`,
+  title: `Gallery – △VSOLEM.`,
   description: `A photo collection by ${person.name}`,
   // Images by https://lorant.one
   // These are placeholder images, replace with your own
