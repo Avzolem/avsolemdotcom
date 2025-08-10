@@ -1,0 +1,11 @@
+@use "../../../components/breakpoints.scss" as breakpoints;
+
+.hideOnMedium {
+    display: block;
+}
+
+@media (max-width: breakpoints.$m) {
+    .hideOnMedium {
+        display: none;
+    }
+}

@@ -45,7 +45,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
       position="fixed"
       paddingLeft="24"
       gap="32"
-      hide="m"
+      className={styles.hideOnMedium}
     >
       {structure
         .filter((section) => section.display)
@@ -65,10 +65,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
               <>
                 {section.items.map((item, itemIndex) => (
                   <Flex
-                    hide="l"
+                    className={`${styles.hideOnLarge} ${styles.hover}`}
                     key={itemIndex}
                     style={{ cursor: "pointer" }}
-                    className={styles.hover}
                     gap="12"
                     paddingLeft="24"
                     vertical="center"

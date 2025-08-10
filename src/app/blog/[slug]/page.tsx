@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CustomMDX, ScrollToHash } from "@/components";
+import styles from "./blog.module.scss";
 import { Meta, Schema, AvatarGroup, Button, Column, Heading, HeadingNav, Icon, Row, Text } from "@once-ui-system/core";
 import { baseURL, about, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
@@ -54,7 +55,7 @@ export default async function Blog({
 
   return (
     <Row fillWidth>
-      <Row maxWidth={12} hide="m"/>
+      <Row maxWidth={12} className={styles.hideOnMedium}/>
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="xs" gap="l">
           <Schema
@@ -88,7 +89,7 @@ export default async function Blog({
           <ScrollToHash />
         </Column>
     </Row>
-    <Column maxWidth={12} paddingLeft="40" fitHeight position="sticky" top="80" gap="16" hide="m">
+    <Column maxWidth={12} paddingLeft="40" fitHeight position="sticky" top="80" gap="16" className={styles.hideOnMedium}>
       <Row
         gap="12"
         paddingLeft="2"

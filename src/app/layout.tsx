@@ -8,6 +8,7 @@ import { Background, Flex, Meta, opacity, SpacingToken } from "@once-ui-system/c
 import { Footer, Header, RouteGuard, Providers } from '@/components';
 import { baseURL, effects, fonts, style, dataStyle, home } from '@/resources';
 import { ClientWarningSuppress } from '@/components/ClientWarningSuppress';
+import styles from './layout.module.scss';
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -139,7 +140,7 @@ export default async function RootLayout({
               color: effects.lines.color,
             }}
           />
-          <Flex fillWidth minHeight="16" hide="s"/>
+          <Flex fillWidth minHeight="16" className={styles.hideOnMobile}/>
             <Header />
             <Flex
               zIndex={0}

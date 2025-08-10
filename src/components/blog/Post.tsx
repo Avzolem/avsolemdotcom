@@ -21,10 +21,9 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
             <Flex
                 position="relative"
                 transition="micro-medium"
-                direction={direction}
                 radius="l"
                 className={styles.hover}
-                mobileDirection="column"
+                direction="column"
                 fillWidth>
                 {post.metadata.image && thumbnail && (
                     <Media

@@ -1,0 +1,11 @@
+@use "../components/breakpoints.scss" as breakpoints;
+
+.hideOnMobile {
+    display: flex;
+}
+
+@media (max-width: breakpoints.$s) {
+    .hideOnMobile {
+        display: none;
+    }
+}

@@ -1,9 +1,17 @@
 @use "./breakpoints.scss" as breakpoints;
 
+.showOnMobile {
+    display: none;
+}
+
 @media (max-width: breakpoints.$s) {
     .mobile {
         text-align: center;
         flex-direction: column;
         align-items: center;
+    }
+
+    .showOnMobile {
+        display: flex;
     }
 }

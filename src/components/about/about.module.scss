@@ -14,6 +14,21 @@
     top: var(--static-space-64);
 }
 
+// Hide table of contents on mobile
+.hideOnMobile {
+    display: block;
+}
+
+// Hide on medium screens
+.hideOnMedium {
+    display: block;
+}
+
+// Hide on large screens
+.hideOnLarge {
+    display: block;
+}
+
 // Social links responsive display
 .socialDesktop {
     display: flex;
@@ -42,5 +57,21 @@
 
     .socialMobile {
         display: flex;
+    }
+
+    .hideOnMobile {
+        display: none;
+    }
+}
+
+@media (max-width: breakpoints.$m) {
+    .hideOnMedium {
+        display: none;
+    }
+}
+
+@media (max-width: breakpoints.$l) {
+    .hideOnLarge {
+        display: none;
     }
 }

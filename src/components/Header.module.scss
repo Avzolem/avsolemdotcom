@@ -1,5 +1,13 @@
 @use "./breakpoints.scss" as breakpoints;
 
+.hideOnMobile {
+    display: block;
+}
+
+.showOnMobile {
+    display: none;
+}
+
 .position {
     position: sticky;
     top: 0;
@@ -23,5 +31,13 @@
     .mask {
         transform: rotate(180deg);
         bottom: 0;
+    }
+
+    .hideOnMobile {
+        display: none;
+    }
+
+    .showOnMobile {
+        display: block;
     }
 }

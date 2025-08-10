@@ -15,7 +15,7 @@ const person = {
 
 const newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
+  title: <>Subscribe to {person.firstName}&apos;s Newsletter</>,
   description: (
     <>
       I share my journey learning new technologies, Web3 experiments, VR projects,
@@ -53,7 +53,7 @@ const home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name}'s Portfolio`,
+  title: `${person.name}&apos;s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
   headline: <>Building the future with React & NextJS</>,  
   featured: {
@@ -63,7 +63,7 @@ const home = {
   },
   subline: (
     <>
-      I'm Andrés, a web developer from Chihuahua, México! I specialize in React & NextJS 🚀
+      I&apos;m Andrés, a web developer from Chihuahua, México! I specialize in React & NextJS 🚀
       <br /> Currently exploring VR worlds and Web3 technologies 🦈
     </>
   ),
@@ -91,8 +91,8 @@ const about = {
     description: (
       <>
         Andrés is a passionate web developer from Chihuahua, México, specializing in React and NextJS.
-        He's constantly learning new technologies and loves creating virtual worlds in VR
-        and building innovative Web3 applications. A true "web cowboy" always exploring the frontier of technology.
+        He&apos;s constantly learning new technologies and loves creating virtual worlds in VR
+        and building innovative Web3 applications. A true &quot;web cowboy&quot; always exploring the frontier of technology.
       </>
     ),
   },
