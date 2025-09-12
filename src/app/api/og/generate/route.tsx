@@ -62,8 +62,10 @@ export async function GET(request: Request) {
             gap: "5rem",
           }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={baseURL + person.avatar}
+            alt={`${person.name} avatar`}
             style={{
               width: "12rem",
               height: "12rem",
