@@ -61,8 +61,8 @@ const home = {
   headline: <>Building the future with React & NextJS</>,  
   featured: {
     display: true,
-    title: <>Recent project: <strong className="ml-4">CoinchaShop</strong></>,
-    href: "/work/simple-portfolio-builder",
+    title: <>Recent project: <strong className="ml-4">Estampanda.com</strong></>,
+    href: "https://estampanda.com",
   },
   subline: (
     <>
