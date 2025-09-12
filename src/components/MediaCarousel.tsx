@@ -107,7 +107,7 @@ export function MediaCarousel({ media }: MediaCarouselProps) {
             />
           </Flex>
           
-          <Flex gap="4" align="center" justify="center">
+          <Flex gap="4" align="center" style={{justifyContent: 'center'}}>
             {uniqueMedia.map((_, index) => (
               <button
                 key={index}
