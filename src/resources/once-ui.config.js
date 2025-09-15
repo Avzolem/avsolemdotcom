@@ -89,13 +89,13 @@ const dataStyle = {
 
 const effects = {
   mask: {
-    cursor: false,
+    cursor: false, // Disabled to remove gradient effect
     x: 50,
     y: 0,
     radius: 100,
   },
   gradient: {
-    display: false,
+    display: false, // Disabled for clean beige background
     opacity: 100,
     x: 50,
     y: 60,
@@ -106,7 +106,7 @@ const effects = {
     colorEnd: "page-background",
   },
   dots: {
-    display: true,
+    display: false, // Disabled for clean beige background
     opacity: 40,
     size: "2",
     color: "brand-background-strong",
@@ -132,7 +132,7 @@ const mailchimp = {
   action: "https://url/subscribe/post?parameters",
   effects: {
     mask: {
-      cursor: true,
+      cursor: false, // Disabled to remove gradient effect
       x: 50,
       y: 0,
       radius: 100,

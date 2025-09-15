@@ -1,0 +1,35 @@
+/* Custom theme overrides for beige background in light mode */
+
+/* Light theme - Beige background */
+[data-theme="light"] {
+  --neutral-background: #f5f0e8 !important;
+  --neutral-background-weak: #faf8f5 !important;
+  --neutral-background-strong: #ebe3d6 !important;
+  --neutral-background-medium: #f0e9df !important;
+
+  /* Override main background */
+  --background: #f5f0e8 !important;
+
+  /* Remove any gradient effects */
+  --gradient-background: transparent !important;
+}
+
+/* Apply beige background to body and main containers */
+[data-theme="light"] body,
+[data-theme="light"] main,
+[data-theme="light"] .main-container {
+  background-color: #f5f0e8 !important;
+  background-image: none !important;
+}
+
+/* Remove any background effects/overlays */
+[data-theme="light"] .background-effects,
+[data-theme="light"] .background-mask,
+[data-theme="light"] .background-gradient {
+  display: none !important;
+}
+
+/* Dark theme remains unchanged */
+[data-theme="dark"] {
+  /* Default dark theme colors */
+}
