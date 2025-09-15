@@ -138,7 +138,7 @@ const mailchimp = {
       radius: 100,
     },
     gradient: {
-      display: true,
+      display: false, // Disabled for performance
       opacity: 90,
       x: 50,
       y: 0,
@@ -149,7 +149,7 @@ const mailchimp = {
       colorEnd: "static-transparent",
     },
     dots: {
-      display: true,
+      display: false, // Disabled for performance
       opacity: 20,
       size: "2",
       color: "brand-on-background-weak",
