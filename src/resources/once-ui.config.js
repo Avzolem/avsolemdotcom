@@ -62,13 +62,13 @@ const fonts = {
 // default customization applied to the HTML in the main layout.tsx
 const style = {
   theme: "system", // dark | light | system
-  neutral: "sand", // sand | gray | slate | custom - Using sand for beige background in light mode
+  neutral: "sand", // sand | gray | slate | custom - Using sand for warmer beige tones
   brand: "cyan", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan | custom
   accent: "red", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan | custom
   solid: "contrast", // color | contrast
   solidStyle: "flat", // flat | plastic
   border: "playful", // rounded | playful | conservative
-  surface: "translucent", // filled | translucent
+  surface: "filled", // filled | translucent - Changed to filled for more visible background
   transition: "all", // all | micro | macro
   scaling: "100" // 90 | 95 | 100 | 105 | 110
 };
