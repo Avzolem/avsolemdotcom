@@ -30,9 +30,15 @@
 [data-theme="light"] .background-effects,
 [data-theme="light"] .background-mask,
 [data-theme="light"] .background-gradient,
-[data-theme="light"] [data-gradient-display="true"] {
+[data-theme="light"] [data-gradient-display="true"],
+[data-theme="light"] [data-mask-cursor="true"] {
   display: none !important;
   opacity: 0 !important;
+}
+
+/* Disable mask effect completely in light mode */
+[data-theme="light"] body::before {
+  display: none !important;
 }
 
 /* Dark theme - Darker blacks with navy accents */
@@ -45,24 +51,40 @@
   /* Override main background */
   --background: #0a0a0a !important;
 
-  /* Navy blue for any gradients or accents */
-  --gradient-start: #0a192f !important; /* Dark navy blue */
-  --gradient-end: #020817 !important; /* Almost black with blue tint */
+  /* Navy blue for gradients */
+  --gradient-start: #001529 !important; /* Deep navy blue */
+  --gradient-end: #000511 !important; /* Almost black with blue tint */
+
+  /* Mask gradient colors */
+  --mask-color-start: #0e1929 !important; /* Navy blue for mask */
+  --mask-color-end: transparent !important;
 
   /* Adjust surface colors to remove brown tint */
   --surface-background: #0d0d0d !important;
   --surface-background-weak: #151515 !important;
 }
 
-/* Apply black background to body and main containers in dark mode */
-[data-theme="dark"] body,
-[data-theme="dark"] main,
-[data-theme="dark"] .main-container {
-  background-color: #0a0a0a !important;
-  background-image: none !important;
+/* Optimized dark mode gradient using CSS only */
+[data-theme="dark"] body {
+  background: #0a0a0a !important;
+  position: relative;
 }
 
-/* If gradients are enabled in dark mode, use navy blue */
-[data-theme="dark"] .background-gradient {
-  background: linear-gradient(135deg, #0a192f 0%, #020817 100%) !important;
+[data-theme="dark"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at top center,
+    rgba(14, 25, 41, 0.4) 0%,
+    rgba(14, 25, 41, 0.2) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+  transform: translateZ(0);
 }

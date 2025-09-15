@@ -89,24 +89,24 @@ const dataStyle = {
 
 const effects = {
   mask: {
-    cursor: false, // Disabled to remove gradient effect
+    cursor: true, // Enable for gradient effect in dark mode
     x: 50,
-    y: 0,
-    radius: 100,
+    y: 50,
+    radius: 80,
   },
   gradient: {
-    display: true, // Enable subtle navy gradient in dark mode only
-    opacity: 30, // Subtle opacity for navy gradient
+    display: false, // Using mask instead for better performance
+    opacity: 30,
     x: 50,
     y: 0,
     width: 80,
     height: 80,
     tilt: 15,
-    colorStart: "blue-background-strong", // Navy blue start
-    colorEnd: "page-background", // Fades to black
+    colorStart: "blue-background-strong",
+    colorEnd: "page-background",
   },
   dots: {
-    display: false, // Disabled for clean beige background
+    display: false, // Disabled for performance
     opacity: 40,
     size: "2",
     color: "brand-background-strong",
