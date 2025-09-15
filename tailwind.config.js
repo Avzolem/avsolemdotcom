@@ -40,8 +40,8 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'beige-gradient': 'linear-gradient(135deg, #faf8f5 0%, #f5f0e8 50%, #ebe3d6 100%)',
-        'navy-gradient': 'radial-gradient(ellipse at top center, rgba(14, 25, 41, 0.6) 0%, rgba(14, 25, 41, 0.3) 40%, transparent 70%)',
-        'navy-linear': 'linear-gradient(135deg, #0e1929 0%, #0a0a0a 100%)',
+        'navy-gradient': 'radial-gradient(ellipse at top center, rgba(59, 130, 246, 0.6) 0%, rgba(37, 99, 235, 0.4) 30%, rgba(30, 64, 175, 0.2) 50%, transparent 70%)',
+        'navy-linear': 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #111827 100%)',
       },
       animation: {
         'gradient-shift': 'gradient 8s ease infinite',

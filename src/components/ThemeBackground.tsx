@@ -29,13 +29,13 @@ export function ThemeBackground() {
         // Light theme - Clean beige background
         <div className="absolute inset-0 bg-beige-100" />
       ) : (
-        // Dark theme - Black with navy gradient
+        // Dark theme - Black with lighter navy gradient
         <>
-          <div className="absolute inset-0 bg-navy-900" />
-          <div className="absolute inset-0 bg-gradient-to-b from-navy-600/40 via-navy-800/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-radial from-navy-500/30 via-transparent to-transparent"
+          <div className="absolute inset-0 bg-gray-950" />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/60 via-blue-950/40 to-transparent" />
+          <div className="absolute inset-0"
                style={{
-                 backgroundImage: 'radial-gradient(ellipse at top center, rgba(14, 25, 41, 0.5) 0%, rgba(10, 25, 47, 0.3) 40%, transparent 70%)'
+                 backgroundImage: 'radial-gradient(ellipse at top center, rgba(30, 58, 138, 0.7) 0%, rgba(30, 64, 175, 0.4) 30%, rgba(37, 99, 235, 0.2) 50%, transparent 70%)'
                }} />
         </>
       )}

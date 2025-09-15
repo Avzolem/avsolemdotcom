@@ -45,11 +45,12 @@
 }
 
 [data-theme="dark"] body {
-  @apply bg-navy-900 text-gray-100;
+  @apply bg-gray-950 text-gray-100;
   background-image: radial-gradient(
     ellipse at top center,
-    rgba(14, 25, 41, 0.5) 0%,
-    rgba(10, 25, 47, 0.3) 40%,
-    transparent 70%
+    rgba(59, 130, 246, 0.5) 0%,    /* Bright blue */
+    rgba(37, 99, 235, 0.3) 25%,    /* Medium blue */
+    rgba(30, 64, 175, 0.2) 50%,    /* Darker blue */
+    transparent 80%
   );
 }
