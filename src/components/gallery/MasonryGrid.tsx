@@ -26,6 +26,7 @@ export default function MasonryGrid() {
           radius="m"
           priority={index < 2}
           loading={index < 4 ? "eager" : "lazy"}
+          className={styles.gridItem}
         />
       ))}
     </Masonry>

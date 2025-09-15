@@ -11,6 +11,7 @@ interface OptimizedMediaProps {
   radius?: any;
   loading?: 'lazy' | 'eager';
   priority?: boolean;
+  className?: string;
 }
 
 export function OptimizedMedia({
@@ -20,7 +21,8 @@ export function OptimizedMedia({
   sizes,
   radius,
   loading = 'lazy',
-  priority = false
+  priority = false,
+  className
 }: OptimizedMediaProps) {
   const [isInView, setIsInView] = useState(false);
 
@@ -55,6 +57,7 @@ export function OptimizedMedia({
     return (
       <div
         data-media-src={src}
+        className={className}
         style={{
           backgroundColor: 'var(--background-neutral-weak)',
           aspectRatio: fill ? 'auto' : '16/9',
@@ -72,6 +75,7 @@ export function OptimizedMedia({
       fill={fill}
       sizes={sizes}
       radius={radius}
+      className={className}
     />
   );
 }
