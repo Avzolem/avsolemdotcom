@@ -62,9 +62,9 @@ const fonts = {
 // default customization applied to the HTML in the main layout.tsx
 const style = {
   theme: "system", // dark | light | system
-  neutral: "sand", // sand | gray | slate | custom - Using sand for warmer beige tones
+  neutral: "slate", // sand | gray | slate | custom - Using slate for better dark mode (sand in light, slate in dark)
   brand: "cyan", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan | custom
-  accent: "red", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan | custom
+  accent: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan | custom
   solid: "contrast", // color | contrast
   solidStyle: "flat", // flat | plastic
   border: "playful", // rounded | playful | conservative
@@ -95,15 +95,15 @@ const effects = {
     radius: 100,
   },
   gradient: {
-    display: false, // Disabled for clean beige background
-    opacity: 100,
+    display: true, // Enable subtle navy gradient in dark mode only
+    opacity: 30, // Subtle opacity for navy gradient
     x: 50,
-    y: 60,
-    width: 100,
-    height: 50,
-    tilt: 0,
-    colorStart: "accent-background-strong",
-    colorEnd: "page-background",
+    y: 0,
+    width: 80,
+    height: 80,
+    tilt: 15,
+    colorStart: "blue-background-strong", // Navy blue start
+    colorEnd: "page-background", // Fades to black
   },
   dots: {
     display: false, // Disabled for clean beige background

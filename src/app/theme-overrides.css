@@ -1,17 +1,21 @@
-/* Custom theme overrides for beige background in light mode */
+/* Custom theme overrides for beige background in light mode and black in dark mode */
 
-/* Light theme - Beige background */
+/* Light theme - Beige background (override slate colors with beige) */
 [data-theme="light"] {
-  --neutral-background: #f5f0e8 !important;
-  --neutral-background-weak: #faf8f5 !important;
-  --neutral-background-strong: #ebe3d6 !important;
-  --neutral-background-medium: #f0e9df !important;
+  --neutral-background: #f5f0e8 !important; /* Main beige */
+  --neutral-background-weak: #faf8f5 !important; /* Very light beige */
+  --neutral-background-strong: #ebe3d6 !important; /* Darker beige */
+  --neutral-background-medium: #f0e9df !important; /* Medium beige */
 
   /* Override main background */
   --background: #f5f0e8 !important;
+  --page-background: #f5f0e8 !important;
 
   /* Remove any gradient effects */
   --gradient-background: transparent !important;
+
+  /* Ensure text contrasts well with beige */
+  --neutral-on-background: #1a1a1a !important;
 }
 
 /* Apply beige background to body and main containers */
@@ -22,14 +26,43 @@
   background-image: none !important;
 }
 
-/* Remove any background effects/overlays */
+/* Remove any background effects/overlays in light mode */
 [data-theme="light"] .background-effects,
 [data-theme="light"] .background-mask,
-[data-theme="light"] .background-gradient {
+[data-theme="light"] .background-gradient,
+[data-theme="light"] [data-gradient-display="true"] {
   display: none !important;
+  opacity: 0 !important;
 }
 
-/* Dark theme remains unchanged */
+/* Dark theme - Darker blacks with navy accents */
 [data-theme="dark"] {
-  /* Default dark theme colors */
+  --neutral-background: #0a0a0a !important; /* Almost pure black */
+  --neutral-background-weak: #121212 !important; /* Very dark gray */
+  --neutral-background-strong: #050505 !important; /* Pure black */
+  --neutral-background-medium: #0f0f0f !important; /* Dark gray */
+
+  /* Override main background */
+  --background: #0a0a0a !important;
+
+  /* Navy blue for any gradients or accents */
+  --gradient-start: #0a192f !important; /* Dark navy blue */
+  --gradient-end: #020817 !important; /* Almost black with blue tint */
+
+  /* Adjust surface colors to remove brown tint */
+  --surface-background: #0d0d0d !important;
+  --surface-background-weak: #151515 !important;
+}
+
+/* Apply black background to body and main containers in dark mode */
+[data-theme="dark"] body,
+[data-theme="dark"] main,
+[data-theme="dark"] .main-container {
+  background-color: #0a0a0a !important;
+  background-image: none !important;
+}
+
+/* If gradients are enabled in dark mode, use navy blue */
+[data-theme="dark"] .background-gradient {
+  background: linear-gradient(135deg, #0a192f 0%, #020817 100%) !important;
 }
