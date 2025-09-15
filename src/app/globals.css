@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS Variables for theme compatibility */
+@layer base {
+  :root {
+    /* Light theme defaults - Beige */
+    --background: theme('colors.beige.100');
+    --foreground: theme('colors.gray.900');
+  }
+
+  [data-theme="dark"] {
+    /* Dark theme - Navy/Black */
+    --background: theme('colors.navy.900');
+    --foreground: theme('colors.gray.100');
+  }
+}
+
+@layer components {
+  /* Gradient backgrounds */
+  .bg-gradient-light {
+    @apply bg-gradient-to-br from-beige-50 via-beige-100 to-beige-200;
+  }
+
+  .bg-gradient-dark {
+    @apply bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700;
+    position: relative;
+  }
+
+  .bg-gradient-dark::before {
+    content: '';
+    @apply absolute inset-0 bg-navy-gradient pointer-events-none;
+  }
+
+  /* Smooth transitions */
+  .theme-transition {
+    @apply transition-colors duration-300 ease-in-out;
+  }
+}
+
+/* Override Once UI with Tailwind */
+[data-theme="light"] body {
+  @apply bg-beige-100 text-gray-900;
+}
+
+[data-theme="dark"] body {
+  @apply bg-navy-900 text-gray-100;
+  background-image: radial-gradient(
+    ellipse at top center,
+    rgba(14, 25, 41, 0.5) 0%,
+    rgba(10, 25, 47, 0.3) 40%,
+    transparent 70%
+  );
+}

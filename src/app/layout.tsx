@@ -2,6 +2,7 @@ import '@once-ui-system/core/css/styles.css';
 import '@once-ui-system/core/css/tokens.css';
 import '@/resources/custom.css';
 import './theme-overrides.css';
+import './globals.css';
 
 import classNames from "classnames";
 
@@ -9,6 +10,7 @@ import { Background, Flex, Meta, opacity, SpacingToken } from "@once-ui-system/c
 import { Footer, Header, RouteGuard, Providers } from '@/components';
 import { baseURL, effects, fonts, style, dataStyle, home } from '@/resources';
 import { ClientWarningSuppress } from '@/components/ClientWarningSuppress';
+import { ThemeBackground } from '@/components/ThemeBackground';
 import styles from './layout.module.scss';
 
 export async function generateMetadata() {
@@ -99,10 +101,11 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body style={{margin: 0, padding: 0}}>
+      <body style={{margin: 0, padding: 0}} className="theme-transition">
         <ClientWarningSuppress />
+        <ThemeBackground />
         <Providers>
-          <Flex fillWidth as="div" background="page" style={{minHeight: "100vh"}} direction="column" horizontal="center">
+          <Flex fillWidth as="div" background="transparent" style={{minHeight: "100vh"}} direction="column" horizontal="center">
           <Background
             position="fixed"
             mask={{
