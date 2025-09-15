@@ -1,0 +1,457 @@
+---
+title: "🚀 How to Integrate Notion API with Next.js: Complete Tutorial"
+publishedAt: "2025-01-14"
+summary: "Learn how to build a powerful content management system by integrating Notion API with your Next.js portfolio, including blog sync, portfolio management, and contact forms."
+category: "Tutorial"
+tags: ["notion", "nextjs", "api", "cms", "tutorial", "web-development"]
+image: "/images/blog/notion-integration.jpg"
+---
+
+## Why Integrate Notion with Your Portfolio?
+
+After implementing a complete Notion integration for my portfolio, I learned valuable lessons about creating a headless CMS. While I ultimately decided to remove it due to the lack of real-time updates, the implementation process taught me a lot about API integrations and content management.
+
+## What We'll Build
+
+In this tutorial, I'll show you how to create:
+- 📝 **Blog synchronization** from Notion databases
+- 💼 **Portfolio project management**
+- 📧 **Contact form submissions** saved to Notion
+- 🔄 **Admin panel** for manual synchronization
+- 🛠️ **CLI tools** for content management
+
+## Prerequisites
+
+- Next.js application (v14 or higher)
+- Notion account with API access
+- Basic knowledge of JavaScript/React
+- Node.js installed
+
+## Step 1: Setting Up Notion API
+
+### Create a Notion Integration
+
+1. Go to [https://www.notion.so/my-integrations](https://www.notion.so/my-integrations)
+2. Click "New integration"
+3. Give it a name (e.g., "My Portfolio")
+4. Select the workspace
+5. Copy the "Internal Integration Token"
+
+### Environment Variables
+
+Create a `.env.local` file:
+
+```env
+NOTION_API_KEY=secret_YOUR_INTEGRATION_TOKEN_HERE
+NOTION_BLOG_DATABASE_ID=YOUR_BLOG_DATABASE_ID
+NOTION_PORTFOLIO_DATABASE_ID=YOUR_PORTFOLIO_DATABASE_ID
+NOTION_CONTACT_DATABASE_ID=YOUR_CONTACT_DATABASE_ID
+```
+
+## Step 2: Install Dependencies
+
+```bash
+npm install @notionhq/client@2.2.15 gray-matter dotenv
+```
+
+**Important:** Use version 2.2.15 of the Notion client for the `query` method support.
+
+## Step 3: Create Notion Databases
+
+### Blog Database Schema
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| Title | Title | Blog post title |
+| Slug | Text | URL-friendly slug |
+| Summary | Text | Post excerpt |
+| Content | Text | Main content |
+| Published Date | Date | Publication date |
+| Status | Select | Draft/Published/Archived |
+| Tags | Multi-select | Post categories |
+| SEO Title | Text | SEO metadata |
+| SEO Description | Text | SEO metadata |
+
+### Portfolio Database Schema
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| Project Name | Title | Project title |
+| Slug | Text | URL slug |
+| Description | Text | Short description |
+| Technologies | Multi-select | Tech stack |
+| Status | Select | Completed/In Progress |
+| Project URL | URL | Live demo link |
+| GitHub URL | URL | Repository link |
+| Date | Date | Project date |
+| Featured | Checkbox | Featured project |
+| Category | Select | Project type |
+
+### Contact Form Database Schema
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| Name | Title | Contact name |
+| Email | Email | Email address |
+| Subject | Text | Message subject |
+| Message | Text | Full message |
+| Date | Date | Submission date |
+| Status | Select | New/Responded |
+
+## Step 4: Create the Notion Client Library
+
+Create `lib/notion.js`:
+
+```javascript
+import { Client } from '@notionhq/client';
+
+const notion = new Client({
+  auth: process.env.NOTION_API_KEY,
+});
+
+export async function queryDatabase(databaseId, filter = {}, sorts = []) {
+  try {
+    const response = await notion.databases.query({
+      database_id: databaseId,
+      filter: filter,
+      sorts: sorts,
+    });
+    return response.results;
+  } catch (error) {
+    console.error('Error querying database:', error);
+    throw error;
+  }
+}
+
+export async function createPage(databaseId, properties) {
+  try {
+    const response = await notion.pages.create({
+      parent: { database_id: databaseId },
+      properties: properties,
+    });
+    return response;
+  } catch (error) {
+    console.error('Error creating page:', error);
+    throw error;
+  }
+}
+
+export async function getPageContent(pageId) {
+  try {
+    const response = await notion.blocks.children.list({
+      block_id: pageId,
+      page_size: 100
+    });
+    return response.results;
+  } catch (error) {
+    console.error('Error fetching page content:', error);
+    throw error;
+  }
+}
+```
+
+## Step 5: Create Sync Functions
+
+Create `lib/notion-sync.js`:
+
+```javascript
+import { queryDatabase, getPageContent } from './notion';
+import fs from 'fs/promises';
+import path from 'path';
+import matter from 'gray-matter';
+
+export async function syncBlogPosts() {
+  const databaseId = process.env.NOTION_BLOG_DATABASE_ID;
+  
+  try {
+    // Get published posts from Notion
+    const posts = await queryDatabase(databaseId, {
+      property: 'Status',
+      select: { equals: 'Published' }
+    });
+
+    const blogDir = path.join(process.cwd(), 'src/app/blog/posts');
+    
+    for (const post of posts) {
+      const properties = post.properties;
+      
+      // Extract post data
+      const title = properties.Title?.title?.[0]?.plain_text || '';
+      const slug = properties.Slug?.rich_text?.[0]?.plain_text || '';
+      const summary = properties.Summary?.rich_text?.[0]?.plain_text || '';
+      
+      // Get full content
+      const blocks = await getPageContent(post.id);
+      const content = await blocksToMarkdown(blocks);
+      
+      // Create MDX file
+      const frontmatter = {
+        title,
+        publishedAt: properties['Published Date']?.date?.start,
+        summary,
+        notionId: post.id
+      };
+      
+      const mdxContent = matter.stringify(content, frontmatter);
+      await fs.writeFile(
+        path.join(blogDir, `${slug}.mdx`),
+        mdxContent
+      );
+    }
+    
+    return { success: true, count: posts.length };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+async function blocksToMarkdown(blocks) {
+  let markdown = '';
+  
+  for (const block of blocks) {
+    switch (block.type) {
+      case 'paragraph':
+        markdown += block.paragraph?.rich_text
+          ?.map(t => t.plain_text).join('') + '\n\n';
+        break;
+      case 'heading_1':
+        markdown += `# ${block.heading_1?.rich_text
+          ?.map(t => t.plain_text).join('')}\n\n`;
+        break;
+      case 'heading_2':
+        markdown += `## ${block.heading_2?.rich_text
+          ?.map(t => t.plain_text).join('')}\n\n`;
+        break;
+      case 'bulleted_list_item':
+        markdown += `- ${block.bulleted_list_item?.rich_text
+          ?.map(t => t.plain_text).join('')}\n`;
+        break;
+      default:
+        break;
+    }
+  }
+  
+  return markdown.trim();
+}
+```
+
+## Step 6: Create API Routes
+
+### Contact Form API
+
+Create `app/api/contact/route.js`:
+
+```javascript
+import { NextResponse } from 'next/server';
+import { createPage } from '@/lib/notion';
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    
+    const result = await createPage(
+      process.env.NOTION_CONTACT_DATABASE_ID,
+      {
+        'Name': {
+          title: [{
+            text: { content: body.name }
+          }]
+        },
+        'Email': {
+          email: body.email
+        },
+        'Message': {
+          rich_text: [{
+            text: { content: body.message }
+          }]
+        },
+        'Date': {
+          date: { start: new Date().toISOString() }
+        }
+      }
+    );
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to save contact' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### Sync API Routes
+
+Create `app/api/sync/blog/route.js`:
+
+```javascript
+import { NextResponse } from 'next/server';
+import { syncBlogPosts } from '@/lib/notion-sync';
+
+export async function POST(request) {
+  // Add authentication check here
+  
+  const result = await syncBlogPosts();
+  
+  if (result.success) {
+    return NextResponse.json({
+      success: true,
+      message: `Synced ${result.count} posts`
+    });
+  } else {
+    return NextResponse.json(
+      { error: result.error },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Step 7: Create Admin Panel
+
+Create `app/admin/page.tsx`:
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+
+export default function AdminPage() {
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSync = async (type: string) => {
+    setIsSyncing(true);
+    setMessage('');
+    
+    try {
+      const response = await fetch(`/api/sync/${type}`, {
+        method: 'POST',
+      });
+      
+      const data = await response.json();
+      setMessage(data.message || 'Sync completed');
+    } catch (error) {
+      setMessage('Sync failed');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  return (
+    <div className="p-8">
+      <h1>Admin Panel</h1>
+      
+      <div className="space-y-4">
+        <button
+          onClick={() => handleSync('blog')}
+          disabled={isSyncing}
+        >
+          Sync Blog Posts
+        </button>
+        
+        <button
+          onClick={() => handleSync('portfolio')}
+          disabled={isSyncing}
+        >
+          Sync Portfolio
+        </button>
+      </div>
+      
+      {message && <p>{message}</p>}
+    </div>
+  );
+}
+```
+
+## Step 8: Create CLI Scripts
+
+Create `scripts/sync-notion.js`:
+
+```javascript
+require('dotenv').config();
+
+async function syncContent() {
+  const type = process.argv[2] || 'all';
+  
+  console.log(`Syncing ${type}...`);
+  
+  if (type === 'blog' || type === 'all') {
+    const { syncBlogPosts } = await import('../lib/notion-sync.js');
+    const result = await syncBlogPosts();
+    console.log('Blog sync:', result);
+  }
+  
+  if (type === 'portfolio' || type === 'all') {
+    const { syncPortfolio } = await import('../lib/notion-sync.js');
+    const result = await syncPortfolio();
+    console.log('Portfolio sync:', result);
+  }
+}
+
+syncContent().catch(console.error);
+```
+
+Add to `package.json`:
+
+```json
+{
+  "scripts": {
+    "sync:notion": "node scripts/sync-notion.js all",
+    "sync:blog": "node scripts/sync-notion.js blog",
+    "sync:portfolio": "node scripts/sync-notion.js portfolio"
+  }
+}
+```
+
+## Important Considerations
+
+### Pros of This Integration
+
+- ✅ Use Notion as a familiar CMS
+- ✅ Collaborative content editing
+- ✅ Rich text editing capabilities
+- ✅ No need for a separate CMS
+
+### Cons to Consider
+
+- ❌ **No real-time updates** - Requires manual sync
+- ❌ **Limited formatting** - Notion blocks don't map perfectly to MDX
+- ❌ **Image handling** - Images aren't automatically transferred
+- ❌ **API rate limits** - Can hit limits with large databases
+- ❌ **Complexity** - Adds significant complexity for simple blogs
+
+## Alternative Approaches
+
+After implementing this, I found these alternatives might be better:
+
+1. **Direct MDX editing** - Simpler, version controlled
+2. **Contentful/Sanity** - Purpose-built CMS with real-time
+3. **GitHub as CMS** - Use GitHub UI for content editing
+4. **Keystatic** - Git-based CMS with visual editing
+
+## Lessons Learned
+
+1. **Keep it simple** - Direct MDX files are often sufficient
+2. **Real-time matters** - Manual sync creates friction
+3. **Image handling is complex** - Notion doesn't handle external images well
+4. **Version control** - Git provides better content versioning
+5. **Performance** - Static MDX files are faster than API calls
+
+## Conclusion
+
+While integrating Notion with Next.js is technically feasible and provides a familiar editing interface, the limitations often outweigh the benefits for portfolio sites. The lack of real-time updates and complex image handling make it less ideal than simpler solutions.
+
+For most portfolio sites, I recommend sticking with MDX files in your repository, using GitHub's web editor for quick edits, or choosing a purpose-built headless CMS if you need a visual editor.
+
+## Resources
+
+- [Notion API Documentation](https://developers.notion.com/)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [@notionhq/client on npm](https://www.npmjs.com/package/@notionhq/client)
+- [MDX Documentation](https://mdxjs.com/)
+
+---
+
+*Have questions or improvements? Let me know in the comments or reach out on [Twitter](https://twitter.com/avsolem)!*

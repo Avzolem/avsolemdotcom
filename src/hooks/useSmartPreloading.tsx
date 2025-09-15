@@ -52,7 +52,7 @@ export function useSmartPreloading(href: string, options: PreloadOptions = {}) {
   const preloadRouteImages = async (route: string) => {
     // This would typically fetch the page metadata or use a predefined map
     const routeImageMap: Record<string, string[]> = {
-      '/work': ['/images/projects/project-01/cover-01.jpg'],
+      '/work': [],
       '/gallery': [
         '/images/gallery/horizontal-1.jpg',
         '/images/gallery/vertical-1.jpg'

@@ -34,10 +34,17 @@ const nextConfig = {
   
   // 4. Performance optimizations
   experimental: {
-    optimizePackageImports: ['@once-ui-system/core'], // Tree-shake Once UI
+    optimizePackageImports: [
+      '@once-ui-system/core',
+      'react-icons',
+      'react-masonry-css'
+    ], // Tree-shake libraries
     optimizeServerReact: true, // Optimize React server components
     webVitalsAttribution: ['CLS', 'LCP'], // Track Web Vitals
   },
+
+  // Disable source maps in production for smaller bundle
+  productionBrowserSourceMaps: false,
 
   // 5. Headers for caching and performance
   async headers() {

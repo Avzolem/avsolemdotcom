@@ -85,3 +85,21 @@ Routes can be password-protected via `protectedRoutes` in `/src/resources/once-u
   ```
 - Use clean, descriptive commit messages focused on the actual changes
 - Follow conventional commit format when appropriate
+
+## Adding New Projects
+
+To add new projects to the portfolio:
+
+1. **Capture screenshots** using the generic script:
+   ```bash
+   node scripts/capture-project-screenshots.cjs <url> <project-slug>
+   # Example: node scripts/capture-project-screenshots.cjs https://example.com my-project
+   ```
+
+2. **Create MDX file** in `src/app/work/projects/<project-slug>.mdx` with:
+   - Frontmatter metadata (title, date, summary, images, etc.)
+   - Project description and details
+   - Technologies used
+   - Links to live demo and GitHub
+
+3. **Images** will be automatically saved to `public/images/projects/<project-slug>/`

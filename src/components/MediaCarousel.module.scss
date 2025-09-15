@@ -1,0 +1,39 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--border-radius-l);
+}
+
+.controls {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-blur);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-full);
+  gap: 16px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-on-background-weak);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--brand-on-background);
+  }
+
+  &:hover:not(.active) {
+    background: var(--brand-on-background-medium);
+  }
+}
