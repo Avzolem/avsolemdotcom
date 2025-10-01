@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Magic Portfolio project built with Next.js 15, React 19, and Once UI. It's a personal portfolio website for Andrés Solem, a Full Stack Developer. The site features a blog, work portfolio, about page, and gallery, all driven by MDX content.
+This is a Magic Portfolio project built with Next.js 15, React 19, and Once UI. It's a personal portfolio website for Andrés Aguilar, a Full Stack Developer. The site features a blog, work portfolio, about page, and gallery, all driven by MDX content.
 
 ## Development Commands
 
