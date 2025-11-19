@@ -11,7 +11,7 @@ import {
   Heading,
   Badge,
   Spinner,
-  Grid,
+  Flex,
 } from '@once-ui-system/core';
 import Image from 'next/image';
 
@@ -76,7 +76,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
 
   if (isLoading) {
     return (
-      <Column fillWidth alignItems="center" paddingY="64">
+      <Column fillWidth horizontal="center" paddingY="64">
         <Spinner size="l" />
         <Text variant="body-default-m" onBackground="neutral-weak">
           Cargando lista compartida...
@@ -87,7 +87,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
 
   if (error) {
     return (
-      <Column fillWidth alignItems="center" paddingY="64" gap="16">
+      <Column fillWidth horizontal="center" paddingY="64" gap="16">
         <Text variant="heading-default-xl" align="center">
           ⚠️
         </Text>
@@ -107,21 +107,21 @@ export default function SharedListView({ params }: SharedListViewProps) {
     <Column fillWidth gap="24">
       {/* Header */}
       <Column gap="12">
-        <Row gap="12" alignItems="center">
+        <Row gap="12" vertical="center">
           <Text variant="body-default-s" onBackground="neutral-weak">
             🔗 Vista Pública
           </Text>
         </Row>
         <Heading variant="heading-strong-xl">{getListTitle()}</Heading>
         <Row gap="16" wrap>
-          <Badge variant="brand" size="l">
+          <Badge background="brand-alpha-weak" paddingX="12" paddingY="4">
             {cards.length} {cards.length === 1 ? 'carta' : 'cartas'}
           </Badge>
-          <Badge variant="accent" size="l">
+          <Badge background="accent-alpha-weak" paddingX="12" paddingY="4">
             Valor Total: {formatPrice(totalValue)}
           </Badge>
           {expiresAt && (
-            <Badge variant="neutral" size="s">
+            <Badge background="neutral-alpha-weak" paddingX="12" paddingY="4">
               Expira: {new Date(expiresAt).toLocaleDateString('es-MX')}
             </Badge>
           )}
@@ -132,7 +132,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
       {cards.length === 0 ? (
         <Column
           fillWidth
-          alignItems="center"
+          horizontal="center"
           paddingY="64"
           gap="16"
         >
@@ -144,7 +144,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
           </Text>
         </Column>
       ) : (
-        <Grid columns="repeat(auto-fill, minmax(280px, 1fr))" gap="16" fillWidth>
+        <Flex gap="16" fillWidth wrap>
           {cards.map((card) => (
             <Column
               key={card.cardId}
@@ -152,11 +152,13 @@ export default function SharedListView({ params }: SharedListViewProps) {
               padding="16"
               background="surface"
               border="neutral-medium"
-              borderStyle="solid-1"
+              borderStyle="solid"
               radius="m"
+              minWidth={20}
+              style={{ flex: '1 1 280px' }}
             >
               {/* Card Image */}
-              <Column fillWidth alignItems="center">
+              <Column fillWidth horizontal="center">
                 <Image
                   src={card.localImagePath || card.cardImage}
                   alt={card.cardName}
@@ -171,7 +173,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
               <Column gap="8">
                 <Heading variant="heading-strong-s">{card.cardName}</Heading>
 
-                <Row gap="8" alignItems="center">
+                <Row gap="8" vertical="center">
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     Cantidad:
                   </Text>
@@ -179,7 +181,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
                 </Row>
 
                 {card.price && (
-                  <Row gap="8" alignItems="center">
+                  <Row gap="8" vertical="center">
                     <Text variant="label-default-s" onBackground="neutral-weak">
                       Precio:
                     </Text>
@@ -201,11 +203,11 @@ export default function SharedListView({ params }: SharedListViewProps) {
               </Column>
             </Column>
           ))}
-        </Grid>
+        </Flex>
       )}
 
       {/* Footer */}
-      <Column alignItems="center" paddingY="24" gap="8">
+      <Column horizontal="center" paddingY="24" gap="8">
         <Text variant="body-default-s" onBackground="neutral-weak" align="center">
           ¿Quieres tu propia colección Yu-Gi-Oh!?
         </Text>

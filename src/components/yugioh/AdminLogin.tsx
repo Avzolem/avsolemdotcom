@@ -43,7 +43,7 @@ export default function AdminLogin({ onClose }: AdminLoginProps) {
       padding="24"
       background="surface"
       border="neutral-medium"
-      borderStyle="solid-1"
+      borderStyle="solid"
       radius="l"
       maxWidth={24}
     >

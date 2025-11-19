@@ -4,9 +4,9 @@ import { YugiohList, CardInList, ListType } from '@/types/yugioh';
 
 const COLLECTION_NAME = 'yugioh_lists';
 
-export async function getListsCollection(): Promise<Collection> {
+export async function getListsCollection(): Promise<Collection<YugiohList>> {
   const db = await getDatabase();
-  return db.collection(COLLECTION_NAME);
+  return db.collection<YugiohList>(COLLECTION_NAME);
 }
 
 /**
@@ -19,7 +19,7 @@ export async function getOrCreateList(type: ListType): Promise<YugiohList> {
 
   if (!list) {
     // Create new list
-    const newList: YugiohList = {
+    const newList: Omit<YugiohList, '_id'> = {
       type,
       cards: [],
       createdAt: new Date(),
