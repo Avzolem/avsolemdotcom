@@ -1,0 +1,311 @@
+$yugioh-purple: #7B2CBF;
+$yugioh-gold: #FFD700;
+$yugioh-gray: #2a2a2a;
+
+.card {
+  background: rgba(26, 26, 26, 0.8);
+  border: 2px solid rgba(123, 44, 191, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+
+  &:hover {
+    border-color: $yugioh-gold;
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+  }
+}
+
+.imageWrapper {
+  flex-shrink: 0;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100px;
+  height: 146px;
+  border-radius: 8px;
+  overflow: visible;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+.cardImage {
+  border-radius: 8px;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.2s ease;
+}
+
+.imageZoomOverlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999999999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 25px 100px rgba(0, 0, 0, 0.95);
+  border-radius: 12px;
+  border: 5px solid $yugioh-gold;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(10, 10, 10, 0.98) 100%);
+  padding: 0.75rem;
+}
+
+.imageContainer:hover .imageZoomOverlay {
+  opacity: 1;
+}
+
+.imageContainer:hover .cardImage {
+  opacity: 0.7;
+}
+
+.largeImage {
+  border-radius: 8px;
+  object-fit: contain;
+  display: block;
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: $yugioh-gold;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  background: rgba(123, 44, 191, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid rgba(123, 44, 191, 0.5);
+}
+
+.badgeAccent {
+  @extend .badge;
+  background: rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: rgb(147, 197, 253);
+}
+
+.badgeBrand {
+  @extend .badge;
+  background: rgba(255, 215, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.4);
+  color: $yugioh-gold;
+}
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+
+  strong {
+    color: $yugioh-gold;
+  }
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.descLabel {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.descText {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.priceSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.priceLabel {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.priceValue {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.successMessage {
+  text-align: center;
+  color: #22C55E;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.375rem;
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 6px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.addButton {
+  flex: 1;
+  background: rgba(123, 44, 191, 0.3);
+  color: $yugioh-gold;
+  border: 1px solid rgba(123, 44, 191, 0.5);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+  z-index: 10;
+
+  &:hover:not(:disabled) {
+    background: rgba(123, 44, 191, 0.5);
+    border-color: $yugioh-gold;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+// Compact version
+.cardCompact {
+  background: rgba(42, 42, 42, 0.8);
+  border: 2px solid rgba(123, 44, 191, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $yugioh-gold;
+    transform: translateY(-2px);
+  }
+}
+
+.compactImage {
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.compactContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.compactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.compactTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $yugioh-gold;
+  margin: 0;
+}
+
+.price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: $yugioh-gold;
+}

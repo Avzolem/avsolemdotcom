@@ -5,6 +5,7 @@ import './theme-overrides.css';
 import './globals.css';
 
 import classNames from "classnames";
+import { headers } from 'next/headers';
 
 import { Background, Flex, Meta, opacity, SpacingToken } from "@once-ui-system/core";
 import { Footer, Header, RouteGuard, Providers } from '@/components';
@@ -28,6 +29,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || headersList.get('referer') || '';
+  const isYugiohRoute = pathname.includes('/yugioh');
+
   return (
     <html
       suppressHydrationWarning
@@ -147,22 +152,28 @@ export default async function RootLayout({
               color: effects.lines.color,
             }}
           />
-          <Flex fillWidth minHeight="16" className={styles.hideOnMobile}/>
-            <Header />
-            <Flex
-              zIndex={0}
-              fillWidth
-              padding="l"
-              horizontal="center"
-              flex={1}
-            >
-              <Flex horizontal="center" fillWidth minHeight="0">
-                <RouteGuard>
-                  {children}
-                </RouteGuard>
+          {isYugiohRoute ? (
+            children
+          ) : (
+            <>
+              <Flex fillWidth minHeight="16" className={styles.hideOnMobile}/>
+              <Header />
+              <Flex
+                zIndex={0}
+                fillWidth
+                padding="l"
+                horizontal="center"
+                flex={1}
+              >
+                <Flex horizontal="center" fillWidth minHeight="0">
+                  <RouteGuard>
+                    {children}
+                  </RouteGuard>
+                </Flex>
               </Flex>
-            </Flex>
-            <Footer/>
+              <Footer/>
+            </>
+          )}
           </Flex>
         </Providers>
       </body>

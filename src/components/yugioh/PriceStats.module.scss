@@ -1,0 +1,145 @@
+$yugioh-purple: #7B2CBF;
+$yugioh-purple-dark: #5A189A;
+$yugioh-gold: #FFD700;
+$yugioh-gold-dark: #FFA500;
+
+.container {
+  background: rgba(26, 26, 26, 0.8);
+  border: 2px solid rgba(123, 44, 191, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  color: $yugioh-gold;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statCard {
+  background: rgba(123, 44, 191, 0.15);
+  border: 1px solid rgba(123, 44, 191, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.statLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  color: $yugioh-gold;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.statSubtext {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.distribution {
+  margin-top: 1.5rem;
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chartRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+.chartLabel {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-width: 120px;
+
+  @media (max-width: 768px) {
+    min-width: auto;
+  }
+}
+
+.chartBarContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.chartBar {
+  height: 24px;
+  background: linear-gradient(90deg, $yugioh-purple 0%, $yugioh-gold 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  min-width: 2px;
+}
+
+.chartValue {
+  color: $yugioh-gold;
+  font-weight: 700;
+  font-size: 0.875rem;
+  min-width: 30px;
+  text-align: right;
+}
+
+.note {
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  text-align: center;
+}

@@ -1,0 +1,52 @@
+$yugioh-purple: #7B2CBF;
+$yugioh-purple-dark: #5A189A;
+$yugioh-gold: #FFD700;
+$yugioh-gold-dark: #FFA500;
+
+.container {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.btnExport {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(123, 44, 191, 0.2);
+  border: 2px solid rgba(123, 44, 191, 0.4);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 100;
+  pointer-events: auto;
+
+  &:hover {
+    background: rgba(123, 44, 191, 0.3);
+    border-color: $yugioh-gold;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(123, 44, 191, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .icon {
+    font-size: 1.125rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
