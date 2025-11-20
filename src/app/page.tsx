@@ -6,6 +6,16 @@ import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 
+export async function generateMetadata() {
+  return Meta.generate({
+    title: home.title,
+    description: home.description,
+    baseURL: baseURL,
+    image: `/api/og/generate?title=${encodeURIComponent(home.title)}`,
+    path: home.path,
+  });
+}
+
 export default function Home() {
   return (
     <Column maxWidth="m" gap="xl" horizontal="center">
