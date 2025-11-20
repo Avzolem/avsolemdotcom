@@ -49,7 +49,7 @@ export default async function Blog({
   }
 
   const avatars =
-    post.metadata.team?.map((person) => ({
+    post.metadata.team?.map((person: { avatar: string }) => ({
       src: person.avatar,
     })) || [];
 
