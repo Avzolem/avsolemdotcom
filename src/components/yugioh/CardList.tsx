@@ -40,6 +40,7 @@ export default function CardList({ type, title }: CardListProps) {
 
   useEffect(() => {
     loadCards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   const removeCard = async (cardId: number) => {
