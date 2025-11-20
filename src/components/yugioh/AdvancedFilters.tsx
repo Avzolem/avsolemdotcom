@@ -20,15 +20,39 @@ interface AdvancedFiltersProps {
 }
 
 const CARD_TYPES = [
+  // Main Deck Monsters
   'Effect Monster',
+  'Flip Effect Monster',
+  'Flip Tuner Effect Monster',
+  'Gemini Monster',
   'Normal Monster',
+  'Normal Tuner Monster',
+  'Pendulum Effect Monster',
+  'Pendulum Effect Ritual Monster',
+  'Pendulum Flip Effect Monster',
+  'Pendulum Normal Monster',
+  'Pendulum Tuner Effect Monster',
+  'Ritual Effect Monster',
   'Ritual Monster',
+  'Spirit Monster',
+  'Toon Monster',
+  'Tuner Monster',
+  'Union Effect Monster',
+  // Extra Deck Monsters
   'Fusion Monster',
-  'Synchro Monster',
-  'XYZ Monster',
   'Link Monster',
+  'Pendulum Effect Fusion Monster',
+  'Synchro Monster',
+  'Synchro Pendulum Effect Monster',
+  'Synchro Tuner Monster',
+  'XYZ Monster',
+  'XYZ Pendulum Effect Monster',
+  // Spells & Traps
   'Spell Card',
   'Trap Card',
+  // Other
+  'Skill Card',
+  'Token',
 ];
 
 const MONSTER_TYPES = [

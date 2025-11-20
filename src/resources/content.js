@@ -50,6 +50,11 @@ const social = [
     icon: "email",
     link: `mailto:${person.email}`,
   },
+  {
+    name: "Yu-Gi-Oh! Manager",
+    icon: "dragon",
+    link: "/yugioh",
+  },
 ];
 
 const home = {

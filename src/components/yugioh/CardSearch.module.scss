@@ -151,3 +151,39 @@ $yugioh-gray: #1a1a1a;
     grid-template-columns: 1fr;
   }
 }
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+
+  h3 {
+    color: $yugioh-gold;
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    max-width: 400px;
+  }
+}
+
+.emptyIcon {
+  opacity: 0.3;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+  transition: all 0.3s ease;
+
+  img {
+    object-fit: contain;
+  }
+
+  &:hover {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+  }
+}

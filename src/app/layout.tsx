@@ -110,9 +110,10 @@ export default async function RootLayout({
         <ClientWarningSuppress />
         <ThemeBackground />
         <Providers>
-          <Flex fillWidth as="div" background="transparent" style={{minHeight: "100vh"}} direction="column" horizontal="center">
+          <Flex fillWidth as="div" background="transparent" style={{minHeight: "100vh", position: "relative", zIndex: 1}} direction="column" horizontal="center">
           <Background
             position="fixed"
+            style={{pointerEvents: "none" as const}}
             mask={{
               x: effects.mask.x,
               y: effects.mask.y,

@@ -58,9 +58,12 @@ export default function YugiohFooter() {
               >
                 TCGPlayer ↗
               </a>
-              <Link href="/" className={styles.link}>
-                Volver al Inicio
-              </Link>
+              <a
+                href="/"
+                className={styles.link}
+              >
+                Volver al Inicio ↗
+              </a>
             </div>
           </div>
         </div>

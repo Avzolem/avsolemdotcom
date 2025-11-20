@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { YugiohCard } from '@/types/yugioh';
 import { searchCardsByName, searchCardsAdvanced } from '@/lib/services/ygoprodeck';
 import CardDisplay from './CardDisplay';
@@ -183,8 +184,16 @@ export default function CardSearch() {
 
       {/* Empty State */}
       {!isLoading && !hasSearched && cards.length === 0 && (
-        <div className="yugioh-empty">
-          <div className="icon">🃏</div>
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <Image
+              src="/images/yugioh-bg-icon.png"
+              alt="Yu-Gi-Oh!"
+              width={150}
+              height={150}
+              priority
+            />
+          </div>
           <h3>Buscador de Cartas Yu-Gi-Oh!</h3>
           <p>
             Busca cualquier carta de Yu-Gi-Oh! por su nombre. Obtén información

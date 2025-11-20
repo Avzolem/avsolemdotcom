@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CardInList, ListType } from '@/types/yugioh';
 import { formatPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
@@ -21,6 +21,7 @@ export default function CardList({ type, title }: CardListProps) {
   const [totalValue, setTotalValue] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isRemoving, setIsRemoving] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const loadCards = async () => {
     setIsLoading(true);
@@ -106,6 +107,15 @@ export default function CardList({ type, title }: CardListProps) {
     }
   };
 
+  // Filtrar cartas localmente
+  const filteredCards = useMemo(() => {
+    if (!searchTerm) return cards;
+
+    return cards.filter(card =>
+      card.cardName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [cards, searchTerm]);
+
   if (isLoading) {
     return (
       <div className={styles.loading}>
@@ -133,7 +143,32 @@ export default function CardList({ type, title }: CardListProps) {
       </div>
 
       {/* Price Statistics */}
-      <PriceStats cards={cards} />
+      <PriceStats cards={filteredCards} />
+
+      {/* Search Bar */}
+      {cards.length > 0 && (
+        <div className={styles.searchSection}>
+          <div className={styles.searchBar}>
+            <input
+              type="text"
+              placeholder="Buscar en esta lista..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={styles.searchInput}
+            />
+            {searchTerm && (
+              <button onClick={() => setSearchTerm('')} className={styles.clearBtn}>
+                ✕
+              </button>
+            )}
+          </div>
+          {filteredCards.length !== cards.length && (
+            <p className={styles.filterInfo}>
+              Mostrando {filteredCards.length} de {cards.length} cartas
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Cards Grid */}
       {cards.length === 0 ? (
@@ -142,9 +177,15 @@ export default function CardList({ type, title }: CardListProps) {
           <h2 className={styles.emptyTitle}>Lista vacía</h2>
           <p className={styles.emptyText}>No hay cartas en esta lista todavía.</p>
         </div>
+      ) : filteredCards.length === 0 ? (
+        <div className={styles.empty}>
+          <div className={styles.emptyIcon}>🔍</div>
+          <h2 className={styles.emptyTitle}>No se encontraron cartas</h2>
+          <p className={styles.emptyText}>No hay cartas que coincidan con los filtros aplicados.</p>
+        </div>
       ) : (
         <div className={styles.cardsGrid}>
-          {cards.map((card) => (
+          {filteredCards.map((card) => (
             <div key={card.cardId} className={styles.cardItem}>
               {/* Card Image */}
               <div className={styles.cardImageWrapper}>

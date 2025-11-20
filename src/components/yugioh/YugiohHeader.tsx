@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import AdminLogin from './AdminLogin';
 import styles from './YugiohHeader.module.scss';
 
@@ -19,7 +20,7 @@ export default function YugiohHeader() {
 
   const navItems = [
     { href: '/yugioh', label: 'Buscar', icon: '🔍' },
-    { href: '/yugioh/coleccion', label: 'Colección', icon: '📚' },
+    { href: '/yugioh/coleccion', label: 'Colección', icon: '🃏' },
     { href: '/yugioh/venta', label: 'En Venta', icon: '💰' },
     { href: '/yugioh/wishlist', label: 'Wishlist', icon: '⭐' },
   ];
@@ -32,11 +33,19 @@ export default function YugiohHeader() {
           <div className={styles.logo}>
             <Link href="/yugioh">
               <h1 className={styles.title}>
-                <span className={styles.titleIcon}>🃏</span>
+                <span className={styles.titleIcon}>
+                  <Image
+                    src="/images/yugioh-logo-icon.png"
+                    alt="Yu-Gi-Oh! Logo"
+                    width={40}
+                    height={40}
+                    priority
+                  />
+                </span>
                 Yu-Gi-Oh! Manager
               </h1>
+              <p className={styles.subtitle}>Gestiona tu colección de cartas</p>
             </Link>
-            <p className={styles.subtitle}>Gestiona tu colección de cartas</p>
           </div>
 
           {/* Auth Status */}
