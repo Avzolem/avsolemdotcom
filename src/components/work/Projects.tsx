@@ -1,4 +1,4 @@
-import { getCachedPosts } from "@/utils/mdx-cache";
+import { getPosts } from "@/utils/utils";
 import { Column } from "@once-ui-system/core";
 import { LazyProjectCard } from "@/components/LazyProjectCard";
 
@@ -7,7 +7,10 @@ interface ProjectsProps {
 }
 
 export function Projects({ range }: ProjectsProps) {
-  let allProjects = getCachedPosts(["src", "app", "work", "projects"]);
+  // Direct call without caching to avoid production issues
+  let allProjects = getPosts(["src", "app", "work", "projects"]);
+
+  console.log('[Projects] Loaded projects count:', allProjects.length);
 
   const sortedProjects = allProjects.sort((a, b) => {
     return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
@@ -16,6 +19,8 @@ export function Projects({ range }: ProjectsProps) {
   const displayedProjects = range
     ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)
     : sortedProjects;
+
+  console.log('[Projects] Displaying projects count:', displayedProjects.length);
 
   return (
     <Column fillWidth gap="xl" marginBottom="40" paddingX="l">

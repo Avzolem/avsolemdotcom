@@ -91,5 +91,9 @@ function getMDXData(dir: string) {
 
 export function getPosts(customPath = ["", "", "", ""]) {
   const postsDir = path.join(process.cwd(), ...customPath);
-  return getMDXData(postsDir);
+  console.log('[getPosts] Looking for MDX files in:', postsDir);
+  console.log('[getPosts] process.cwd():', process.cwd());
+  const result = getMDXData(postsDir);
+  console.log('[getPosts] Found', result.length, 'posts');
+  return result;
 }

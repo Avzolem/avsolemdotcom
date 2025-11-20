@@ -68,13 +68,18 @@ Routes can be password-protected via `protectedRoutes` in `/src/resources/once-u
 
 ## Git Workflow Policies
 
-### **CRITICAL: Git Push Policy**
-- **🚨 NEVER EVER push to remote repository without explicit user authorization**
-- **🚨 ALWAYS ask "¿Puedo hacer push?" or "Can I push?" and WAIT for user confirmation**
-- **🚨 Do NOT execute `git push` commands automatically, even if the user says "commit and push"**
-- **🚨 Treat push requests as separate actions that require explicit permission**
+### **CRITICAL: Git Commit and Push Policy**
+- **🚨 NEVER EVER commit or push without EXPLICIT user request**
+- **🚨 DO NOT commit automatically, even when making fixes or changes**
+- **🚨 DO NOT push to remote repository without explicit user authorization**
+- **🚨 ALWAYS ask "¿Quieres que haga commit?" or "Should I commit?" BEFORE committing**
+- **🚨 ALWAYS ask "¿Puedo hacer push?" or "Can I push?" BEFORE pushing**
+- **🚨 WAIT for user confirmation before executing git commands**
+- **🚨 Do NOT execute `git commit` or `git push` commands automatically**
+- **🚨 Treat commit and push as separate actions that require explicit permission**
+- Only commit when the user explicitly says "haz commit" or "make a commit"
 - Only push when the user gives clear authorization like "yes, push" or "haz push"
-- If unsure about push authorization, ASK FIRST
+- If unsure about commit/push authorization, ASK FIRST
 
 ### **Commit Message Policy**  
 - **DO NOT include Claude Code co-authorship in commits**
