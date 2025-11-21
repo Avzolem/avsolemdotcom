@@ -93,7 +93,18 @@ export function getPosts(customPath = ["", "", "", ""]) {
   const postsDir = path.join(process.cwd(), ...customPath);
   console.log('[getPosts] Looking for MDX files in:', postsDir);
   console.log('[getPosts] process.cwd():', process.cwd());
+  console.log('[getPosts] __dirname equivalent:', __dirname || 'not available');
+  console.log('[getPosts] Directory exists:', fs.existsSync(postsDir));
+
   const result = getMDXData(postsDir);
   console.log('[getPosts] Found', result.length, 'posts');
+
+  if (result.length === 0) {
+    console.error('[getPosts] WARNING: No posts found! This may cause empty carousels in production');
+    console.error('[getPosts] Attempted path:', postsDir);
+    console.error('[getPosts] CWD:', process.cwd());
+    console.error('[getPosts] Files in CWD:', fs.existsSync(process.cwd()) ? fs.readdirSync(process.cwd()).slice(0, 10) : 'CWD not accessible');
+  }
+
   return result;
 }
