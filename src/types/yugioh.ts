@@ -26,6 +26,14 @@ export interface YugiohCard {
 
   // Prices
   card_prices?: CardPrice[];
+
+  // Specific set info (when searched by set code)
+  specificSetInfo?: {
+    setCode: string;
+    setName: string;
+    setRarity: string;
+    setPrice: string;
+  };
 }
 
 export interface CardImage {

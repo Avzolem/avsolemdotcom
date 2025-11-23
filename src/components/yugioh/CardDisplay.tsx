@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, memo } from 'react';
-import { YugiohCard, ListType } from '@/types/yugioh';
+import { YugiohCard, ListType, CardSet } from '@/types/yugioh';
 import { getCardPrice, formatPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
 import Image from 'next/image';
@@ -10,6 +10,45 @@ import styles from './CardDisplay.module.scss';
 interface CardDisplayProps {
   card: YugiohCard;
   compact?: boolean;
+}
+
+// Component to display all sets in a collapsible dropdown
+function AllSetsDropdown({ sets }: { sets: CardSet[] }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className={styles.allSetsSection}>
+      <button
+        type="button"
+        className={styles.allSetsToggle}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <span className={styles.allSetsLabel}>
+          📦 Ver todos los sets ({sets.length})
+        </span>
+        <span className={styles.toggleIcon}>{isExpanded ? '▼' : '▶'}</span>
+      </button>
+
+      {isExpanded && (
+        <div className={styles.setsList}>
+          {sets.map((set, index) => (
+            <div key={index} className={styles.setItem}>
+              <div className={styles.setCode}>{set.set_code}</div>
+              <div className={styles.setDetails}>
+                <div className={styles.setName}>{set.set_name}</div>
+                <div className={styles.setMeta}>
+                  <span className={styles.setRarity}>{set.set_rarity}</span>
+                  <span className={styles.setPrice}>
+                    {formatPrice(parseFloat(set.set_price))}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function CardDisplay({ card, compact = false }: CardDisplayProps) {
@@ -171,10 +210,51 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           <p className={styles.descText}>{card.desc}</p>
         </div>
 
+        {/* Card Codes - Different display based on search type */}
+        {card.specificSetInfo ? (
+          // Specific set code search - show only this set's info
+          <div className={styles.codesSection}>
+            <div className={styles.codeItem}>
+              <strong>Passcode:</strong> <span className={styles.codeValue}>{card.id}</span>
+            </div>
+            <div className={styles.codeItem}>
+              <strong>Set Code:</strong>{' '}
+              <span className={styles.codeValue}>{card.specificSetInfo.setCode}</span>
+            </div>
+            <div className={styles.codeItem}>
+              <strong>Set:</strong>{' '}
+              <span className={styles.setName}>{card.specificSetInfo.setName}</span>
+            </div>
+            <div className={styles.codeItem}>
+              <strong>Rareza:</strong>{' '}
+              <span className={styles.rarity}>{card.specificSetInfo.setRarity}</span>
+            </div>
+          </div>
+        ) : (
+          // Name search - show passcode only, sets will be in collapsible section
+          <div className={styles.codesSection}>
+            <div className={styles.codeItem}>
+              <strong>Passcode:</strong> <span className={styles.codeValue}>{card.id}</span>
+            </div>
+          </div>
+        )}
+
+        {/* All Sets - Collapsible (only for name search) */}
+        {!card.specificSetInfo && card.card_sets && card.card_sets.length > 0 && (
+          <AllSetsDropdown sets={card.card_sets} />
+        )}
+
         {/* Price */}
         <div className={styles.priceSection}>
-          <span className={styles.priceLabel}>Precio estimado:</span>
-          <span className={styles.priceValue}>{formatPrice(price)}</span>
+          <span className={styles.priceLabel}>
+            {card.specificSetInfo ? 'Precio de este set:' : 'Precio estimado:'}
+          </span>
+          <span className={styles.priceValue}>
+            {card.specificSetInfo
+              ? formatPrice(parseFloat(card.specificSetInfo.setPrice))
+              : formatPrice(price)
+            }
+          </span>
         </div>
 
         {/* Add to List Buttons */}

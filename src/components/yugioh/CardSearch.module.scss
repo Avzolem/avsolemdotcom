@@ -20,7 +20,7 @@ $yugioh-gray: #1a1a1a;
 
 .searchInput {
   width: 100%;
-  padding: 1.25rem 3.5rem 1.25rem 1.5rem;
+  padding: 1.25rem 6.5rem 1.25rem 1.5rem;
   background: rgba(26, 26, 26, 0.9);
   border: 3px solid rgba(123, 44, 191, 0.4);
   border-radius: 16px;
@@ -41,14 +41,14 @@ $yugioh-gray: #1a1a1a;
   }
 
   @media (max-width: 768px) {
-    padding: 1rem 3rem 1rem 1rem;
+    padding: 1rem 6rem 1rem 1rem;
     font-size: 1rem;
   }
 }
 
 .clearButton {
   position: absolute;
-  right: 1rem;
+  right: 4rem;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(239, 68, 68, 0.2);
@@ -67,6 +67,36 @@ $yugioh-gray: #1a1a1a;
   &:hover {
     background: rgba(239, 68, 68, 0.3);
     transform: translateY(-50%) scale(1.1);
+  }
+}
+
+.scanButton {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, $yugioh-purple 0%, rgba(123, 44, 191, 0.8) 100%);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  color: $yugioh-gold;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(123, 44, 191, 0.8) 0%, #5A189A 100%);
+    border-color: $yugioh-gold;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
   }
 }
 
@@ -185,5 +215,21 @@ $yugioh-gray: #1a1a1a;
   &:hover {
     opacity: 0.5;
     filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+  }
+}
+
+.scannerSection {
+  margin-bottom: 2rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

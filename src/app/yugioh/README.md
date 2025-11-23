@@ -6,7 +6,24 @@ Sistema completo de gestión de cartas Yu-Gi-Oh! con búsqueda, visualización d
 
 ### 🔍 Búsqueda Pública
 - Búsqueda de cartas por nombre (fuzzy search)
-- **NUEVO**: Filtros avanzados (tipo, atributo, nivel, ATK/DEF rangos)
+- **NUEVO**: 📸 Escaneo de cartas con cámara (Dos Modos)
+  - **🏷️ Modo Set Code (Recomendado)**: Escanea el código de set alfanumérico
+    - Escanea código de set (ej: "LOB-EN001", "SDK-001")
+    - OCR optimizado para alfanumérico (letras mayúsculas + números + guión)
+    - Búsqueda en **YugiohPrices API** (precios por rareza específica)
+    - Fallback a YGOPRODeck API
+    - Marco visual en esquina inferior derecha
+    - Identifica la versión exacta de la carta
+  - **📝 Modo Nombre**: Escanea el nombre de la carta con fuzzy matching
+    - OCR de texto con Tesseract.js
+    - Fuzzy matching inteligente con Fuse.js
+    - Presenta top 5 coincidencias con porcentaje de similitud
+    - Marco visual en parte superior de la carta
+  - Selector de modo fácil de usar
+  - Soporte para subir imágenes desde galería
+  - Marcos visuales ajustables según modo seleccionado
+  - Funciona en móvil y escritorio
+- Filtros avanzados (tipo, atributo, nivel, ATK/DEF rangos)
 - Información completa de cada carta:
   - Imagen de alta calidad
   - Estadísticas (ATK, DEF, Level, etc.)
@@ -50,6 +67,8 @@ Cada lista incluye:
 - **Backend**: Next.js API Routes
 - **Base de Datos**: MongoDB
 - **API Externa**: YGOPRODeck API v7
+- **OCR**: Tesseract.js para reconocimiento de texto
+- **Fuzzy Matching**: Fuse.js para búsqueda difusa inteligente
 - **Autenticación**: Cookie-based sessions
 - **TypeScript**: Tipado completo
 - **Estilos**: Once UI Design System
@@ -83,7 +102,8 @@ src/
 │   ├── AdminLogin.tsx          # Modal de login
 │   ├── CardDisplay.tsx         # Visualización de carta individual
 │   ├── CardList.tsx            # Lista de cartas guardadas
-│   └── CardSearch.tsx          # Buscador con debounce
+│   ├── CardSearch.tsx          # Buscador con debounce
+│   └── CardScanner.tsx         # Escáner de cámara con OCR y fuzzy matching
 ├── lib/
 │   ├── services/ygoprodeck.ts  # Cliente API YGOPRODeck
 │   └── mongodb/
@@ -97,6 +117,55 @@ src/
     ├── auth/route.ts           # Autenticación
     └── lists/[type]/route.ts   # CRUD de listas
 ```
+
+## Cómo Funciona el Escaneo de Cartas
+
+El sistema ofrece **dos modos de escaneo** con diferentes enfoques:
+
+### Modo Set Code (Recomendado) 🏷️
+
+1. **Captura del Set Code**
+   - Marco visual en esquina inferior derecha (donde está el código de set)
+   - Recorta 50% derecho x 15% inferior de la imagen
+   - Aplica preprocesamiento: escala de grises + mejora de contraste
+
+2. **OCR Optimizado para Alfanumérico**
+   - Tesseract configurado para letras mayúsculas + números + guión
+   - Extrae el set code (ej: "LOB-EN001", "SDK-001")
+   - Valida mínimo 5 caracteres
+
+3. **Búsqueda Multi-API**
+   - **Primera opción**: YugiohPrices API
+     - Endpoint: `https://yugiohprices.com/api/price_for_print_tag/{setcode}`
+     - Obtiene precio específico de esa rareza/versión
+     - Identifica la carta exacta con su set
+   - **Fallback**: YGOPRODeck API
+     - Endpoint: `https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode={setcode}`
+     - Búsqueda por código de set
+   - Resultado exacto de la versión específica de la carta
+
+### Modo Nombre 📝
+
+1. **Captura del Nombre**
+   - Marco visual en parte superior (30% de altura)
+   - Recorta el 30% superior de la imagen
+   - Aplica preprocesamiento: escala de grises + mejora de contraste
+
+2. **OCR de Texto**
+   - Tesseract con caracteres alfanuméricos permitidos
+   - Limpieza de texto (espacios, artefactos, etc.)
+
+3. **Fuzzy Matching Inteligente**
+   - Obtiene todos los nombres de cartas de YGOProDeck (~13,000 cartas)
+   - Usa Fuse.js con threshold de 0.4 para encontrar similitudes
+   - Maneja errores comunes de OCR
+   - Presenta top 5 coincidencias con porcentaje de similitud
+   - El usuario selecciona la carta correcta
+
+### ¿Cuál modo usar?
+
+- **Usa Modo Set Code** si: Quieres identificar la versión exacta de la carta con su rareza específica y obtener precios precisos por versión
+- **Usa Modo Nombre** si: No tienes acceso al set code o prefieres buscar por el nombre de la carta
 
 ## Optimizaciones
 

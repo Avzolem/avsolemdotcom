@@ -6,6 +6,7 @@ import { YugiohCard } from '@/types/yugioh';
 import { searchCardsByName, searchCardsAdvanced } from '@/lib/services/ygoprodeck';
 import CardDisplay from './CardDisplay';
 import AdvancedFilters, { FilterOptions } from './AdvancedFilters';
+import CardScanner from './CardScanner';
 import styles from './CardSearch.module.scss';
 
 // Debounce hook
@@ -25,6 +26,61 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
+// Detect if input is a Set Code (e.g., LOB-EN001, SDK-001, CT13-EN008, MVP1-ENSV4)
+function isSetCode(input: string): boolean {
+  const trimmed = input.trim().toUpperCase();
+  // Pattern: 2-6 alphanumeric chars, dash, 3-7 alphanumeric chars
+  // Examples: LOB-001, SDK-E001, LOB-EN001, CT13-EN008, MVP1-ENSV4, DP03-EN001
+  const setCodePattern = /^[A-Z0-9]{2,6}-[A-Z0-9]{3,7}$/;
+  return setCodePattern.test(trimmed);
+}
+
+// Search by Set Code using internal API route (avoids CORS issues)
+async function searchBySetCode(setCode: string): Promise<YugiohCard | null> {
+  const cleanSetCode = setCode.trim().toUpperCase();
+  console.log('🔍 Searching by set code:', cleanSetCode);
+
+  try {
+    // Call internal API route to search by set code
+    const response = await fetch(
+      `/api/yugioh/search-setcode?code=${encodeURIComponent(cleanSetCode)}`
+    );
+
+    if (!response.ok) {
+      console.log('❌ API returned error:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+
+    if (data.success && data.cardName) {
+      console.log('✅ Found via API:', data.cardName, `(source: ${data.source})`);
+
+      // Get full card details from YGOPRODeck
+      const cards = await searchCardsByName(data.cardName);
+      if (cards.length > 0) {
+        // Attach specific set info from the set code search
+        const cardWithSetInfo = {
+          ...cards[0],
+          specificSetInfo: {
+            setCode: data.setCode,
+            setName: data.setName,
+            setRarity: data.setRarity,
+            setPrice: data.setPrice,
+          },
+        };
+        return cardWithSetInfo;
+      }
+    }
+
+    console.log('❌ No card found with set code:', cleanSetCode);
+    return null;
+  } catch (error) {
+    console.error('❌ Error searching by set code:', error);
+    return null;
+  }
+}
+
 export default function CardSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const [cards, setCards] = useState<YugiohCard[]>([]);
@@ -32,6 +88,7 @@ export default function CardSearch() {
   const [error, setError] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterOptions>({});
+  const [showScanner, setShowScanner] = useState(false);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -52,8 +109,17 @@ export default function CardSearch() {
     try {
       let results: YugiohCard[] = [];
 
-      if (hasFilters || hasQuery) {
-        // Use advanced search with filters
+      // Check if the query is a Set Code (e.g., LOB-EN001)
+      if (hasQuery && isSetCode(query) && !hasFilters) {
+        console.log('🏷️ Detected Set Code format, searching by set code...');
+        const card = await searchBySetCode(query);
+        if (card) {
+          results = [card];
+        } else {
+          setError(`No se encontró ninguna carta con el Set Code: ${query.trim().toUpperCase()}`);
+        }
+      } else if (hasFilters || hasQuery) {
+        // Use advanced search with filters or name search
         const searchParams = {
           name: hasQuery ? query : undefined,
           ...filters,
@@ -78,12 +144,15 @@ export default function CardSearch() {
             return true;
           });
         }
+
+        if (results.length === 0) {
+          setError('No se encontraron cartas con esos criterios');
+        }
       } else {
         results = await searchCardsByName(query);
-      }
-
-      if (results.length === 0) {
-        setError('No se encontraron cartas con esos criterios');
+        if (results.length === 0) {
+          setError('No se encontraron cartas con esos criterios');
+        }
       }
 
       setCards(results);
@@ -121,6 +190,11 @@ export default function CardSearch() {
     }
   };
 
+  const handleScanComplete = (cardName: string) => {
+    setSearchTerm(cardName);
+    setShowScanner(false);
+  };
+
   return (
     <div className={styles.container} suppressHydrationWarning>
       {/* Search Input */}
@@ -129,7 +203,7 @@ export default function CardSearch() {
           <input
             type="text"
             id="card-search"
-            placeholder="Busca cartas: Dark Magician, Blue-Eyes..."
+            placeholder="Busca por nombre o Set Code: Dark Magician, LOB-EN001..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
@@ -139,11 +213,25 @@ export default function CardSearch() {
               ✕
             </button>
           )}
+          <button
+            onClick={() => setShowScanner(!showScanner)}
+            className={styles.scanButton}
+            title="Escanear carta con cámara"
+          >
+            {showScanner ? '✕' : '📸'}
+          </button>
         </div>
         <p className={styles.searchHint}>
-          💡 Escribe al menos 2 caracteres para buscar o usa los filtros avanzados
+          💡 Busca por nombre, Set Code (ej: LOB-EN001), usa filtros avanzados, o escanea con la cámara
         </p>
       </div>
+
+      {/* Card Scanner */}
+      {showScanner && (
+        <div className={styles.scannerSection}>
+          <CardScanner onScanComplete={handleScanComplete} />
+        </div>
+      )}
 
       {/* Advanced Filters */}
       <AdvancedFilters
