@@ -1,4 +1,4 @@
-import { getDatabase } from '../index';
+import { getDatabase } from '../connection';
 import { Collection, MongoClient } from 'mongodb';
 import { ListType } from '@/types/yugioh';
 
