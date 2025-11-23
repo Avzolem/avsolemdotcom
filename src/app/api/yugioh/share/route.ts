@@ -3,6 +3,12 @@ import * as cookie from 'cookie';
 import { randomBytes } from 'crypto';
 import { ListType } from '@/types/yugioh';
 import { getOrCreateList } from '@/lib/mongodb/models/YugiohList';
+import {
+  createSharedLink,
+  getSharedLink,
+  cleanupExpiredLinks,
+  deleteSharedLink,
+} from '@/lib/mongodb/models/SharedLink';
 
 function isAuthenticated(request: NextRequest): boolean {
   const cookies = cookie.parse(request.headers.get('cookie') || '');
@@ -12,14 +18,6 @@ function isAuthenticated(request: NextRequest): boolean {
 function validateListType(type: string): type is ListType {
   return ['collection', 'for-sale', 'wishlist'].includes(type);
 }
-
-// In-memory store for shared lists (in production, use MongoDB)
-// Structure: { token: { listType, createdAt, expiresAt } }
-const sharedLinks = new Map<string, {
-  listType: ListType;
-  createdAt: Date;
-  expiresAt: Date;
-}>();
 
 /**
  * POST: Generate a shareable link for a list
@@ -39,24 +37,11 @@ export async function POST(request: NextRequest) {
     // Generate unique token
     const token = randomBytes(16).toString('hex');
 
-    // Calculate expiration
-    const createdAt = new Date();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+    // Create shared link in MongoDB
+    const sharedLink = await createSharedLink(token, listType, expiresInDays);
 
-    // Store the shared link
-    sharedLinks.set(token, {
-      listType,
-      createdAt,
-      expiresAt,
-    });
-
-    // Clean up expired links
-    for (const [key, value] of sharedLinks.entries()) {
-      if (value.expiresAt < new Date()) {
-        sharedLinks.delete(key);
-      }
-    }
+    // Clean up expired links in the background (don't await)
+    cleanupExpiredLinks().catch(console.error);
 
     const baseUrl = request.headers.get('origin') || 'http://localhost:3000';
     const shareUrl = `${baseUrl}/yugioh/shared/${token}`;
@@ -65,7 +50,7 @@ export async function POST(request: NextRequest) {
       success: true,
       shareUrl,
       token,
-      expiresAt: expiresAt.toISOString(),
+      expiresAt: sharedLink.expiresAt.toISOString(),
     });
   } catch (error) {
     console.error('Error creating share link:', error);
@@ -91,7 +76,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const shareData = sharedLinks.get(token);
+    const shareData = await getSharedLink(token);
 
     if (!shareData) {
       return NextResponse.json(
@@ -102,7 +87,7 @@ export async function GET(request: NextRequest) {
 
     // Check if expired
     if (shareData.expiresAt < new Date()) {
-      sharedLinks.delete(token);
+      await deleteSharedLink(token);
       return NextResponse.json(
         { message: 'Share link has expired' },
         { status: 410 }

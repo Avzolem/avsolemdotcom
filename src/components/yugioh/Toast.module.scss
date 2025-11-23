@@ -1,0 +1,142 @@
+$yugioh-purple: #7B2CBF;
+$yugioh-gold: #FFD700;
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: slideInRight 0.3s ease-out;
+  min-width: 300px;
+  max-width: 500px;
+  backdrop-filter: blur(10px);
+
+  @media (max-width: 768px) {
+    top: auto;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    min-width: auto;
+  }
+}
+
+.toastContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.toastIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.toastMessage {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.toastClose {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+// Success variant
+.success {
+  border-color: #22C55E;
+
+  .toastIcon {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22C55E;
+  }
+
+  .toastMessage {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+// Error variant
+.error {
+  border-color: #EF4444;
+
+  .toastIcon {
+    background: rgba(239, 68, 68, 0.2);
+    color: #EF4444;
+  }
+
+  .toastMessage {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+// Info variant
+.info {
+  border-color: $yugioh-gold;
+
+  .toastIcon {
+    background: rgba(255, 215, 0, 0.2);
+    color: $yugioh-gold;
+  }
+
+  .toastMessage {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+

@@ -41,6 +41,7 @@ export async function getOrCreateList(type: ListType): Promise<YugiohList> {
 
 /**
  * Add a card to a list
+ * Uses setCode as the unique identifier (primary key)
  */
 export async function addCardToList(
   type: ListType,
@@ -48,18 +49,18 @@ export async function addCardToList(
 ): Promise<boolean> {
   const collection = await getListsCollection();
 
-  // Check if card already exists in the list
+  // Check if card with this setCode already exists in the list
   const existingList = await collection.findOne({
     type,
-    'cards.cardId': card.cardId,
+    'cards.setCode': card.setCode,
   });
 
   if (existingList) {
-    // Update quantity if card exists
+    // Update quantity if card with this setCode exists
     await collection.updateOne(
       {
         type,
-        'cards.cardId': card.cardId,
+        'cards.setCode': card.setCode,
       },
       {
         $inc: { 'cards.$.quantity': card.quantity || 1 },
@@ -67,7 +68,7 @@ export async function addCardToList(
       }
     );
   } else {
-    // Add new card
+    // Add new card (new setCode means new entry even if same cardId)
     await collection.updateOne(
       { type },
       {
@@ -88,17 +89,18 @@ export async function addCardToList(
 
 /**
  * Remove a card from a list
+ * Uses setCode as the unique identifier
  */
 export async function removeCardFromList(
   type: ListType,
-  cardId: number
+  setCode: string
 ): Promise<boolean> {
   const collection = await getListsCollection();
 
   await collection.updateOne(
     { type },
     {
-      $pull: { cards: { cardId } },
+      $pull: { cards: { setCode } },
       $set: { updatedAt: new Date() },
     }
   );
@@ -108,22 +110,23 @@ export async function removeCardFromList(
 
 /**
  * Update card quantity in a list
+ * Uses setCode as the unique identifier
  */
 export async function updateCardQuantity(
   type: ListType,
-  cardId: number,
+  setCode: string,
   quantity: number
 ): Promise<boolean> {
   const collection = await getListsCollection();
 
   if (quantity <= 0) {
-    return removeCardFromList(type, cardId);
+    return removeCardFromList(type, setCode);
   }
 
   await collection.updateOne(
     {
       type,
-      'cards.cardId': cardId,
+      'cards.setCode': setCode,
     },
     {
       $set: {
@@ -138,10 +141,11 @@ export async function updateCardQuantity(
 
 /**
  * Update card notes or price
+ * Uses setCode as the unique identifier
  */
 export async function updateCardDetails(
   type: ListType,
-  cardId: number,
+  setCode: string,
   updates: { notes?: string; price?: number }
 ): Promise<boolean> {
   const collection = await getListsCollection();
@@ -160,7 +164,7 @@ export async function updateCardDetails(
   await collection.updateOne(
     {
       type,
-      'cards.cardId': cardId,
+      'cards.setCode': setCode,
     },
     { $set: setFields }
   );
@@ -206,4 +210,32 @@ export async function getListValue(type: ListType): Promise<number> {
     const quantity = card.quantity || 1;
     return total + cardPrice * quantity;
   }, 0);
+}
+
+/**
+ * Update a specific field of a card in a list
+ * Uses setCode as the unique identifier
+ */
+export async function updateCardField(
+  type: ListType,
+  setCode: string,
+  field: string,
+  value: any
+): Promise<boolean> {
+  const collection = await getListsCollection();
+
+  const setFields: any = {
+    [`cards.$.${field}`]: value,
+    updatedAt: new Date(),
+  };
+
+  await collection.updateOne(
+    {
+      type,
+      'cards.setCode': setCode,
+    },
+    { $set: setFields }
+  );
+
+  return true;
 }

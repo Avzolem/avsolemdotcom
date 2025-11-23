@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { CardInList, ListType } from '@/types/yugioh';
 import { formatPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
+import { useToast } from '@/contexts/ToastContext';
 import ExportButtons from './ExportButtons';
 import PriceStats from './PriceStats';
 import ShareButton from './ShareButton';
@@ -17,10 +18,12 @@ interface CardListProps {
 
 export default function CardList({ type, title }: CardListProps) {
   const { isAuthenticated } = useYugiohAuth();
+  const { showToast } = useToast();
   const [cards, setCards] = useState<CardInList[]>([]);
   const [totalValue, setTotalValue] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [isRemoving, setIsRemoving] = useState<number | null>(null);
+  const [isRemoving, setIsRemoving] = useState<string | null>(null);
+  const [isTogglingForSale, setIsTogglingForSale] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const loadCards = async () => {
@@ -43,14 +46,14 @@ export default function CardList({ type, title }: CardListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
-  const removeCard = async (cardId: number) => {
-    console.log('removeCard called:', { cardId, type });
+  const removeCard = async (setCode: string) => {
+    console.log('removeCard called:', { setCode, type });
     if (!confirm('¿Seguro que quieres eliminar esta carta?')) return;
 
-    setIsRemoving(cardId);
+    setIsRemoving(setCode);
 
     try {
-      const response = await fetch(`/api/yugioh/lists/${type}?cardId=${cardId}`, {
+      const response = await fetch(`/api/yugioh/lists/${type}?setCode=${encodeURIComponent(setCode)}`, {
         method: 'DELETE',
       });
 
@@ -71,23 +74,33 @@ export default function CardList({ type, title }: CardListProps) {
     }
   };
 
-  const updateQuantity = async (cardId: number, newQuantity: number) => {
-    console.log('updateQuantity called:', { cardId, newQuantity, type });
+  const updateQuantity = async (setCode: string, newQuantity: number) => {
+    console.log('updateQuantity called:', { setCode, newQuantity, type });
 
-    // Actualizar optimísticamente la UI
-    setCards(prevCards =>
-      prevCards.map(card =>
-        card.cardId === cardId
-          ? { ...card, quantity: newQuantity }
-          : card
-      )
+    // Guardar estado anterior para poder revertir
+    const previousCards = cards;
+    const previousTotal = totalValue;
+
+    // Actualizar optimísticamente la UI y el valor total
+    const updatedCards = cards.map(card =>
+      card.setCode === setCode
+        ? { ...card, quantity: newQuantity }
+        : card
     );
+
+    const newTotal = updatedCards.reduce(
+      (sum, card) => sum + (card.price || 0) * card.quantity,
+      0
+    );
+
+    setCards(updatedCards);
+    setTotalValue(newTotal);
 
     try {
       const response = await fetch(`/api/yugioh/lists/${type}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cardId, quantity: newQuantity }),
+        body: JSON.stringify({ setCode, quantity: newQuantity }),
       });
 
       console.log('updateQuantity response:', response.status, response.ok);
@@ -95,16 +108,66 @@ export default function CardList({ type, title }: CardListProps) {
       if (!response.ok) {
         console.error('Failed to update quantity:', await response.text());
         // Revertir si falla
-        await loadCards();
-      } else {
-        // Actualizar el valor total sin recargar
-        const data = await response.json();
-        setTotalValue(data.totalValue || 0);
+        setCards(previousCards);
+        setTotalValue(previousTotal);
       }
     } catch (error) {
       console.error('Error updating quantity:', error);
       // Revertir si hay error
-      await loadCards();
+      setCards(previousCards);
+      setTotalValue(previousTotal);
+    }
+  };
+
+  const toggleForSale = async (setCode: string, currentForSale: boolean, cardName: string) => {
+    setIsTogglingForSale(setCode);
+
+    try {
+      const response = await fetch('/api/yugioh/toggle-for-sale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ setCode }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const newIsForSale = data.isForSale;
+
+        // Actualizar optimísticamente el estado local
+        setCards((prevCards) =>
+          prevCards.map((card) =>
+            card.setCode === setCode ? { ...card, isForSale: newIsForSale } : card
+          )
+        );
+
+        // Mostrar toast
+        if (newIsForSale) {
+          showToast(
+            <>
+              ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}puesta en venta
+            </>,
+            'success'
+          );
+        } else {
+          showToast(
+            <>
+              <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}quitada de venta
+            </>,
+            'info'
+          );
+        }
+      } else {
+        showToast('Error al cambiar estado de venta', 'error');
+      }
+    } catch (error) {
+      console.error('Error toggling for-sale:', error);
+      showToast('Error al cambiar estado de venta', 'error');
+    } finally {
+      setIsTogglingForSale(null);
     }
   };
 
@@ -187,7 +250,7 @@ export default function CardList({ type, title }: CardListProps) {
       ) : (
         <div className={styles.cardsGrid}>
           {filteredCards.map((card) => (
-            <div key={card.cardId} className={styles.cardItem}>
+            <div key={card.setCode} className={styles.cardItem}>
               {/* Card Image */}
               <div className={styles.cardImageWrapper}>
                 <div className={styles.cardImage}>
@@ -217,6 +280,22 @@ export default function CardList({ type, title }: CardListProps) {
                 <h3 className={styles.cardName}>{card.cardName}</h3>
 
                 <div className={styles.cardInfo}>
+                  {/* Set Code Information */}
+                  <div className={styles.setInfoSection}>
+                    <div className={styles.infoRow}>
+                      <span className={styles.infoLabel}>Set Code:</span>
+                      <span className={styles.setCodeValue}>{card.setCode}</span>
+                    </div>
+                    <div className={styles.infoRow}>
+                      <span className={styles.infoLabel}>Set:</span>
+                      <span className={styles.infoValue}>{card.setName}</span>
+                    </div>
+                    <div className={styles.infoRow}>
+                      <span className={styles.infoLabel}>Rareza:</span>
+                      <span className={styles.rarityValue}>{card.setRarity}</span>
+                    </div>
+                  </div>
+
                   {/* Quantity */}
                   <div className={styles.infoRow}>
                     <span className={styles.infoLabel}>Cantidad:</span>
@@ -228,7 +307,7 @@ export default function CardList({ type, title }: CardListProps) {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            updateQuantity(card.cardId, card.quantity - 1);
+                            updateQuantity(card.setCode, card.quantity - 1);
                           }}
                           disabled={card.quantity <= 1}
                         >
@@ -241,7 +320,7 @@ export default function CardList({ type, title }: CardListProps) {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            updateQuantity(card.cardId, card.quantity + 1);
+                            updateQuantity(card.setCode, card.quantity + 1);
                           }}
                         >
                           +
@@ -252,15 +331,40 @@ export default function CardList({ type, title }: CardListProps) {
                     )}
                   </div>
 
-                  {/* Price */}
-                  {card.price && (
-                    <div className={styles.infoRow}>
-                      <span className={styles.infoLabel}>Precio:</span>
-                      <span className={`${styles.infoValue} ${styles.price}`}>
-                        {formatPrice(card.price)}
-                      </span>
-                    </div>
-                  )}
+                  {/* Price and For Sale Button */}
+                  <div className={styles.priceRow}>
+                    {card.price && (
+                      <div className={styles.infoRow}>
+                        <span className={styles.infoLabel}>Precio:</span>
+                        <span className={`${styles.infoValue} ${styles.price}`}>
+                          {formatPrice(card.price)}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* For Sale Button - only in collection */}
+                    {type === 'collection' && isAuthenticated && (
+                      <button
+                        type="button"
+                        className={`${styles.btnForSale} ${card.isForSale ? styles.forSaleActive : ''}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleForSale(card.setCode, !!card.isForSale, card.cardName);
+                        }}
+                        disabled={isTogglingForSale === card.setCode}
+                        title={card.isForSale ? 'Quitar de venta' : 'Poner en venta'}
+                      >
+                        {isTogglingForSale === card.setCode ? (
+                          '...'
+                        ) : card.isForSale ? (
+                          '💰 En Venta'
+                        ) : (
+                          'Poner en venta'
+                        )}
+                      </button>
+                    )}
+                  </div>
 
                   {/* Notes */}
                   {card.notes && (
@@ -282,11 +386,11 @@ export default function CardList({ type, title }: CardListProps) {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        removeCard(card.cardId);
+                        removeCard(card.setCode);
                       }}
-                      disabled={isRemoving === card.cardId}
+                      disabled={isRemoving === card.setCode}
                     >
-                      {isRemoving === card.cardId ? (
+                      {isRemoving === card.setCode ? (
                         <div className={styles.spinner} />
                       ) : (
                         '🗑️ Eliminar'

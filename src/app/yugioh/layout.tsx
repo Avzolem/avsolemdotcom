@@ -1,8 +1,10 @@
 'use client';
 
 import { YugiohAuthProvider } from '@/contexts/YugiohAuthContext';
+import { ToastProvider } from '@/contexts/ToastContext';
 import YugiohHeader from '@/components/yugioh/YugiohHeader';
 import YugiohFooter from '@/components/yugioh/YugiohFooter';
+import ToastContainer from '@/components/yugioh/ToastContainer';
 import { Crimson_Text } from 'next/font/google';
 import './yugioh-theme.scss';
 
@@ -20,11 +22,14 @@ export default function YugiohLayout({
 }) {
   return (
     <YugiohAuthProvider>
-      <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
-        <YugiohHeader />
-        <main className="yugioh-main">{children}</main>
-        <YugiohFooter />
-      </div>
+      <ToastProvider>
+        <ToastContainer />
+        <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
+          <YugiohHeader />
+          <main className="yugioh-main">{children}</main>
+          <YugiohFooter />
+        </div>
+      </ToastProvider>
     </YugiohAuthProvider>
   );
 }

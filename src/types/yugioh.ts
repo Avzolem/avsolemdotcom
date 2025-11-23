@@ -66,10 +66,14 @@ export interface CardInList {
   cardName: string;
   cardImage: string;
   localImagePath?: string; // Path to locally stored image
+  setCode: string; // Required: Set code (e.g., LOB-EN001)
+  setName: string; // Required: Set name
+  setRarity: string; // Required: Card rarity in this set
   addedAt: Date;
   quantity: number;
   price?: number;
   notes?: string;
+  isForSale?: boolean; // Indica si la carta está en venta (solo para collection)
 }
 
 export interface YugiohList {

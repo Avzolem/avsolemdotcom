@@ -197,7 +197,7 @@ export default function CardSearch() {
 
   return (
     <div className={styles.container} suppressHydrationWarning>
-      {/* Search Input */}
+        {/* Search Input */}
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <input

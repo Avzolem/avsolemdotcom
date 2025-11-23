@@ -11,12 +11,15 @@ export function exportToCSV(cards: CardInList[], listName: string): void {
   }
 
   // CSV headers
-  const headers = ['Card ID', 'Card Name', 'Quantity', 'Price (USD)', 'Added Date', 'Notes'];
+  const headers = ['Card ID', 'Card Name', 'Set Code', 'Set Name', 'Rarity', 'Quantity', 'Price (USD)', 'Added Date', 'Notes'];
 
   // CSV rows
   const rows = cards.map(card => [
     card.cardId,
     `"${card.cardName.replace(/"/g, '""')}"`, // Escape quotes
+    card.setCode,
+    `"${card.setName.replace(/"/g, '""')}"`,
+    `"${card.setRarity.replace(/"/g, '""')}"`,
     card.quantity,
     card.price || 0,
     new Date(card.addedAt).toLocaleDateString('es-MX'),
@@ -28,7 +31,7 @@ export function exportToCSV(cards: CardInList[], listName: string): void {
   const totalValue = cards.reduce((sum, card) => sum + (card.price || 0) * card.quantity, 0);
 
   // Add totals row
-  rows.push(['', 'TOTAL', totalCards, totalValue.toFixed(2), '', '']);
+  rows.push(['', 'TOTAL', '', '', '', totalCards, totalValue.toFixed(2), '', '']);
 
   // Combine headers and rows
   const csvContent = [
@@ -208,12 +211,15 @@ export function exportToPDF(cards: CardInList[], listName: string, totalValue: n
   <table>
     <thead>
       <tr>
-        <th style="width: 10%;">ID</th>
-        <th style="width: 35%;">Nombre de Carta</th>
-        <th style="width: 10%;">Cantidad</th>
-        <th style="width: 15%;">Precio Unit.</th>
-        <th style="width: 15%;">Valor Total</th>
-        <th style="width: 15%;">Fecha</th>
+        <th style="width: 8%;">ID</th>
+        <th style="width: 22%;">Nombre de Carta</th>
+        <th style="width: 10%;">Set Code</th>
+        <th style="width: 15%;">Set</th>
+        <th style="width: 10%;">Rareza</th>
+        <th style="width: 8%;">Cant.</th>
+        <th style="width: 10%;">Precio</th>
+        <th style="width: 10%;">Total</th>
+        <th style="width: 10%;">Fecha</th>
       </tr>
     </thead>
     <tbody>
@@ -221,10 +227,13 @@ export function exportToPDF(cards: CardInList[], listName: string, totalValue: n
         <tr>
           <td>${card.cardId}</td>
           <td><strong>${card.cardName}</strong>${card.notes ? `<br><small style="color: #666;">${card.notes}</small>` : ''}</td>
+          <td><code style="background: #f0f0f0; padding: 2px 4px; border-radius: 3px; font-size: 10px;">${card.setCode}</code></td>
+          <td><small>${card.setName}</small></td>
+          <td><small style="color: #7B2CBF; font-weight: bold;">${card.setRarity}</small></td>
           <td>${card.quantity}</td>
           <td class="price">${card.price ? formatPrice(card.price) : '-'}</td>
           <td class="price">${card.price ? formatPrice(card.price * card.quantity) : '-'}</td>
-          <td>${new Date(card.addedAt).toLocaleDateString('es-MX')}</td>
+          <td><small>${new Date(card.addedAt).toLocaleDateString('es-MX')}</small></td>
         </tr>
       `).join('')}
     </tbody>

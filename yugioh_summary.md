@@ -41,6 +41,17 @@ A comprehensive Yu-Gi-Oh! card search and management system integrated into the 
 ### 4. Collection Management
 - Three list types: Collection, For Sale, Wishlist
 - Add cards to lists with quantity tracking
+- **For Sale Management**:
+  - "Poner en venta" button in Collection list
+  - Toggle button changes to "💰 En Venta" (golden styling) when active
+  - Hover over active button shows "Quitar de venta"
+  - Bidirectional sync between Collection and For Sale lists
+  - Cards marked for sale appear in both lists automatically
+- **Quantity Controls**: Update card quantities without page reload
+- **Toast Notifications**:
+  - Success/info messages with colored text
+  - Card names in green, set codes in yellow
+  - Context-based toast system available across all pages
 - Local image storage for offline access
 - Price tracking per card
 - Requires authentication
@@ -50,8 +61,10 @@ A comprehensive Yu-Gi-Oh! card search and management system integrated into the 
 ### Tech Stack
 - **Framework**: Next.js 15 (App Router)
 - **UI**: React 19 with SCSS modules
+- **State Management**: React Context API (Toast notifications, Authentication)
 - **OCR**: Tesseract.js v5
 - **API**: YGOPRODeck API (primary source)
+- **Database**: MongoDB for persistent list storage
 - **Authentication**: Cookie-based sessions
 - **Image Processing**: Canvas API for cropping
 
@@ -59,6 +72,12 @@ A comprehensive Yu-Gi-Oh! card search and management system integrated into the 
 
 #### Types
 - `src/types/yugioh.ts` - TypeScript interfaces for cards, lists, and API responses
+  - Updated with `isForSale` field for Collection/For-Sale sync
+
+#### Context & State Management
+- `src/contexts/ToastContext.tsx` - Global toast notification system
+- `src/contexts/YugiohAuthContext.tsx` - Authentication state management
+- `src/app/yugioh/layout.tsx` - Layout with ToastProvider for all yugioh pages
 
 #### Components
 - `src/components/yugioh/CardSearch.tsx` - Main search interface with debouncing
@@ -66,11 +85,22 @@ A comprehensive Yu-Gi-Oh! card search and management system integrated into the 
 - `src/components/yugioh/CardDisplay.module.scss` - Styling with Yu-Gi-Oh! brand colors
 - `src/components/yugioh/CardScanner.tsx` - OCR scanning with camera integration
 - `src/components/yugioh/AdvancedFilters.tsx` - Filter interface
+- `src/components/yugioh/CardList.tsx` - List display with quantity controls and for-sale toggle
+- `src/components/yugioh/CardList.module.scss` - List styling with button states
+- `src/components/yugioh/ToastContainer.tsx` - Toast notification UI
 
 #### API Routes
 - `src/app/api/yugioh/search-setcode/route.ts` - Server-side set code lookup (avoids CORS)
-- `src/app/api/yugioh/lists/[type]/route.ts` - Collection management endpoints
+- `src/app/api/yugioh/lists/[type]/route.ts` - Collection management endpoints (GET, POST, DELETE, PATCH)
+- `src/app/api/yugioh/toggle-for-sale/route.ts` - Toggle for-sale status with bidirectional sync
 - `src/app/api/yugioh/download-image/route.ts` - Local image storage
+
+#### Database Models
+- `src/lib/mongodb/models/YugiohList.ts` - MongoDB operations for list management
+  - `updateCardField()` - Update specific card fields (e.g., isForSale)
+  - `updateCardQuantity()` - Update card quantities
+  - `addCardToList()` - Add cards with automatic sync
+  - `removeCardFromList()` - Remove cards from lists
 
 #### Services
 - `src/lib/services/ygoprodeck.ts` - API integration and price calculations
@@ -186,10 +216,14 @@ $yugioh-gray: #2a2a2a;
   cardName: string;
   cardImage: string;
   localImagePath?: string; // For offline access
+  setCode: string;         // Unique identifier for card in specific set
+  setName: string;
+  setRarity: string;
   addedAt: Date;
   quantity: number;
   price?: number;
   notes?: string;
+  isForSale?: boolean;     // For Collection/For-Sale sync
 }
 ```
 
@@ -215,11 +249,23 @@ $yugioh-gray: #2a2a2a;
 - Improved regex pattern detection
 - Created API route for CORS-free set code lookup
 
-### Phase 5: Differentiated Display (Latest)
+### Phase 5: Differentiated Display
 - Added `specificSetInfo` field to card type
 - Implemented conditional rendering based on search type
 - Created collapsible sets dropdown for name searches
 - Different price labels and display logic
+
+### Phase 6: For-Sale Management & Toast System (Latest)
+- Implemented Context API for toast notifications
+- Created `ToastProvider` and `ToastContainer` components
+- Added `isForSale` field to card type
+- Implemented "Poner en venta" toggle button in Collection
+- Created bidirectional sync between Collection and For-Sale lists
+- Added `/api/yugioh/toggle-for-sale` endpoint
+- Implemented optimistic UI updates for quantity changes
+- Added colored toast messages (green names, yellow set codes)
+- Moved ToastProvider to layout level for global availability
+- Button states: normal → active ("💰 En Venta") → hover shows "Quitar de venta"
 
 ## Known Patterns and Solutions
 
@@ -241,6 +287,38 @@ Started with restrictive pattern, progressively expanded to support all set code
 
 ### Conditional Display Logic
 Uses `card.specificSetInfo` presence to determine which UI template to render.
+
+### For-Sale System Architecture
+**Bidirectional Sync Logic**:
+- Collection has `isForSale` boolean field
+- For-Sale list is separate but synchronized
+- When toggling "Poner en venta":
+  - Updates `isForSale` in Collection via `/api/yugioh/toggle-for-sale`
+  - Adds/removes card from For-Sale list automatically
+- When adding from search to "En Venta":
+  - Adds to For-Sale list
+  - Also adds to Collection with `isForSale: true`
+- When deleting from For-Sale:
+  - Removes from For-Sale list
+  - Sets `isForSale: false` in Collection (card remains in Collection)
+- When deleting from Collection:
+  - Removes from Collection completely
+  - Also removes from For-Sale if present
+
+### Toast System
+Context-based notification system:
+- `ToastProvider` at layout level provides global access
+- `useToast()` hook available in all yugioh pages
+- Toast messages support JSX for colored text
+- Types: success, error, info
+- Auto-dismisses after 3 seconds
+
+### Optimistic UI Updates
+Quantity and for-sale status updates:
+- Update local state immediately for instant feedback
+- Make API call in background
+- Revert on failure (for quantity updates)
+- Prevents page reloads and loading spinners
 
 ## Future Considerations
 
@@ -295,6 +373,6 @@ Following CLAUDE.md policies:
 
 ---
 
-**Last Updated**: Current session
-**Status**: All features implemented and ready for testing
-**Version**: Next.js 15, React 19, Tesseract.js 5
+**Last Updated**: November 23, 2025
+**Status**: Production ready - For-Sale management system fully implemented
+**Version**: Next.js 15, React 19, MongoDB, Tesseract.js 5

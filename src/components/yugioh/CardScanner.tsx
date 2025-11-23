@@ -116,7 +116,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
 
     if (!context) {
       console.error('❌ Could not get canvas context');
@@ -164,8 +164,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
     );
 
     // Apply image preprocessing for better OCR
-    // Use willReadFrequently for better performance
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height, { willReadFrequently: true } as any);
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     preprocessImage(imageData);
     context.putImageData(imageData, 0, 0);
 

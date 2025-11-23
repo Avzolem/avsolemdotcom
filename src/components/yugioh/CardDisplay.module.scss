@@ -299,7 +299,8 @@ $yugioh-gray: #2a2a2a;
 
 .setItem {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 0.75rem;
   margin-bottom: 0.5rem;
   background: rgba(26, 26, 26, 0.6);
@@ -316,6 +317,12 @@ $yugioh-gray: #2a2a2a;
     border-color: rgba(123, 44, 191, 0.4);
     transform: translateX(2px);
   }
+}
+
+.setItemContent {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
 }
 
 .setCode {
@@ -347,9 +354,9 @@ $yugioh-gray: #2a2a2a;
 
 .setMeta {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
 }
 
 .setRarity {
@@ -363,9 +370,44 @@ $yugioh-gray: #2a2a2a;
 }
 
 .setPrice {
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   color: #22C55E;
   font-weight: 700;
+}
+
+.setActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(123, 44, 191, 0.2);
+}
+
+.setActionButton {
+  background: rgba(123, 44, 191, 0.2);
+  border: 1px solid rgba(123, 44, 191, 0.4);
+  border-radius: 6px;
+  padding: 0.375rem 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+
+  &:hover {
+    background: rgba(123, 44, 191, 0.4);
+    border-color: $yugioh-gold;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .priceSection {

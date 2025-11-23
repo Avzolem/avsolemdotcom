@@ -7,6 +7,7 @@ import {
   removeCardFromList,
   updateCardQuantity,
   updateCardDetails,
+  updateCardField,
   clearList,
   getListValue,
 } from '@/lib/mongodb/models/YugiohList';
@@ -65,24 +66,55 @@ export async function POST(
     }
 
     const body = await request.json();
-    const { cardId, cardName, cardImage, localImagePath, quantity, price, notes } = body;
+    const { cardId, cardName, cardImage, localImagePath, setCode, setName, setRarity, quantity, price, notes } = body;
 
-    if (!cardId || !cardName || !cardImage) {
+    if (!cardId || !cardName || !cardImage || !setCode || !setName || !setRarity) {
       return NextResponse.json(
-        { message: 'Missing required fields' },
+        { message: 'Missing required fields (cardId, cardName, cardImage, setCode, setName, setRarity required)' },
         { status: 400 }
       );
     }
 
+    // Add to the requested list
     await addCardToList(type, {
       cardId,
       cardName,
       cardImage,
       localImagePath,
+      setCode,
+      setName,
+      setRarity,
       quantity: quantity || 1,
       price,
       notes,
     });
+
+    // If adding to for-sale, also add to collection with isForSale: true
+    if (type === 'for-sale') {
+      // Check if card already exists in collection
+      const collection = await getOrCreateList('collection');
+      const existingCard = collection.cards.find((c) => c.setCode === setCode);
+
+      if (existingCard) {
+        // Update isForSale to true
+        await updateCardField('collection', setCode, 'isForSale', true);
+      } else {
+        // Add to collection with isForSale: true
+        await addCardToList('collection', {
+          cardId,
+          cardName,
+          cardImage,
+          localImagePath,
+          setCode,
+          setName,
+          setRarity,
+          quantity: quantity || 1,
+          price,
+          notes,
+          isForSale: true,
+        });
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -111,16 +143,26 @@ export async function DELETE(
     }
 
     const { searchParams } = new URL(request.url);
-    const cardId = searchParams.get('cardId');
+    const setCode = searchParams.get('setCode');
 
-    if (!cardId) {
+    if (!setCode) {
       return NextResponse.json(
-        { message: 'Card ID required' },
+        { message: 'Set Code required' },
         { status: 400 }
       );
     }
 
-    await removeCardFromList(type, parseInt(cardId));
+    await removeCardFromList(type, setCode);
+
+    // If deleting from for-sale, update isForSale to false in collection
+    if (type === 'for-sale') {
+      const collection = await getOrCreateList('collection');
+      const cardInCollection = collection.cards.find((c) => c.setCode === setCode);
+
+      if (cardInCollection) {
+        await updateCardField('collection', setCode, 'isForSale', false);
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -149,21 +191,21 @@ export async function PATCH(
     }
 
     const body = await request.json();
-    const { cardId, quantity, price, notes } = body;
+    const { setCode, quantity, price, notes } = body;
 
-    if (!cardId) {
+    if (!setCode) {
       return NextResponse.json(
-        { message: 'Card ID required' },
+        { message: 'Set Code required' },
         { status: 400 }
       );
     }
 
     if (quantity !== undefined) {
-      await updateCardQuantity(type, cardId, quantity);
+      await updateCardQuantity(type, setCode, quantity);
     }
 
     if (price !== undefined || notes !== undefined) {
-      await updateCardDetails(type, cardId, { price, notes });
+      await updateCardDetails(type, setCode, { price, notes });
     }
 
     return NextResponse.json({ success: true });

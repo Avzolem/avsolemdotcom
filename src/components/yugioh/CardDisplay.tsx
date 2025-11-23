@@ -4,6 +4,7 @@ import { useState, memo } from 'react';
 import { YugiohCard, ListType, CardSet } from '@/types/yugioh';
 import { getCardPrice, formatPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
+import { useToast } from '@/contexts/ToastContext';
 import Image from 'next/image';
 import styles from './CardDisplay.module.scss';
 
@@ -13,7 +14,21 @@ interface CardDisplayProps {
 }
 
 // Component to display all sets in a collapsible dropdown
-function AllSetsDropdown({ sets }: { sets: CardSet[] }) {
+function AllSetsDropdown({
+  sets,
+  cardId,
+  cardName,
+  imageUrl,
+  isAuthenticated,
+  onAddToList
+}: {
+  sets: CardSet[];
+  cardId: number;
+  cardName: string;
+  imageUrl: string;
+  isAuthenticated: boolean;
+  onAddToList: (type: ListType, setCode: string, setName: string, setRarity: string, setPrice: string) => void;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -33,16 +48,57 @@ function AllSetsDropdown({ sets }: { sets: CardSet[] }) {
         <div className={styles.setsList}>
           {sets.map((set, index) => (
             <div key={index} className={styles.setItem}>
-              <div className={styles.setCode}>{set.set_code}</div>
-              <div className={styles.setDetails}>
-                <div className={styles.setName}>{set.set_name}</div>
-                <div className={styles.setMeta}>
-                  <span className={styles.setRarity}>{set.set_rarity}</span>
-                  <span className={styles.setPrice}>
-                    {formatPrice(parseFloat(set.set_price))}
-                  </span>
+              <div className={styles.setItemContent}>
+                <div className={styles.setCode}>{set.set_code}</div>
+                <div className={styles.setDetails}>
+                  <div className={styles.setName}>{set.set_name}</div>
+                  <div className={styles.setMeta}>
+                    <span className={styles.setRarity}>{set.set_rarity}</span>
+                    <span className={styles.setPrice}>
+                      {formatPrice(parseFloat(set.set_price))}
+                    </span>
+                  </div>
                 </div>
               </div>
+
+              {/* Add to list buttons - only show when authenticated */}
+              {isAuthenticated && (
+                <div className={styles.setActions}>
+                  <button
+                    type="button"
+                    className={styles.setActionButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToList('collection', set.set_code, set.set_name, set.set_rarity, set.set_price);
+                    }}
+                    title="Agregar a Colección"
+                  >
+                    📚
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.setActionButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToList('for-sale', set.set_code, set.set_name, set.set_rarity, set.set_price);
+                    }}
+                    title="Agregar a En Venta"
+                  >
+                    💰
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.setActionButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToList('wishlist', set.set_code, set.set_name, set.set_rarity, set.set_price);
+                    }}
+                    title="Agregar a Wishlist"
+                  >
+                    ⭐
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -53,15 +109,20 @@ function AllSetsDropdown({ sets }: { sets: CardSet[] }) {
 
 function CardDisplay({ card, compact = false }: CardDisplayProps) {
   const { isAuthenticated } = useYugiohAuth();
+  const { showToast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
-  const [addedTo, setAddedTo] = useState<string | null>(null);
 
   const price = getCardPrice(card);
   const imageUrl = card.card_images[0]?.image_url_small || card.card_images[0]?.image_url;
 
-  const addToList = async (type: ListType) => {
+  const addToList = async (
+    type: ListType,
+    setCode: string,
+    setName: string,
+    setRarity: string,
+    setPrice: string
+  ) => {
     setIsAdding(true);
-    setAddedTo(null);
 
     try {
       // First, download and store the image locally
@@ -84,7 +145,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
         console.warn('Failed to download image locally, will use remote URL:', downloadError);
       }
 
-      // Add card to list
+      // Add card to list with set code information
       const response = await fetch(`/api/yugioh/lists/${type}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,8 +154,11 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           cardName: card.name,
           cardImage: imageUrl,
           localImagePath: localImagePath,
+          setCode: setCode,
+          setName: setName,
+          setRarity: setRarity,
           quantity: 1,
-          price: price,
+          price: parseFloat(setPrice),
         }),
       });
 
@@ -104,14 +168,20 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           'for-sale': 'En Venta',
           wishlist: 'Wishlist',
         };
-        setAddedTo(listNames[type]);
-        setTimeout(() => setAddedTo(null), 3000);
+        showToast(
+          <>
+            ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
+            {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+            {' '}agregada a {listNames[type]}
+          </>,
+          'success'
+        );
       } else {
-        alert('Error al agregar la carta');
+        showToast('Error al agregar la carta', 'error');
       }
     } catch (error) {
       console.error('Error adding card:', error);
-      alert('Error al agregar la carta');
+      showToast('Error al agregar la carta', 'error');
     } finally {
       setIsAdding(false);
     }
@@ -241,7 +311,14 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
 
         {/* All Sets - Collapsible (only for name search) */}
         {!card.specificSetInfo && card.card_sets && card.card_sets.length > 0 && (
-          <AllSetsDropdown sets={card.card_sets} />
+          <AllSetsDropdown
+            sets={card.card_sets}
+            cardId={card.id}
+            cardName={card.name}
+            imageUrl={imageUrl}
+            isAuthenticated={isAuthenticated}
+            onAddToList={addToList}
+          />
         )}
 
         {/* Price */}
@@ -257,15 +334,9 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           </span>
         </div>
 
-        {/* Add to List Buttons */}
-        {isAuthenticated && (
+        {/* Add to List Buttons - only show for set code searches */}
+        {isAuthenticated && card.specificSetInfo && (
           <div className={styles.actions}>
-            {addedTo && (
-              <div className={styles.successMessage}>
-                ✓ Agregada a {addedTo}
-              </div>
-            )}
-
             <div className={styles.buttonGroup}>
               <button
                 type="button"
@@ -273,7 +344,13 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  addToList('collection');
+                  addToList(
+                    'collection',
+                    card.specificSetInfo!.setCode,
+                    card.specificSetInfo!.setName,
+                    card.specificSetInfo!.setRarity,
+                    card.specificSetInfo!.setPrice
+                  );
                 }}
                 disabled={isAdding}
               >
@@ -285,7 +362,13 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  addToList('for-sale');
+                  addToList(
+                    'for-sale',
+                    card.specificSetInfo!.setCode,
+                    card.specificSetInfo!.setName,
+                    card.specificSetInfo!.setRarity,
+                    card.specificSetInfo!.setPrice
+                  );
                 }}
                 disabled={isAdding}
               >
@@ -297,7 +380,13 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  addToList('wishlist');
+                  addToList(
+                    'wishlist',
+                    card.specificSetInfo!.setCode,
+                    card.specificSetInfo!.setName,
+                    card.specificSetInfo!.setRarity,
+                    card.specificSetInfo!.setPrice
+                  );
                 }}
                 disabled={isAdding}
               >

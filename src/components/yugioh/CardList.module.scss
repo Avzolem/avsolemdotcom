@@ -260,6 +260,17 @@ $yugioh-gold: #FFD700;
   gap: 0.5rem;
 }
 
+.setInfoSection {
+  padding: 0.75rem;
+  background: rgba(123, 44, 191, 0.1);
+  border: 1px solid rgba(123, 44, 191, 0.2);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
 .infoRow {
   display: flex;
   align-items: center;
@@ -281,6 +292,23 @@ $yugioh-gold: #FFD700;
     color: #22C55E;
     font-weight: 700;
   }
+}
+
+.setCodeValue {
+  font-family: 'Geist Mono', monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: $yugioh-gold;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 0.8125rem;
+}
+
+.rarityValue {
+  color: $yugioh-gold;
+  font-weight: 600;
+  font-size: 0.8125rem;
 }
 
 .quantityControls {
@@ -397,5 +425,85 @@ $yugioh-gold: #FFD700;
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+// Price Row (contains price and for-sale button)
+.priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// For Sale Button
+.btnForSale {
+  padding: 0.5rem 1rem;
+  background: rgba(123, 44, 191, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(123, 44, 191, 0.4);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+  z-index: 10;
+
+  &:hover:not(:disabled) {
+    background: rgba(123, 44, 191, 0.3);
+    border-color: $yugioh-purple;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // Active state (when card is for sale)
+  &.forSaleActive {
+    background: rgba(255, 215, 0, 0.2);
+    color: $yugioh-gold;
+    border-color: rgba(255, 215, 0, 0.4);
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 215, 0, 0.3);
+      border-color: $yugioh-gold;
+
+      &::after {
+        content: 'Quitar de venta';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        border-radius: 6px;
+        font-weight: 700;
+        z-index: 1;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    text-align: center;
   }
 }
