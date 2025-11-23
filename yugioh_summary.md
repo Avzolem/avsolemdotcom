@@ -266,6 +266,7 @@ $yugioh-gray: #2a2a2a;
 - Added colored toast messages (green names, yellow set codes)
 - Moved ToastProvider to layout level for global availability
 - Button states: normal → active ("💰 En Venta") → hover shows "Quitar de venta"
+- **Deployment Fix**: Corrected import path in `SharedLink.ts` for Vercel compatibility
 
 ## Known Patterns and Solutions
 
@@ -319,6 +320,13 @@ Quantity and for-sale status updates:
 - Make API call in background
 - Revert on failure (for quantity updates)
 - Prevents page reloads and loading spinners
+
+### Vercel Deployment
+**Common Issues**:
+- Import path resolution differs between dev and production
+- Always use relative imports from actual file locations, not index files
+- Example fix: `SharedLink.ts` imported from `../index` → changed to `../connection`
+- Test production builds locally before deploying: `npm run build`
 
 ## Future Considerations
 
