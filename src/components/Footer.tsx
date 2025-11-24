@@ -1,3 +1,5 @@
+"use client";
+
 import { Flex, IconButton, SmartLink, Text } from "@once-ui-system/core";
 import { person, social } from "@/resources";
 import styles from "./Footer.module.scss";
@@ -30,19 +32,47 @@ export const Footer = () => {
           </Text>
         </Text>
         <Flex gap="16">
-          {social.map(
-            (item) =>
-              item.link && (
-                <IconButton
+          {social.map((item) => {
+            if (!item.link) return null;
+
+            const isSpecialRoute = item.link.includes('/yugioh') || item.link.includes('/roms');
+
+            if (isSpecialRoute) {
+              return (
+                <a
                   key={item.name}
                   href={item.link}
-                  icon={item.icon}
-                  tooltip={item.name}
-                  size="s"
-                  variant="ghost"
-                />
-              ),
-          )}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = item.link;
+                  }}
+                  style={{
+                    display: 'inline-flex',
+                    cursor: 'pointer',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <IconButton
+                    icon={item.icon}
+                    tooltip={item.name}
+                    size="s"
+                    variant="ghost"
+                  />
+                </a>
+              );
+            }
+
+            return (
+              <IconButton
+                key={item.name}
+                href={item.link}
+                icon={item.icon}
+                tooltip={item.name}
+                size="s"
+                variant="ghost"
+              />
+            );
+          })}
         </Flex>
       </Flex>
       <Flex height="80" className={styles.showOnMobile}></Flex>

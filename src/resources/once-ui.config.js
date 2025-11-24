@@ -11,6 +11,7 @@ const routes = {
   "/gallery": true,
   "/whatsapp": true,
   "/yugioh": true,
+  "/roms": true,
 };
 
 const display = {

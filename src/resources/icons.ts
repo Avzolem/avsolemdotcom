@@ -13,6 +13,7 @@ import {
   HiOutlineGlobeAsiaAustralia,
   HiOutlineRocketLaunch,
 } from "react-icons/hi2";
+import { FaSave } from "react-icons/fa";
 
 import {
   PiHouseDuotone,
@@ -47,7 +48,8 @@ export const iconLibrary: Record<string, IconType> = {
   arrowUpRightFromSquare: HiArrowTopRightOnSquare,
   document: HiOutlineDocument,
   rocket: HiOutlineRocketLaunch,
-  dragon: GiDragonHead
+  dragon: GiDragonHead,
+  save: FaSave
 };
 
 export type IconLibrary = typeof iconLibrary;

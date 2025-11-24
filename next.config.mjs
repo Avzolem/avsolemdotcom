@@ -31,6 +31,16 @@ const nextConfig = {
         hostname: 'images.ygoprodeck.com',
         pathname: '/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+        pathname: '/wikipedia/commons/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.svgrepo.com',
+        pathname: '/show/**',
+      },
     ],
     dangerouslyAllowSVG: true,
   },

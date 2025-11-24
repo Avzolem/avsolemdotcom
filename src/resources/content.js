@@ -55,6 +55,11 @@ const social = [
     icon: "dragon",
     link: "/yugioh",
   },
+  {
+    name: "ROMs Index",
+    icon: "save",
+    link: "/roms",
+  },
 ];
 
 const home = {

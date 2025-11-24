@@ -33,6 +33,7 @@ export default async function RootLayout({
   const headersList = await headers();
   const pathname = headersList.get('x-pathname') || headersList.get('referer') || '';
   const isYugiohRoute = pathname.includes('/yugioh');
+  const isRomsRoute = pathname.includes('/roms');
 
   return (
     <html
@@ -156,6 +157,10 @@ export default async function RootLayout({
           />
           {isYugiohRoute ? (
             children
+          ) : isRomsRoute ? (
+            <div style={{ width: '100%', minHeight: '100vh' }}>
+              {children}
+            </div>
           ) : (
             <>
               <Flex fillWidth minHeight="16" className={styles.hideOnMobile}/>
