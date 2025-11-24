@@ -294,6 +294,27 @@ $yugioh-gold: #FFD700;
   }
 }
 
+.priceUnavailable {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  font-style: italic;
+  font-size: 0.8125rem;
+}
+
+.priceWithFallback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.priceRowFallback {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
 .setCodeValue {
   font-family: 'Geist Mono', monospace;
   background: rgba(0, 0, 0, 0.3);

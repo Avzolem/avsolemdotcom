@@ -8,6 +8,16 @@ import { useToast } from '@/contexts/ToastContext';
 import Image from 'next/image';
 import styles from './CardDisplay.module.scss';
 
+// Helper function to convert card type to CSS class name
+function getTypeClassName(type: string): string {
+  // Remove spaces and special characters, convert to camelCase
+  return type
+    .replace(/\s+/g, '')
+    .replace(/-/g, '')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .replace(/^./, (str) => str.toLowerCase());
+}
+
 interface CardDisplayProps {
   card: YugiohCard;
   compact?: boolean;
@@ -111,9 +121,13 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
   const { isAuthenticated } = useYugiohAuth();
   const { showToast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
 
   const price = getCardPrice(card);
   const imageUrl = card.card_images[0]?.image_url_small || card.card_images[0]?.image_url;
+
+  // Check if description is long (more than 250 characters)
+  const isLongDescription = card.desc && card.desc.length > 250;
 
   const addToList = async (
     type: ListType,
@@ -168,14 +182,28 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           'for-sale': 'En Venta',
           wishlist: 'Wishlist',
         };
-        showToast(
-          <>
-            ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
-            {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-            {' '}agregada a {listNames[type]}
-          </>,
-          'success'
-        );
+
+        // Special message when adding to for-sale (also adds to collection)
+        let message;
+        if (type === 'for-sale') {
+          message = (
+            <>
+              ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}agregada a Colección y En Venta
+            </>
+          );
+        } else {
+          message = (
+            <>
+              ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}agregada a {listNames[type]}
+            </>
+          );
+        }
+
+        showToast(message, 'success');
       } else {
         showToast('Error al agregar la carta', 'error');
       }
@@ -203,8 +231,14 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           <div className={styles.compactInfo}>
             <h3 className={styles.compactTitle}>{card.name}</h3>
             <div className={styles.badges}>
-              <span className={styles.badge}>{card.type}</span>
-              {card.attribute && <span className={styles.badgeAccent}>{card.attribute}</span>}
+              <span className={`${styles.badgeType} ${styles[getTypeClassName(card.type)]}`}>
+                {card.type}
+              </span>
+              {card.attribute && (
+                <span className={`${styles.badgeAttribute} ${styles[card.attribute.toLowerCase()]}`}>
+                  {card.attribute}
+                </span>
+              )}
             </div>
           </div>
           <div className={styles.price}>{formatPrice(price)}</div>
@@ -246,9 +280,15 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
         <div className={styles.header}>
           <h2 className={styles.cardTitle}>{card.name}</h2>
           <div className={styles.badges}>
-            <span className={styles.badge}>{card.type}</span>
+            <span className={`${styles.badgeType} ${styles[getTypeClassName(card.type)]}`}>
+              {card.type}
+            </span>
             {card.race && <span className={styles.badge}>{card.race}</span>}
-            {card.attribute && <span className={styles.badgeAccent}>{card.attribute}</span>}
+            {card.attribute && (
+              <span className={`${styles.badgeAttribute} ${styles[card.attribute.toLowerCase()]}`}>
+                {card.attribute}
+              </span>
+            )}
             {card.archetype && <span className={styles.badgeBrand}>{card.archetype}</span>}
           </div>
         </div>
@@ -277,7 +317,20 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
         {/* Description */}
         <div className={styles.description}>
           <p className={styles.descLabel}>Descripción:</p>
-          <p className={styles.descText}>{card.desc}</p>
+          <p className={styles.descText}>
+            {isLongDescription && !isDescExpanded
+              ? `${card.desc.substring(0, 250)}...`
+              : card.desc}
+          </p>
+          {isLongDescription && (
+            <button
+              type="button"
+              className={styles.expandButton}
+              onClick={() => setIsDescExpanded(!isDescExpanded)}
+            >
+              {isDescExpanded ? '▲ Ver menos' : '▼ Ver más'}
+            </button>
+          )}
         </div>
 
         {/* Card Codes - Different display based on search type */}
@@ -323,15 +376,38 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
 
         {/* Price */}
         <div className={styles.priceSection}>
-          <span className={styles.priceLabel}>
-            {card.specificSetInfo ? 'Precio de este set:' : 'Precio estimado:'}
-          </span>
-          <span className={styles.priceValue}>
-            {card.specificSetInfo
-              ? formatPrice(parseFloat(card.specificSetInfo.setPrice))
-              : formatPrice(price)
-            }
-          </span>
+          {card.specificSetInfo ? (
+            // Set code search - show set price with fallback to general price
+            <>
+              {parseFloat(card.specificSetInfo.setPrice) > 0 ? (
+                // Set has a price
+                <>
+                  <span className={styles.priceLabel}>Precio de este set:</span>
+                  <span className={styles.priceValue}>
+                    {formatPrice(parseFloat(card.specificSetInfo.setPrice))}
+                  </span>
+                </>
+              ) : (
+                // Set price is $0 - show general price instead
+                <div className={styles.priceWithFallback}>
+                  <div className={styles.priceRow}>
+                    <span className={styles.priceLabel}>Precio de este set:</span>
+                    <span className={styles.priceUnavailable}>No disponible</span>
+                  </div>
+                  <div className={styles.priceRow}>
+                    <span className={styles.priceLabel}>Precio estimado general:</span>
+                    <span className={styles.priceValue}>{formatPrice(price)}</span>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            // Name search - show general price
+            <>
+              <span className={styles.priceLabel}>Precio estimado:</span>
+              <span className={styles.priceValue}>{formatPrice(price)}</span>
+            </>
+          )}
         </div>
 
         {/* Add to List Buttons - only show for set code searches */}

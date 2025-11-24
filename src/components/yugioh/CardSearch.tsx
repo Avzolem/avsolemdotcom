@@ -36,7 +36,10 @@ function isSetCode(input: string): boolean {
 }
 
 // Search by Set Code using internal API route (avoids CORS issues)
-async function searchBySetCode(setCode: string): Promise<YugiohCard | null> {
+async function searchBySetCode(setCode: string): Promise<{
+  card: YugiohCard | null;
+  fallbackInfo?: { originalCode: string; fallbackCode: string };
+}> {
   const cleanSetCode = setCode.trim().toUpperCase();
   console.log('🔍 Searching by set code:', cleanSetCode);
 
@@ -48,13 +51,17 @@ async function searchBySetCode(setCode: string): Promise<YugiohCard | null> {
 
     if (!response.ok) {
       console.log('❌ API returned error:', response.status);
-      return null;
+      return { card: null };
     }
 
     const data = await response.json();
 
     if (data.success && data.cardName) {
       console.log('✅ Found via API:', data.cardName, `(source: ${data.source})`);
+
+      if (data.usedFallback) {
+        console.log(`🌐 Used fallback: ${data.originalCode} → ${data.fallbackCode}`);
+      }
 
       // Get full card details from YGOPRODeck
       const cards = await searchCardsByName(data.cardName);
@@ -69,15 +76,22 @@ async function searchBySetCode(setCode: string): Promise<YugiohCard | null> {
             setPrice: data.setPrice,
           },
         };
-        return cardWithSetInfo;
+
+        // Return card with fallback info if used
+        return {
+          card: cardWithSetInfo,
+          fallbackInfo: data.usedFallback
+            ? { originalCode: data.originalCode, fallbackCode: data.fallbackCode }
+            : undefined,
+        };
       }
     }
 
     console.log('❌ No card found with set code:', cleanSetCode);
-    return null;
+    return { card: null };
   } catch (error) {
     console.error('❌ Error searching by set code:', error);
-    return null;
+    return { card: null };
   }
 }
 
@@ -89,6 +103,7 @@ export default function CardSearch() {
   const [hasSearched, setHasSearched] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterOptions>({});
   const [showScanner, setShowScanner] = useState(false);
+  const [fallbackWarning, setFallbackWarning] = useState<string | null>(null);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -99,11 +114,13 @@ export default function CardSearch() {
     if (!hasQuery && !hasFilters) {
       setCards([]);
       setHasSearched(false);
+      setFallbackWarning(null);
       return;
     }
 
     setIsLoading(true);
     setError('');
+    setFallbackWarning(null);
     setHasSearched(true);
 
     try {
@@ -112,9 +129,15 @@ export default function CardSearch() {
       // Check if the query is a Set Code (e.g., LOB-EN001)
       if (hasQuery && isSetCode(query) && !hasFilters) {
         console.log('🏷️ Detected Set Code format, searching by set code...');
-        const card = await searchBySetCode(query);
+        const { card, fallbackInfo } = await searchBySetCode(query);
         if (card) {
           results = [card];
+          // Set fallback warning if fallback was used
+          if (fallbackInfo) {
+            setFallbackWarning(
+              `⚠️ El código ${fallbackInfo.originalCode} no está disponible. Mostrando versión en INGLES: ${fallbackInfo.fallbackCode}`
+            );
+          }
         } else {
           setError(`No se encontró ninguna carta con el Set Code: ${query.trim().toUpperCase()}`);
         }
@@ -252,6 +275,13 @@ export default function CardSearch() {
         <div className={styles.errorBox}>
           <span className={styles.errorIcon}>⚠️</span>
           <p>{error}</p>
+        </div>
+      )}
+
+      {/* Fallback Warning */}
+      {fallbackWarning && !isLoading && (
+        <div className={styles.warningBox}>
+          <p>{fallbackWarning}</p>
         </div>
       )}
 

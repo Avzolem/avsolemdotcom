@@ -146,6 +146,23 @@ $yugioh-gray: #1a1a1a;
   margin-bottom: 0.5rem;
 }
 
+.warningBox {
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  max-width: 600px;
+  margin: 2rem auto;
+
+  p {
+    color: $yugioh-gold;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
 .results {
   width: 100%;
 }

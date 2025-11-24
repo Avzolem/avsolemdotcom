@@ -4,8 +4,12 @@ import { NextRequest, NextResponse } from 'next/server';
  * Search for a Yu-Gi-Oh! card by Set Code
  * Uses YGOPRODeck API exclusively (most reliable and up-to-date)
  *
+ * Supports automatic fallback for non-English set codes:
+ * - If a code with -SP, -FR, -IT, -PT, etc. is not found
+ * - Automatically tries the -EN version as fallback
+ *
  * @route GET /api/yugioh/search-setcode?code={setCode}
- * @param code - Set code (e.g., LOB-EN001, SDK-001)
+ * @param code - Set code (e.g., LOB-EN001, SDK-001, SDCK-SP049)
  * @returns Card name, set info, and rarity if found
  */
 export async function GET(request: NextRequest) {
@@ -23,7 +27,11 @@ export async function GET(request: NextRequest) {
     const cleanSetCode = setCode.trim().toUpperCase();
     console.log('🔍 API: Searching by set code:', cleanSetCode);
 
-    // Use YGOPRODeck API (updated Sept 2025, supports 1007+ sets)
+    // Detect non-English language codes (SP, FR, IT, PT, DE, etc.)
+    const nonEnglishPattern = /^(.+)-(SP|FR|IT|PT|DE|AE|KR|JP)(\d+.*)$/i;
+    const match = cleanSetCode.match(nonEnglishPattern);
+
+    // Try original code first
     const ygoprodeckResponse = await fetch(
       `https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode=${cleanSetCode}`,
       {
@@ -33,33 +41,62 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    if (!ygoprodeckResponse.ok) {
-      console.log('❌ API: YGOPRODeck returned error:', ygoprodeckResponse.status);
-      return NextResponse.json(
+    if (ygoprodeckResponse.ok) {
+      const data = await ygoprodeckResponse.json();
+      if (data && data.name) {
+        console.log('✅ API: Found via YGOPRODeck:', data.name);
+        return NextResponse.json({
+          success: true,
+          cardName: data.name,
+          setCode: data.set_code,
+          setName: data.set_name,
+          setRarity: data.set_rarity,
+          setPrice: data.set_price,
+          source: 'ygoprodeck',
+          usedFallback: false,
+        });
+      }
+    }
+
+    // If original code failed and it's a non-English code, try EN fallback
+    if (match) {
+      const prefix = match[1];
+      const langCode = match[2];
+      const suffix = match[3];
+      const fallbackCode = `${prefix}-EN${suffix}`;
+
+      console.log(`🌐 API: Code ${cleanSetCode} not found, trying EN fallback: ${fallbackCode}`);
+
+      const fallbackResponse = await fetch(
+        `https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode=${fallbackCode}`,
         {
-          success: false,
-          error: `No se encontró ninguna carta con el Set Code: ${cleanSetCode}`,
-        },
-        { status: 404 }
+          headers: {
+            'Accept': 'application/json',
+          },
+        }
       );
+
+      if (fallbackResponse.ok) {
+        const fallbackData = await fallbackResponse.json();
+        if (fallbackData && fallbackData.name) {
+          console.log('✅ API: Found via EN fallback:', fallbackData.name);
+          return NextResponse.json({
+            success: true,
+            cardName: fallbackData.name,
+            setCode: fallbackData.set_code,
+            setName: fallbackData.set_name,
+            setRarity: fallbackData.set_rarity,
+            setPrice: fallbackData.set_price,
+            source: 'ygoprodeck',
+            usedFallback: true,
+            originalCode: cleanSetCode,
+            fallbackCode: fallbackCode,
+          });
+        }
+      }
     }
 
-    const data = await ygoprodeckResponse.json();
-
-    if (data && data.name) {
-      console.log('✅ API: Found via YGOPRODeck:', data.name);
-      return NextResponse.json({
-        success: true,
-        cardName: data.name,
-        setCode: data.set_code,
-        setName: data.set_name,
-        setRarity: data.set_rarity,
-        setPrice: data.set_price,
-        source: 'ygoprodeck',
-      });
-    }
-
-    // No card found
+    // No card found with original or fallback code
     console.log('❌ API: No card found with set code:', cleanSetCode);
     return NextResponse.json(
       {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { CardInList, ListType } from '@/types/yugioh';
-import { formatPrice } from '@/lib/services/ygoprodeck';
+import { formatPrice, getCardById, getCardPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
 import { useToast } from '@/contexts/ToastContext';
 import ExportButtons from './ExportButtons';
@@ -25,6 +25,7 @@ export default function CardList({ type, title }: CardListProps) {
   const [isRemoving, setIsRemoving] = useState<string | null>(null);
   const [isTogglingForSale, setIsTogglingForSale] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [generalPrices, setGeneralPrices] = useState<Record<number, number>>({});
 
   const loadCards = async () => {
     setIsLoading(true);
@@ -46,7 +47,33 @@ export default function CardList({ type, title }: CardListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
-  const removeCard = async (setCode: string) => {
+  // Load general prices for cards with price = 0
+  useEffect(() => {
+    const fetchGeneralPrices = async () => {
+      const cardsWithoutPrice = cards.filter(card => !card.price || card.price === 0);
+
+      if (cardsWithoutPrice.length === 0) return;
+
+      const prices: Record<number, number> = {};
+
+      for (const card of cardsWithoutPrice) {
+        try {
+          const fullCard = await getCardById(card.cardId);
+          if (fullCard) {
+            prices[card.cardId] = getCardPrice(fullCard);
+          }
+        } catch (error) {
+          console.error(`Error fetching price for card ${card.cardId}:`, error);
+        }
+      }
+
+      setGeneralPrices(prices);
+    };
+
+    fetchGeneralPrices();
+  }, [cards]);
+
+  const removeCard = async (setCode: string, cardName: string) => {
     console.log('removeCard called:', { setCode, type });
     if (!confirm('¿Seguro que quieres eliminar esta carta?')) return;
 
@@ -60,15 +87,48 @@ export default function CardList({ type, title }: CardListProps) {
       console.log('removeCard response:', response.status, response.ok);
 
       if (response.ok) {
+        const data = await response.json();
+        const deletedFrom = data.deletedFrom || [type];
+
+        // Show toast based on what was deleted
+        const listNames: Record<ListType, string> = {
+          collection: 'Colección',
+          'for-sale': 'En Venta',
+          wishlist: 'Wishlist',
+        };
+
+        let message;
+        if (deletedFrom.length > 1) {
+          // Deleted from multiple lists
+          const lists = deletedFrom.map((t: ListType) => listNames[t]).join(' y ');
+          message = (
+            <>
+              🗑️ <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}eliminada de {lists}
+            </>
+          );
+        } else {
+          // Deleted from single list
+          message = (
+            <>
+              🗑️ <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}eliminada de {listNames[deletedFrom[0] as ListType]}
+            </>
+          );
+        }
+
+        showToast(message, 'info');
         await loadCards();
       } else {
         const errorText = await response.text();
         console.error('Failed to remove card:', errorText);
-        alert('Error al eliminar la carta');
+        showToast('Error al eliminar la carta', 'error');
       }
     } catch (error) {
       console.error('Error removing card:', error);
-      alert('Error al eliminar la carta');
+      showToast('Error al eliminar la carta', 'error');
     } finally {
       setIsRemoving(null);
     }
@@ -333,12 +393,29 @@ export default function CardList({ type, title }: CardListProps) {
 
                   {/* Price and For Sale Button */}
                   <div className={styles.priceRow}>
-                    {card.price && (
+                    {card.price && card.price > 0 ? (
+                      // Has set price
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>Precio:</span>
                         <span className={`${styles.infoValue} ${styles.price}`}>
                           {formatPrice(card.price)}
                         </span>
+                      </div>
+                    ) : (
+                      // Set price is $0 - show general price fallback
+                      <div className={styles.priceWithFallback}>
+                        <div className={styles.priceRowFallback}>
+                          <span className={styles.infoLabel}>Precio de este set:</span>
+                          <span className={styles.priceUnavailable}>No disponible</span>
+                        </div>
+                        {generalPrices[card.cardId] !== undefined && (
+                          <div className={styles.priceRowFallback}>
+                            <span className={styles.infoLabel}>Precio estimado general:</span>
+                            <span className={`${styles.infoValue} ${styles.price}`}>
+                              {formatPrice(generalPrices[card.cardId])}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     )}
 
@@ -386,7 +463,7 @@ export default function CardList({ type, title }: CardListProps) {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        removeCard(card.setCode);
+                        removeCard(card.setCode, card.cardName);
                       }}
                       disabled={isRemoving === card.setCode}
                     >

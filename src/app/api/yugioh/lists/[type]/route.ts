@@ -152,19 +152,41 @@ export async function DELETE(
       );
     }
 
+    const deletedFrom: ListType[] = [type];
+
+    // Get card info before deleting (for the response)
+    const list = await getOrCreateList(type);
+    const card = list.cards.find((c) => c.setCode === setCode);
+
+    // Remove from the requested list
     await removeCardFromList(type, setCode);
 
-    // If deleting from for-sale, update isForSale to false in collection
+    // Bidirectional sync logic
     if (type === 'for-sale') {
+      // If deleting from for-sale, update isForSale to false in collection
       const collection = await getOrCreateList('collection');
       const cardInCollection = collection.cards.find((c) => c.setCode === setCode);
 
       if (cardInCollection) {
         await updateCardField('collection', setCode, 'isForSale', false);
       }
+    } else if (type === 'collection') {
+      // If deleting from collection, also remove from for-sale if it exists there
+      const forSaleList = await getOrCreateList('for-sale');
+      const cardInForSale = forSaleList.cards.find((c) => c.setCode === setCode);
+
+      if (cardInForSale) {
+        await removeCardFromList('for-sale', setCode);
+        deletedFrom.push('for-sale');
+      }
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      deletedFrom,
+      cardName: card?.cardName,
+      setCode,
+    });
   } catch (error) {
     console.error('Error removing card from list:', error);
     return NextResponse.json(

@@ -125,6 +125,53 @@ $yugioh-gray: #2a2a2a;
   border: 1px solid rgba(123, 44, 191, 0.5);
 }
 
+// Attribute Colors (Official Yu-Gi-Oh! colors)
+.badgeAttribute {
+  @extend .badge;
+
+  &.dark {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.6);
+    color: #A78BFA;
+  }
+
+  &.light {
+    background: rgba(251, 191, 36, 0.3);
+    border-color: rgba(251, 191, 36, 0.6);
+    color: #FBBF24;
+  }
+
+  &.water {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.6);
+    color: #60A5FA;
+  }
+
+  &.fire {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #F87171;
+  }
+
+  &.earth {
+    background: rgba(120, 113, 108, 0.3);
+    border-color: rgba(120, 113, 108, 0.6);
+    color: #A8A29E;
+  }
+
+  &.wind {
+    background: rgba(16, 185, 129, 0.3);
+    border-color: rgba(16, 185, 129, 0.6);
+    color: #34D399;
+  }
+
+  &.divine {
+    background: rgba(245, 158, 11, 0.3);
+    border-color: rgba(245, 158, 11, 0.6);
+    color: #FBBF24;
+  }
+}
+
 .badgeAccent {
   @extend .badge;
   background: rgba(59, 130, 246, 0.3);
@@ -137,6 +184,103 @@ $yugioh-gray: #2a2a2a;
   background: rgba(255, 215, 0, 0.2);
   border-color: rgba(255, 215, 0, 0.4);
   color: $yugioh-gold;
+}
+
+// Card Type Colors (Official Yu-Gi-Oh! colors)
+.badgeType {
+  @extend .badge;
+
+  // Monsters
+  &.normalMonster {
+    background: rgba(253, 230, 138, 0.3);
+    border-color: rgba(253, 230, 138, 0.6);
+    color: #FDE68A;
+  }
+
+  &.effectMonster,
+  &.flipEffectMonster,
+  &.tunablePendulumEffectMonster,
+  &.pendulumTunerEffectMonster {
+    background: rgba(251, 146, 60, 0.3);
+    border-color: rgba(251, 146, 60, 0.6);
+    color: #FB923C;
+  }
+
+  &.ritualMonster,
+  &.ritualEffectMonster {
+    background: rgba(96, 165, 250, 0.3);
+    border-color: rgba(96, 165, 250, 0.6);
+    color: #60A5FA;
+  }
+
+  &.fusionMonster {
+    background: rgba(168, 85, 247, 0.3);
+    border-color: rgba(168, 85, 247, 0.6);
+    color: #A855F7;
+  }
+
+  &.synchroMonster,
+  &.synchroTunerMonster,
+  &.synchroEffectMonster,
+  &.synchroTunerEffectMonster,
+  &.synchroP endulumEffectMonster {
+    background: rgba(229, 231, 235, 0.3);
+    border-color: rgba(229, 231, 235, 0.6);
+    color: #E5E7EB;
+  }
+
+  &.xyzMonster,
+  &.xyzEffectMonster,
+  &.xyzPendulumEffectMonster {
+    background: rgba(31, 41, 55, 0.5);
+    border-color: rgba(31, 41, 55, 0.8);
+    color: #D1D5DB;
+  }
+
+  &.pendulumMonster,
+  &.pendulumEffectMonster,
+  &.pendulumNormalMonster,
+  &.pendulumFlipEffectMonster {
+    background: rgba(52, 211, 153, 0.3);
+    border-color: rgba(52, 211, 153, 0.6);
+    color: #34D399;
+  }
+
+  &.linkMonster {
+    background: rgba(30, 64, 175, 0.4);
+    border-color: rgba(30, 64, 175, 0.7);
+    color: #60A5FA;
+  }
+
+  &.geminiMonster,
+  &.spiritMonster,
+  &.tunerMonster,
+  &.unionEffectMonster,
+  &.flipTunerEffectMonster {
+    background: rgba(253, 186, 116, 0.3);
+    border-color: rgba(253, 186, 116, 0.6);
+    color: #FDBA74;
+  }
+
+  // Spell & Trap
+  &.spellCard {
+    background: rgba(16, 185, 129, 0.3);
+    border-color: rgba(16, 185, 129, 0.6);
+    color: #10B981;
+  }
+
+  &.trapCard {
+    background: rgba(236, 72, 153, 0.3);
+    border-color: rgba(236, 72, 153, 0.6);
+    color: #EC4899;
+  }
+
+  // Token
+  &.token {
+    background: rgba(156, 163, 175, 0.3);
+    border-color: rgba(156, 163, 175, 0.6);
+    color: #9CA3AF;
+  }
 }
 
 .stats {
@@ -174,10 +318,36 @@ $yugioh-gray: #2a2a2a;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.expandButton {
+  margin-top: 0.5rem;
+  background: rgba(123, 44, 191, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: $yugioh-gold;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  align-self: flex-start;
+
+  &:hover {
+    background: rgba(123, 44, 191, 0.3);
+    border-color: $yugioh-gold;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .codesSection {
@@ -427,6 +597,26 @@ $yugioh-gray: #2a2a2a;
   font-size: 1.125rem;
   font-weight: 700;
   color: #22C55E;
+}
+
+.priceWithFallback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.priceUnavailable {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
 }
 
 .actions {

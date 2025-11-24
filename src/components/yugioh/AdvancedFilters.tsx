@@ -53,44 +53,46 @@ const CARD_TYPES = [
   // Other
   'Skill Card',
   'Token',
-];
+].sort();
 
 const MONSTER_TYPES = [
-  'Spellcaster',
-  'Dragon',
-  'Zombie',
-  'Warrior',
-  'Beast-Warrior',
-  'Beast',
-  'Winged Beast',
-  'Fiend',
-  'Fairy',
-  'Insect',
-  'Dinosaur',
-  'Reptile',
-  'Fish',
-  'Sea Serpent',
   'Aqua',
-  'Pyro',
-  'Thunder',
-  'Rock',
-  'Plant',
-  'Machine',
-  'Psychic',
-  'Divine-Beast',
-  'Wyrm',
+  'Beast',
+  'Beast-Warrior',
+  'Creator-God',
   'Cyberse',
-];
+  'Dinosaur',
+  'Divine-Beast',
+  'Dragon',
+  'Fairy',
+  'Fiend',
+  'Fish',
+  'Illusion',
+  'Insect',
+  'Machine',
+  'Plant',
+  'Psychic',
+  'Pyro',
+  'Reptile',
+  'Rock',
+  'Sea Serpent',
+  'Spellcaster',
+  'Thunder',
+  'Warrior',
+  'Winged Beast',
+  'Wyrm',
+  'Zombie',
+].sort();
 
 const ATTRIBUTES = [
   'DARK',
-  'LIGHT',
-  'EARTH',
-  'WATER',
-  'FIRE',
-  'WIND',
   'DIVINE',
-];
+  'EARTH',
+  'FIRE',
+  'LIGHT',
+  'WATER',
+  'WIND',
+].sort();
 
 export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -202,8 +204,8 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
                 type="number"
                 id="filter-level"
                 min="1"
-                max="12"
-                placeholder="Nivel..."
+                max="13"
+                placeholder="Nivel (1-13)..."
                 value={filters.level || ''}
                 onChange={(e) =>
                   setFilters({ ...filters, level: e.target.value ? parseInt(e.target.value) : undefined })

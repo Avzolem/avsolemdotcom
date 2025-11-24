@@ -483,6 +483,29 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         </div>
       )}
 
+      {/* Camera Preview */}
+      {isCameraOpen && !capturedImage && (
+        <div className={styles.cameraContainer}>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className={styles.video}
+          />
+          <div className={styles.overlay}>
+            <div
+              className={`${styles.frame} ${scanMode === 'setcode' ? styles.frameSetCode : styles.frameName}`}
+            />
+            <p className={styles.hint}>
+              {scanMode === 'setcode'
+                ? 'Centra el set code en el recuadro (ej: LOB-EN001)'
+                : 'Centra el nombre de la carta en el recuadro'}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className={styles.controls}>
         {!isCameraOpen && !isScanning && (
           <>
@@ -539,29 +562,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
           </div>
         )}
       </div>
-
-      {/* Camera Preview */}
-      {isCameraOpen && !capturedImage && (
-        <div className={styles.cameraContainer}>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className={styles.video}
-          />
-          <div className={styles.overlay}>
-            <div
-              className={`${styles.frame} ${scanMode === 'setcode' ? styles.frameSetCode : styles.frameName}`}
-            />
-            <p className={styles.hint}>
-              {scanMode === 'setcode'
-                ? 'Centra el set code en el recuadro (ej: LOB-EN001)'
-                : 'Centra el nombre de la carta en el recuadro'}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Captured Image Preview */}
       {capturedImage && (
