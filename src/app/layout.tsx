@@ -6,6 +6,7 @@ import './globals.css';
 
 import classNames from "classnames";
 import { headers } from 'next/headers';
+import { Analytics } from '@vercel/analytics/react';
 
 import { Background, Flex, Meta, opacity, SpacingToken } from "@once-ui-system/core";
 import { Footer, Header, RouteGuard, Providers } from '@/components';
@@ -177,6 +178,7 @@ export default async function RootLayout({
           )}
           </Flex>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

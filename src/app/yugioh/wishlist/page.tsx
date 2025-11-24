@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function WishlistPage() {
-  return <CardList type="wishlist" title="Mi Wishlist" />;
+  return <CardList type="wishlist" />;
 }

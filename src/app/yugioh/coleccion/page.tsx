@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ColeccionPage() {
-  return <CardList type="collection" title="Mi Colección" />;
+  return <CardList type="collection" />;
 }

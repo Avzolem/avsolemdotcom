@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, memo } from 'react';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import { YugiohCard, ListType, CardSet } from '@/types/yugioh';
 import { getCardPrice, formatPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
@@ -39,6 +40,7 @@ function AllSetsDropdown({
   isAuthenticated: boolean;
   onAddToList: (type: ListType, setCode: string, setName: string, setRarity: string, setPrice: string) => void;
 }) {
+  const { t } = useYugiohLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -49,7 +51,7 @@ function AllSetsDropdown({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <span className={styles.allSetsLabel}>
-          📦 Ver todos los sets ({sets.length})
+          📦 {t('card.setInfo')} ({sets.length})
         </span>
         <span className={styles.toggleIcon}>{isExpanded ? '▼' : '▶'}</span>
       </button>
@@ -81,7 +83,7 @@ function AllSetsDropdown({
                       e.stopPropagation();
                       onAddToList('collection', set.set_code, set.set_name, set.set_rarity, set.set_price);
                     }}
-                    title="Agregar a Colección"
+                    title={t('card.addToCollection')}
                   >
                     📚
                   </button>
@@ -92,7 +94,7 @@ function AllSetsDropdown({
                       e.stopPropagation();
                       onAddToList('for-sale', set.set_code, set.set_name, set.set_rarity, set.set_price);
                     }}
-                    title="Agregar a En Venta"
+                    title={t('card.addToForSale')}
                   >
                     💰
                   </button>
@@ -103,7 +105,7 @@ function AllSetsDropdown({
                       e.stopPropagation();
                       onAddToList('wishlist', set.set_code, set.set_name, set.set_rarity, set.set_price);
                     }}
-                    title="Agregar a Wishlist"
+                    title={t('card.addToWishlist')}
                   >
                     ⭐
                   </button>
@@ -118,6 +120,7 @@ function AllSetsDropdown({
 }
 
 function CardDisplay({ card, compact = false }: CardDisplayProps) {
+  const { t } = useYugiohLanguage();
   const { isAuthenticated } = useYugiohAuth();
   const { showToast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
@@ -177,39 +180,41 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
       });
 
       if (response.ok) {
-        const listNames = {
-          collection: 'Colección',
-          'for-sale': 'En Venta',
-          wishlist: 'Wishlist',
-        };
-
         // Special message when adding to for-sale (also adds to collection)
-        let message;
+        let toastMessage;
         if (type === 'for-sale') {
-          message = (
+          toastMessage = (
             <>
               ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
               {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-              {' '}agregada a Colección y En Venta
+              {' '}{t('toast.added.forSale')}
+            </>
+          );
+        } else if (type === 'collection') {
+          toastMessage = (
+            <>
+              ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
+              {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
+              {' '}{t('toast.added.collection')}
             </>
           );
         } else {
-          message = (
+          toastMessage = (
             <>
               ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{card.name}</span>
               {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-              {' '}agregada a {listNames[type]}
+              {' '}{t('toast.added.wishlist')}
             </>
           );
         }
 
-        showToast(message, 'success');
+        showToast(toastMessage, 'success');
       } else {
-        showToast('Error al agregar la carta', 'error');
+        showToast(t('toast.error.add'), 'error');
       }
     } catch (error) {
       console.error('Error adding card:', error);
-      showToast('Error al agregar la carta', 'error');
+      showToast(t('toast.error.add'), 'error');
     } finally {
       setIsAdding(false);
     }
@@ -298,17 +303,17 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           <div className={styles.stats}>
             {card.level !== undefined && (
               <div className={styles.stat}>
-                <strong>Nivel:</strong> {card.level}
+                <strong>{t('card.level')}:</strong> {card.level}
               </div>
             )}
             {card.atk !== undefined && (
               <div className={styles.stat}>
-                <strong>ATK:</strong> {card.atk}
+                <strong>{t('card.atk')}:</strong> {card.atk}
               </div>
             )}
             {card.def !== undefined && (
               <div className={styles.stat}>
-                <strong>DEF:</strong> {card.def}
+                <strong>{t('card.def')}:</strong> {card.def}
               </div>
             )}
           </div>
@@ -316,7 +321,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
 
         {/* Description */}
         <div className={styles.description}>
-          <p className={styles.descLabel}>Descripción:</p>
+          <p className={styles.descLabel}>{t('card.description')}:</p>
           <p className={styles.descText}>
             {isLongDescription && !isDescExpanded
               ? `${card.desc.substring(0, 250)}...`
@@ -328,7 +333,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
               className={styles.expandButton}
               onClick={() => setIsDescExpanded(!isDescExpanded)}
             >
-              {isDescExpanded ? '▲ Ver menos' : '▼ Ver más'}
+              {isDescExpanded ? `▲ ${t('card.showLess')}` : `▼ ${t('card.showMore')}`}
             </button>
           )}
         </div>
@@ -341,15 +346,15 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
               <strong>Passcode:</strong> <span className={styles.codeValue}>{card.id}</span>
             </div>
             <div className={styles.codeItem}>
-              <strong>Set Code:</strong>{' '}
+              <strong>{t('card.setCode')}:</strong>{' '}
               <span className={styles.codeValue}>{card.specificSetInfo.setCode}</span>
             </div>
             <div className={styles.codeItem}>
-              <strong>Set:</strong>{' '}
+              <strong>{t('card.setName')}:</strong>{' '}
               <span className={styles.setName}>{card.specificSetInfo.setName}</span>
             </div>
             <div className={styles.codeItem}>
-              <strong>Rareza:</strong>{' '}
+              <strong>{t('card.rarity')}:</strong>{' '}
               <span className={styles.rarity}>{card.specificSetInfo.setRarity}</span>
             </div>
           </div>
@@ -382,7 +387,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
               {parseFloat(card.specificSetInfo.setPrice) > 0 ? (
                 // Set has a price
                 <>
-                  <span className={styles.priceLabel}>Precio de este set:</span>
+                  <span className={styles.priceLabel}>{t('card.price.set')}:</span>
                   <span className={styles.priceValue}>
                     {formatPrice(parseFloat(card.specificSetInfo.setPrice))}
                   </span>
@@ -391,11 +396,11 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 // Set price is $0 - show general price instead
                 <div className={styles.priceWithFallback}>
                   <div className={styles.priceRow}>
-                    <span className={styles.priceLabel}>Precio de este set:</span>
-                    <span className={styles.priceUnavailable}>No disponible</span>
+                    <span className={styles.priceLabel}>{t('card.price.set')}:</span>
+                    <span className={styles.priceUnavailable}>{t('card.price.unavailable')}</span>
                   </div>
                   <div className={styles.priceRow}>
-                    <span className={styles.priceLabel}>Precio estimado general:</span>
+                    <span className={styles.priceLabel}>{t('card.price.general')}:</span>
                     <span className={styles.priceValue}>{formatPrice(price)}</span>
                   </div>
                 </div>
@@ -404,7 +409,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
           ) : (
             // Name search - show general price
             <>
-              <span className={styles.priceLabel}>Precio estimado:</span>
+              <span className={styles.priceLabel}>{t('card.price.general')}:</span>
               <span className={styles.priceValue}>{formatPrice(price)}</span>
             </>
           )}
@@ -430,7 +435,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 }}
                 disabled={isAdding}
               >
-                {isAdding ? '...' : '+ Colección'}
+                {isAdding ? '...' : `+ ${t('header.collection')}`}
               </button>
               <button
                 type="button"
@@ -448,7 +453,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 }}
                 disabled={isAdding}
               >
-                {isAdding ? '...' : '+ En Venta'}
+                {isAdding ? '...' : `+ ${t('header.forSale')}`}
               </button>
               <button
                 type="button"
@@ -466,7 +471,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 }}
                 disabled={isAdding}
               >
-                {isAdding ? '...' : '+ Wishlist'}
+                {isAdding ? '...' : `+ ${t('header.wishlist')}`}
               </button>
             </div>
           </div>

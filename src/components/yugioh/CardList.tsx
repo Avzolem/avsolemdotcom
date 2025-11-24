@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { CardInList, ListType } from '@/types/yugioh';
 import { formatPrice, getCardById, getCardPrice } from '@/lib/services/ygoprodeck';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import { useToast } from '@/contexts/ToastContext';
 import ExportButtons from './ExportButtons';
 import PriceStats from './PriceStats';
@@ -13,12 +14,30 @@ import styles from './CardList.module.scss';
 
 interface CardListProps {
   type: ListType;
-  title: string;
+  title?: string;
 }
 
 export default function CardList({ type, title }: CardListProps) {
   const { isAuthenticated } = useYugiohAuth();
+  const { t } = useYugiohLanguage();
   const { showToast } = useToast();
+
+  // Get title from translations based on type
+  const getTitle = () => {
+    if (title) return title;
+    switch (type) {
+      case 'collection':
+        return t('list.collection.title');
+      case 'for-sale':
+        return t('list.forSale.title');
+      case 'wishlist':
+        return t('list.wishlist.title');
+      default:
+        return '';
+    }
+  };
+
+  const displayTitle = getTitle();
   const [cards, setCards] = useState<CardInList[]>([]);
   const [totalValue, setTotalValue] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,7 +94,7 @@ export default function CardList({ type, title }: CardListProps) {
 
   const removeCard = async (setCode: string, cardName: string) => {
     console.log('removeCard called:', { setCode, type });
-    if (!confirm('¿Seguro que quieres eliminar esta carta?')) return;
+    if (!confirm(t('list.confirmDelete'))) return;
 
     setIsRemoving(setCode);
 
@@ -92,9 +111,9 @@ export default function CardList({ type, title }: CardListProps) {
 
         // Show toast based on what was deleted
         const listNames: Record<ListType, string> = {
-          collection: 'Colección',
-          'for-sale': 'En Venta',
-          wishlist: 'Wishlist',
+          collection: t('header.collection'),
+          'for-sale': t('header.forSale'),
+          wishlist: t('header.wishlist'),
         };
 
         let message;
@@ -105,7 +124,7 @@ export default function CardList({ type, title }: CardListProps) {
             <>
               🗑️ <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
               {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-              {' '}eliminada de {lists}
+              {' '}{t('list.deletedFrom')} {lists}
             </>
           );
         } else {
@@ -114,7 +133,7 @@ export default function CardList({ type, title }: CardListProps) {
             <>
               🗑️ <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
               {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-              {' '}eliminada de {listNames[deletedFrom[0] as ListType]}
+              {' '}{t('list.deletedFrom')} {listNames[deletedFrom[0] as ListType]}
             </>
           );
         }
@@ -124,11 +143,11 @@ export default function CardList({ type, title }: CardListProps) {
       } else {
         const errorText = await response.text();
         console.error('Failed to remove card:', errorText);
-        showToast('Error al eliminar la carta', 'error');
+        showToast(t('list.errorDelete'), 'error');
       }
     } catch (error) {
       console.error('Error removing card:', error);
-      showToast('Error al eliminar la carta', 'error');
+      showToast(t('list.errorDelete'), 'error');
     } finally {
       setIsRemoving(null);
     }
@@ -206,7 +225,7 @@ export default function CardList({ type, title }: CardListProps) {
             <>
               ✓ <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
               {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-              {' '}puesta en venta
+              {' '}{t('list.forSale.addedToast')}
             </>,
             'success'
           );
@@ -215,17 +234,17 @@ export default function CardList({ type, title }: CardListProps) {
             <>
               <span style={{ color: '#22C55E', fontWeight: 700 }}>{cardName}</span>
               {' '}(<span style={{ color: '#FFD700', fontWeight: 700, fontFamily: 'Geist Mono, monospace' }}>{setCode}</span>)
-              {' '}quitada de venta
+              {' '}{t('list.forSale.removedToast')}
             </>,
             'info'
           );
         }
       } else {
-        showToast('Error al cambiar estado de venta', 'error');
+        showToast(t('list.forSale.error'), 'error');
       }
     } catch (error) {
       console.error('Error toggling for-sale:', error);
-      showToast('Error al cambiar estado de venta', 'error');
+      showToast(t('list.forSale.error'), 'error');
     } finally {
       setIsTogglingForSale(null);
     }
@@ -244,7 +263,7 @@ export default function CardList({ type, title }: CardListProps) {
     return (
       <div className={styles.loading}>
         <div className="yugioh-skeleton" style={{ width: '60px', height: '60px', borderRadius: '50%' }} />
-        <p>Cargando {title.toLowerCase()}...</p>
+        <p>{t('list.loading')} {displayTitle.toLowerCase()}...</p>
       </div>
     );
   }
@@ -253,16 +272,16 @@ export default function CardList({ type, title }: CardListProps) {
     <div className={styles.container}>
       {/* Header */}
       <div className={styles.header}>
-        <h1 className={styles.title}>{title}</h1>
+        <h1 className={styles.title}>{displayTitle}</h1>
         <div className={styles.headerRow}>
           <span className={`${styles.badge} ${styles.brand}`}>
-            {cards.length} {cards.length === 1 ? 'carta' : 'cartas'}
+            {t('list.cardsCount', { count: cards.length })}
           </span>
           <span className={`${styles.badge} ${styles.accent}`}>
-            Valor Total: {formatPrice(totalValue)}
+            {t('list.totalValue')}: {formatPrice(totalValue)}
           </span>
-          <ExportButtons cards={cards} listName={title} totalValue={totalValue} />
-          {isAuthenticated && <ShareButton listType={type} listName={title} />}
+          <ExportButtons cards={cards} listName={displayTitle} totalValue={totalValue} />
+          {isAuthenticated && <ShareButton listType={type} listName={displayTitle} />}
         </div>
       </div>
 
@@ -275,7 +294,7 @@ export default function CardList({ type, title }: CardListProps) {
           <div className={styles.searchBar}>
             <input
               type="text"
-              placeholder="Buscar en esta lista..."
+              placeholder={t('list.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={styles.searchInput}
@@ -288,7 +307,7 @@ export default function CardList({ type, title }: CardListProps) {
           </div>
           {filteredCards.length !== cards.length && (
             <p className={styles.filterInfo}>
-              Mostrando {filteredCards.length} de {cards.length} cartas
+              {t('list.showingResults', { shown: filteredCards.length, total: cards.length })}
             </p>
           )}
         </div>
@@ -298,14 +317,14 @@ export default function CardList({ type, title }: CardListProps) {
       {cards.length === 0 ? (
         <div className={styles.empty}>
           <div className={styles.emptyIcon}>📦</div>
-          <h2 className={styles.emptyTitle}>Lista vacía</h2>
-          <p className={styles.emptyText}>No hay cartas en esta lista todavía.</p>
+          <h2 className={styles.emptyTitle}>{t('list.empty.title')}</h2>
+          <p className={styles.emptyText}>{t('list.empty.description')}</p>
         </div>
       ) : filteredCards.length === 0 ? (
         <div className={styles.empty}>
           <div className={styles.emptyIcon}>🔍</div>
-          <h2 className={styles.emptyTitle}>No se encontraron cartas</h2>
-          <p className={styles.emptyText}>No hay cartas que coincidan con los filtros aplicados.</p>
+          <h2 className={styles.emptyTitle}>{t('list.empty.noResults')}</h2>
+          <p className={styles.emptyText}>{t('list.empty.noResultsDescription')}</p>
         </div>
       ) : (
         <div className={styles.cardsGrid}>
@@ -343,22 +362,22 @@ export default function CardList({ type, title }: CardListProps) {
                   {/* Set Code Information */}
                   <div className={styles.setInfoSection}>
                     <div className={styles.infoRow}>
-                      <span className={styles.infoLabel}>Set Code:</span>
+                      <span className={styles.infoLabel}>{t('list.setCode')}</span>
                       <span className={styles.setCodeValue}>{card.setCode}</span>
                     </div>
                     <div className={styles.infoRow}>
-                      <span className={styles.infoLabel}>Set:</span>
+                      <span className={styles.infoLabel}>{t('list.set')}</span>
                       <span className={styles.infoValue}>{card.setName}</span>
                     </div>
                     <div className={styles.infoRow}>
-                      <span className={styles.infoLabel}>Rareza:</span>
+                      <span className={styles.infoLabel}>{t('list.rarity')}</span>
                       <span className={styles.rarityValue}>{card.setRarity}</span>
                     </div>
                   </div>
 
                   {/* Quantity */}
                   <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Cantidad:</span>
+                    <span className={styles.infoLabel}>{t('list.quantity')}</span>
                     {isAuthenticated ? (
                       <div className={styles.quantityControls}>
                         <button
@@ -396,7 +415,7 @@ export default function CardList({ type, title }: CardListProps) {
                     {card.price && card.price > 0 ? (
                       // Has set price
                       <div className={styles.infoRow}>
-                        <span className={styles.infoLabel}>Precio:</span>
+                        <span className={styles.infoLabel}>{t('list.price')}</span>
                         <span className={`${styles.infoValue} ${styles.price}`}>
                           {formatPrice(card.price)}
                         </span>
@@ -405,12 +424,12 @@ export default function CardList({ type, title }: CardListProps) {
                       // Set price is $0 - show general price fallback
                       <div className={styles.priceWithFallback}>
                         <div className={styles.priceRowFallback}>
-                          <span className={styles.infoLabel}>Precio de este set:</span>
-                          <span className={styles.priceUnavailable}>No disponible</span>
+                          <span className={styles.infoLabel}>{t('list.priceSet')}</span>
+                          <span className={styles.priceUnavailable}>{t('list.priceUnavailable')}</span>
                         </div>
                         {generalPrices[card.cardId] !== undefined && (
                           <div className={styles.priceRowFallback}>
-                            <span className={styles.infoLabel}>Precio estimado general:</span>
+                            <span className={styles.infoLabel}>{t('list.priceEstimated')}</span>
                             <span className={`${styles.infoValue} ${styles.price}`}>
                               {formatPrice(generalPrices[card.cardId])}
                             </span>
@@ -430,14 +449,14 @@ export default function CardList({ type, title }: CardListProps) {
                           toggleForSale(card.setCode, !!card.isForSale, card.cardName);
                         }}
                         disabled={isTogglingForSale === card.setCode}
-                        title={card.isForSale ? 'Quitar de venta' : 'Poner en venta'}
+                        title={card.isForSale ? t('list.forSale.remove') : t('list.forSale.add')}
                       >
                         {isTogglingForSale === card.setCode ? (
                           '...'
                         ) : card.isForSale ? (
-                          '💰 En Venta'
+                          t('list.forSale.active')
                         ) : (
-                          'Poner en venta'
+                          t('list.forSale.add')
                         )}
                       </button>
                     )}
@@ -450,7 +469,7 @@ export default function CardList({ type, title }: CardListProps) {
 
                   {/* Date */}
                   <div className={styles.cardDate}>
-                    Agregada: {new Date(card.addedAt).toLocaleDateString('es-MX')}
+                    {t('list.addedOn')} {new Date(card.addedAt).toLocaleDateString('es-MX')}
                   </div>
                 </div>
 
@@ -470,7 +489,7 @@ export default function CardList({ type, title }: CardListProps) {
                       {isRemoving === card.setCode ? (
                         <div className={styles.spinner} />
                       ) : (
-                        '🗑️ Eliminar'
+                        t('list.remove')
                       )}
                     </button>
                   </div>

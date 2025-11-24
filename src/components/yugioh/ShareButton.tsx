@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ListType } from '@/types/yugioh';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import styles from './ShareButton.module.scss';
 
 interface ShareButtonProps {
@@ -10,6 +11,7 @@ interface ShareButtonProps {
 }
 
 export default function ShareButton({ listType, listName }: ShareButtonProps) {
+  const { t } = useYugiohLanguage();
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -30,11 +32,11 @@ export default function ShareButton({ listType, listName }: ShareButtonProps) {
         setShareUrl(data.shareUrl);
         setShowModal(true);
       } else {
-        alert('Error al crear enlace para compartir');
+        alert(t('share.error'));
       }
     } catch (error) {
       console.error('Error sharing list:', error);
-      alert('Error al crear enlace para compartir');
+      alert(t('share.error'));
     } finally {
       setIsLoading(false);
     }
@@ -48,7 +50,7 @@ export default function ShareButton({ listType, listName }: ShareButtonProps) {
         setTimeout(() => setCopied(false), 2000);
       } catch (error) {
         console.error('Error copying to clipboard:', error);
-        alert('Error al copiar');
+        alert(t('share.errorCopy'));
       }
     }
   };
@@ -64,19 +66,19 @@ export default function ShareButton({ listType, listName }: ShareButtonProps) {
           handleShare();
         }}
         disabled={isLoading}
-        title="Compartir lista"
+        title={t('share.buttonTitle')}
       >
         <span className={styles.icon}>🔗</span>
-        {isLoading ? 'Generando...' : 'Compartir'}
+        {isLoading ? t('share.generating') : t('share.button')}
       </button>
 
       {showModal && shareUrl && (
         <div className={styles.modal} onClick={() => setShowModal(false)}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <h3 className={styles.modalTitle}>Compartir {listName}</h3>
+            <h3 className={styles.modalTitle}>{t('share.title', { listName })}</h3>
 
             <p className={styles.modalDescription}>
-              Cualquiera con este enlace podrá ver tu lista. El enlace expira en 7 días.
+              {t('share.description')}
             </p>
 
             <div className={styles.urlBox}>
@@ -95,7 +97,7 @@ export default function ShareButton({ listType, listName }: ShareButtonProps) {
                   handleCopy();
                 }}
               >
-                {copied ? '✓ Copiado' : 'Copiar'}
+                {copied ? t('share.copied') : t('share.copyLink')}
               </button>
             </div>
 
@@ -109,7 +111,7 @@ export default function ShareButton({ listType, listName }: ShareButtonProps) {
                   setShowModal(false);
                 }}
               >
-                Cerrar
+                {t('share.close')}
               </button>
             </div>
           </div>

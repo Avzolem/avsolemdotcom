@@ -1,5 +1,6 @@
 'use client';
 
+import { YugiohLanguageProvider } from '@/contexts/YugiohLanguageContext';
 import { YugiohAuthProvider } from '@/contexts/YugiohAuthContext';
 import { ToastProvider } from '@/contexts/ToastContext';
 import YugiohHeader from '@/components/yugioh/YugiohHeader';
@@ -21,15 +22,17 @@ export default function YugiohLayout({
   children: React.ReactNode;
 }) {
   return (
-    <YugiohAuthProvider>
-      <ToastProvider>
-        <ToastContainer />
-        <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
-          <YugiohHeader />
-          <main className="yugioh-main">{children}</main>
-          <YugiohFooter />
-        </div>
-      </ToastProvider>
-    </YugiohAuthProvider>
+    <YugiohLanguageProvider>
+      <YugiohAuthProvider>
+        <ToastProvider>
+          <ToastContainer />
+          <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
+            <YugiohHeader />
+            <main className="yugioh-main">{children}</main>
+            <YugiohFooter />
+          </div>
+        </ToastProvider>
+      </YugiohAuthProvider>
+    </YugiohLanguageProvider>
   );
 }

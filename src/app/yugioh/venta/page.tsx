@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function VentaPage() {
-  return <CardList type="for-sale" title="Cartas en Venta" />;
+  return <CardList type="for-sale" />;
 }

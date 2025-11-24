@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import Tesseract from 'tesseract.js';
 import Fuse from 'fuse.js';
 import styles from './CardScanner.module.scss';
@@ -17,6 +18,7 @@ interface CardMatch {
 type ScanMode = 'name' | 'setcode';
 
 export default function CardScanner({ onScanComplete }: CardScannerProps) {
+  const { t } = useYugiohLanguage();
   const [isScanning, setIsScanning] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
@@ -74,19 +76,19 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
               }, 500);
             }).catch((err) => {
               console.error('❌ Error playing video:', err);
-              setError('Error al iniciar la cámara. Intenta de nuevo.');
+              setError(t('scanner.error.camera'));
             });
           }
         };
       } else {
         console.error('❌ videoRef.current is still null after delay');
         setIsCameraOpen(false);
-        setError('Error al inicializar el video. Intenta de nuevo.');
+        setError(t('scanner.error.camera'));
       }
     } catch (err) {
       console.error('❌ Error accessing camera:', err);
       setIsCameraOpen(false);
-      setError('No se pudo acceder a la cámara. Por favor, permite el acceso a la cámara en tu navegador.');
+      setError(t('scanner.error.camera'));
     }
   };
 
@@ -110,7 +112,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
     if (!videoRef.current || !canvasRef.current) {
       console.error('❌ Video or canvas ref is null');
-      setError('Error al capturar la foto. Intenta de nuevo.');
+      setError(t('scanner.error.capture'));
       return;
     }
 
@@ -120,14 +122,14 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
     if (!context) {
       console.error('❌ Could not get canvas context');
-      setError('Error al inicializar el canvas.');
+      setError(t('scanner.error.capture'));
       return;
     }
 
     // Verify video has valid dimensions
     if (video.videoWidth === 0 || video.videoHeight === 0) {
       console.error('❌ Video has no dimensions');
-      setError('El video no está listo. Espera un momento e intenta de nuevo.');
+      setError(t('scanner.error.capture'));
       return;
     }
 
@@ -240,10 +242,10 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         }
       }
 
-      setError('No se encontró ninguna carta con ese código. Verifica que el set code sea correcto.');
+      setError(t('scanner.error.noMatch'));
     } catch (error) {
       console.error('❌ Error searching by set code:', error);
-      setError('Error al buscar la carta. Verifica tu conexión e intenta de nuevo.');
+      setError(t('scanner.error.process'));
     }
   };
 
@@ -296,10 +298,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       const text = result.data.text.trim();
 
       if (!text) {
-        const errorMsg = scanMode === 'setcode'
-          ? 'No se detectó el set code. Asegúrate de que el código (ej: LOB-EN001) sea visible.'
-          : 'No se detectó texto en la imagen. Intenta capturar una foto más clara del nombre de la carta.';
-        setError(errorMsg);
+        setError(t('scanner.error.noText'));
         setIsScanning(false);
         return;
       }
@@ -314,7 +313,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
           console.log('✅ Using set code:', setCode);
           await searchBySetCode(setCode);
         } else {
-          setError(`Set code incompleto detectado (${setCode.length} caracteres). Intenta de nuevo.`);
+          setError(t('scanner.error.noText'));
         }
       } else {
         // Name mode: use fuzzy matching
@@ -331,16 +330,15 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
             console.log('✅ Found card matches, displaying options');
             setCardMatches(matches);
           } else {
-            setError('No se encontraron cartas que coincidan. Intenta de nuevo con mejor iluminación.');
+            setError(t('scanner.error.noMatch'));
           }
         } else {
-          setError('No se pudo identificar el nombre de la carta. Intenta de nuevo con mejor iluminación.');
+          setError(t('scanner.error.noText'));
         }
       }
     } catch (err) {
       console.error('❌ OCR Error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError(`Error al procesar la imagen: ${errorMessage}. Verifica tu conexión e intenta de nuevo.`);
+      setError(t('scanner.error.process'));
     } finally {
       setIsScanning(false);
     }
@@ -460,25 +458,25 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       {/* Mode Selector */}
       {!isCameraOpen && !isScanning && (
         <div className={styles.modeSelector}>
-          <p className={styles.modeLabel}>Modo de Escaneo:</p>
+          <p className={styles.modeLabel}>{t('scanner.mode.label')}:</p>
           <div className={styles.modeButtons}>
             <button
               onClick={() => setScanMode('setcode')}
               className={`${styles.modeButton} ${scanMode === 'setcode' ? styles.modeButtonActive : ''}`}
             >
-              🏷️ Set Code (Recomendado)
+              🏷️ {t('scanner.mode.setCode')}
             </button>
             <button
               onClick={() => setScanMode('name')}
               className={`${styles.modeButton} ${scanMode === 'name' ? styles.modeButtonActive : ''}`}
             >
-              📝 Nombre
+              📝 {t('scanner.mode.name')}
             </button>
           </div>
           <p className={styles.modeHint}>
             {scanMode === 'setcode'
-              ? '💡 Escanea el código en la esquina inferior derecha (ej: LOB-EN001)'
-              : '💡 Escanea el nombre en la parte superior de la carta'}
+              ? t('scanner.mode.hint.setCode')
+              : t('scanner.mode.hint.name')}
           </p>
         </div>
       )}
@@ -499,8 +497,8 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
             />
             <p className={styles.hint}>
               {scanMode === 'setcode'
-                ? 'Centra el set code en el recuadro (ej: LOB-EN001)'
-                : 'Centra el nombre de la carta en el recuadro'}
+                ? t('scanner.hint.setCode')
+                : t('scanner.hint.name')}
             </p>
           </div>
         </div>
@@ -513,13 +511,13 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
               onClick={openCamera}
               className={styles.primaryButton}
             >
-              📸 Abrir Cámara
+              📸 {t('scanner.button.start')}
             </button>
             <button
               onClick={() => fileInputRef.current?.click()}
               className={styles.secondaryButton}
             >
-              🖼️ Subir Imagen
+              🖼️ {t('scanner.button.upload')}
             </button>
             <input
               ref={fileInputRef}
@@ -539,20 +537,20 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
               className={styles.captureButton}
               style={{ opacity: isVideoReady ? 1 : 0.5, cursor: isVideoReady ? 'pointer' : 'not-allowed' }}
             >
-              {isVideoReady ? '📷 Capturar' : '⏳ Cargando...'}
+              {isVideoReady ? `📷 ${t('scanner.button.capture')}` : `⏳ ${t('scanner.loading')}`}
             </button>
             <button
               onClick={closeCamera}
               className={styles.cancelButton}
             >
-              ✕ Cerrar
+              ✕ {t('scanner.button.cancel')}
             </button>
           </>
         )}
 
         {capturedImage && isScanning && (
           <div className={styles.processingInfo}>
-            <p>Procesando imagen... {progress}%</p>
+            <p>{t('scanner.processing')} {progress}%</p>
             <div className={styles.progressBar}>
               <div
                 className={styles.progressFill}
@@ -574,7 +572,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       {/* Card Matches */}
       {cardMatches.length > 0 && !isScanning && (
         <div className={styles.matchesSection}>
-          <h4 className={styles.matchesTitle}>🎯 Selecciona la carta correcta:</h4>
+          <h4 className={styles.matchesTitle}>{t('scanner.matches.title')}</h4>
           <div className={styles.matchesList}>
             {cardMatches.map((match, index) => (
               <button
@@ -585,7 +583,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
                 <span className={styles.matchRank}>#{index + 1}</span>
                 <span className={styles.matchName}>{match.name}</span>
                 <span className={styles.matchScore}>
-                  {Math.round(match.score * 100)}% coincidencia
+                  {t('scanner.matches.score', { score: Math.round(match.score * 100) })}
                 </span>
               </button>
             ))}
@@ -598,7 +596,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
             }}
             className={styles.retryButton}
           >
-            🔄 Intentar de Nuevo
+            🔄 {t('scanner.button.retry')}
           </button>
         </div>
       )}
@@ -619,7 +617,7 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
               }}
               className={styles.retryButton}
             >
-              🔄 Intentar de Nuevo
+              🔄 {t('scanner.button.retry')}
             </button>
           )}
         </div>
@@ -628,12 +626,12 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       {/* Instructions */}
       {!isCameraOpen && !isScanning && !error && (
         <div className={styles.instructions}>
-          <h4>📋 Instrucciones:</h4>
+          <h4>{t('scanner.instructions.title')}</h4>
           <ul>
-            <li>Asegúrate de tener buena iluminación</li>
-            <li>Centra el nombre de la carta en la cámara</li>
-            <li>Mantén la carta lo más plana posible</li>
-            <li>Evita reflejos y sombras sobre el texto</li>
+            <li>{scanMode === 'setcode' ? t('scanner.instructions.setCode.1') : t('scanner.instructions.name.1')}</li>
+            <li>{scanMode === 'setcode' ? t('scanner.instructions.setCode.2') : t('scanner.instructions.name.2')}</li>
+            <li>{scanMode === 'setcode' ? t('scanner.instructions.setCode.3') : t('scanner.instructions.name.3')}</li>
+            <li>{scanMode === 'setcode' ? t('scanner.instructions.setCode.4') : t('scanner.instructions.name.4')}</li>
           </ul>
         </div>
       )}

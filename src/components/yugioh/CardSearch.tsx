@@ -2,12 +2,19 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import { YugiohCard } from '@/types/yugioh';
 import { searchCardsByName, searchCardsAdvanced } from '@/lib/services/ygoprodeck';
 import CardDisplay from './CardDisplay';
 import AdvancedFilters, { FilterOptions } from './AdvancedFilters';
-import CardScanner from './CardScanner';
 import styles from './CardSearch.module.scss';
+
+// Dynamic import CardScanner to avoid SSR issues with Tesseract.js
+const CardScanner = dynamic(() => import('./CardScanner'), {
+  ssr: false,
+  loading: () => <div style={{ padding: '2rem', textAlign: 'center' }}>Loading scanner...</div>
+});
 
 // Debounce hook
 function useDebounce<T>(value: T, delay: number): T {
@@ -96,6 +103,7 @@ async function searchBySetCode(setCode: string): Promise<{
 }
 
 export default function CardSearch() {
+  const { t } = useYugiohLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [cards, setCards] = useState<YugiohCard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -135,11 +143,14 @@ export default function CardSearch() {
           // Set fallback warning if fallback was used
           if (fallbackInfo) {
             setFallbackWarning(
-              `⚠️ El código ${fallbackInfo.originalCode} no está disponible. Mostrando versión en INGLES: ${fallbackInfo.fallbackCode}`
+              t('search.fallbackWarning', {
+                originalCode: fallbackInfo.originalCode,
+                fallbackCode: fallbackInfo.fallbackCode,
+              })
             );
           }
         } else {
-          setError(`No se encontró ninguna carta con el Set Code: ${query.trim().toUpperCase()}`);
+          setError(t('search.error.notFound', { code: query.trim().toUpperCase() }));
         }
       } else if (hasFilters || hasQuery) {
         // Use advanced search with filters or name search
@@ -169,24 +180,24 @@ export default function CardSearch() {
         }
 
         if (results.length === 0) {
-          setError('No se encontraron cartas con esos criterios');
+          setError(t('search.noResults'));
         }
       } else {
         results = await searchCardsByName(query);
         if (results.length === 0) {
-          setError('No se encontraron cartas con esos criterios');
+          setError(t('search.noResults'));
         }
       }
 
       setCards(results);
     } catch (err) {
       console.error('Search error:', err);
-      setError('Error al buscar cartas. Intenta de nuevo.');
+      setError(t('search.error.generic'));
       setCards([]);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     performSearch(debouncedSearchTerm, activeFilters);
@@ -226,7 +237,7 @@ export default function CardSearch() {
           <input
             type="text"
             id="card-search"
-            placeholder="Busca por nombre o Set Code: Dark Magician, LOB-EN001..."
+            placeholder={t('search.placeholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
@@ -239,13 +250,13 @@ export default function CardSearch() {
           <button
             onClick={() => setShowScanner(!showScanner)}
             className={styles.scanButton}
-            title="Escanear carta con cámara"
+            title={t('search.scanButton')}
           >
             {showScanner ? '✕' : '📸'}
           </button>
         </div>
         <p className={styles.searchHint}>
-          💡 Busca por nombre, Set Code (ej: LOB-EN001), usa filtros avanzados, o escanea con la cámara
+          {t('search.hint')}
         </p>
       </div>
 
@@ -266,7 +277,7 @@ export default function CardSearch() {
       {isLoading && (
         <div className="yugioh-loading">
           <div className={styles.spinner}></div>
-          <p>Buscando cartas...</p>
+          <p>{t('search.loading')}</p>
         </div>
       )}
 
@@ -289,7 +300,7 @@ export default function CardSearch() {
       {!isLoading && cards.length > 0 && (
         <div className={styles.results}>
           <h2 className={styles.resultsTitle}>
-            🎴 {cards.length} {cards.length === 1 ? 'carta encontrada' : 'cartas encontradas'}
+            🎴 {t('search.resultsCount', { count: cards.length })}
           </h2>
 
           <div className={styles.resultsGrid}>
@@ -312,10 +323,9 @@ export default function CardSearch() {
               priority
             />
           </div>
-          <h3>Buscador de Cartas Yu-Gi-Oh!</h3>
+          <h3>{t('search.emptyState.title')}</h3>
           <p>
-            Busca cualquier carta de Yu-Gi-Oh! por su nombre. Obtén información
-            completa incluyendo estadísticas, descripción y precios actualizados.
+            {t('search.emptyState.description')}
           </p>
         </div>
       )}

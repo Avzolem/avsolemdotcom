@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import styles from './AdvancedFilters.module.scss';
 
 export interface FilterOptions {
@@ -95,6 +96,7 @@ const ATTRIBUTES = [
 ].sort();
 
 export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFiltersProps) {
+  const { t } = useYugiohLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({});
 
@@ -136,7 +138,7 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
         }}
       >
         <span className={styles.icon}>⚙️</span>
-        Filtros Avanzados
+        {t('filters.title')}
         {activeFilterCount > 0 && (
           <span className={styles.badge}>{activeFilterCount}</span>
         )}
@@ -148,13 +150,13 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
           <div className={styles.grid}>
             {/* Card Type */}
             <div className={styles.field}>
-              <label htmlFor="filter-type">Tipo de Carta</label>
+              <label htmlFor="filter-type">{t('filters.cardType')}</label>
               <select
                 id="filter-type"
                 value={filters.type || ''}
                 onChange={(e) => setFilters({ ...filters, type: e.target.value || undefined })}
               >
-                <option value="">Todos</option>
+                <option value="">{t('filters.cardType.placeholder')}</option>
                 {CARD_TYPES.map((type) => (
                   <option key={type} value={type}>
                     {type}
@@ -165,13 +167,13 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
 
             {/* Monster Type/Race */}
             <div className={styles.field}>
-              <label htmlFor="filter-race">Tipo de Monstruo</label>
+              <label htmlFor="filter-race">{t('filters.monsterType')}</label>
               <select
                 id="filter-race"
                 value={filters.race || ''}
                 onChange={(e) => setFilters({ ...filters, race: e.target.value || undefined })}
               >
-                <option value="">Todos</option>
+                <option value="">{t('filters.monsterType.placeholder')}</option>
                 {MONSTER_TYPES.map((race) => (
                   <option key={race} value={race}>
                     {race}
@@ -182,13 +184,13 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
 
             {/* Attribute */}
             <div className={styles.field}>
-              <label htmlFor="filter-attribute">Atributo</label>
+              <label htmlFor="filter-attribute">{t('filters.attribute')}</label>
               <select
                 id="filter-attribute"
                 value={filters.attribute || ''}
                 onChange={(e) => setFilters({ ...filters, attribute: e.target.value || undefined })}
               >
-                <option value="">Todos</option>
+                <option value="">{t('filters.attribute.placeholder')}</option>
                 {ATTRIBUTES.map((attr) => (
                   <option key={attr} value={attr}>
                     {attr}
@@ -199,13 +201,13 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
 
             {/* Level */}
             <div className={styles.field}>
-              <label htmlFor="filter-level">Nivel</label>
+              <label htmlFor="filter-level">{t('filters.level')}</label>
               <input
                 type="number"
                 id="filter-level"
                 min="1"
                 max="13"
-                placeholder="Nivel (1-13)..."
+                placeholder={t('filters.level.placeholder')}
                 value={filters.level || ''}
                 onChange={(e) =>
                   setFilters({ ...filters, level: e.target.value ? parseInt(e.target.value) : undefined })
@@ -215,10 +217,10 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
 
             {/* ATK Range */}
             <div className={styles.field}>
-              <label>ATK (Mínimo)</label>
+              <label>{t('filters.atk.min')}</label>
               <input
                 type="number"
-                placeholder="ATK mín..."
+                placeholder={t('filters.atk.min')}
                 value={filters.atkMin || ''}
                 onChange={(e) =>
                   setFilters({ ...filters, atkMin: e.target.value ? parseInt(e.target.value) : undefined })
@@ -227,10 +229,10 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
             </div>
 
             <div className={styles.field}>
-              <label>ATK (Máximo)</label>
+              <label>{t('filters.atk.max')}</label>
               <input
                 type="number"
-                placeholder="ATK máx..."
+                placeholder={t('filters.atk.max')}
                 value={filters.atkMax || ''}
                 onChange={(e) =>
                   setFilters({ ...filters, atkMax: e.target.value ? parseInt(e.target.value) : undefined })
@@ -240,10 +242,10 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
 
             {/* DEF Range */}
             <div className={styles.field}>
-              <label>DEF (Mínimo)</label>
+              <label>{t('filters.def.min')}</label>
               <input
                 type="number"
-                placeholder="DEF mín..."
+                placeholder={t('filters.def.min')}
                 value={filters.defMin || ''}
                 onChange={(e) =>
                   setFilters({ ...filters, defMin: e.target.value ? parseInt(e.target.value) : undefined })
@@ -252,10 +254,10 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
             </div>
 
             <div className={styles.field}>
-              <label>DEF (Máximo)</label>
+              <label>{t('filters.def.max')}</label>
               <input
                 type="number"
-                placeholder="DEF máx..."
+                placeholder={t('filters.def.max')}
                 value={filters.defMax || ''}
                 onChange={(e) =>
                   setFilters({ ...filters, defMax: e.target.value ? parseInt(e.target.value) : undefined })
@@ -274,7 +276,7 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
                 handleApply();
               }}
             >
-              Aplicar Filtros
+              {t('filters.apply')}
             </button>
             <button
               type="button"
@@ -285,7 +287,7 @@ export default function AdvancedFilters({ onApplyFilters, onClear }: AdvancedFil
                 handleClear();
               }}
             >
-              Limpiar
+              {t('filters.clear')}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
-$yugioh-purple: #7B2CBF;
-$yugioh-purple-dark: #5A189A;
 $yugioh-gold: #FFD700;
 $yugioh-gold-dark: #FFA500;
+$yugioh-gray-medium: #4A4A4A;
+$yugioh-gray-dark: #3A3A3A;
 
 .container {
   width: 100%;
@@ -14,8 +14,8 @@ $yugioh-gold-dark: #FFA500;
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1.25rem;
-  background: rgba(123, 44, 191, 0.2);
-  border: 2px solid rgba(123, 44, 191, 0.4);
+  background: rgba(42, 42, 42, 0.8);
+  border: 2px solid rgba(100, 100, 100, 0.6);
   border-radius: 12px;
   color: white;
   font-weight: 600;
@@ -24,7 +24,7 @@ $yugioh-gold-dark: #FFA500;
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(123, 44, 191, 0.3);
+    background: rgba(100, 100, 100, 0.5);
     border-color: $yugioh-gold;
   }
 
@@ -34,7 +34,7 @@ $yugioh-gold-dark: #FFA500;
 
   .badge {
     background: $yugioh-gold;
-    color: $yugioh-purple-dark;
+    color: #3A3A3A;
     padding: 0.25rem 0.625rem;
     border-radius: 9999px;
     font-size: 0.75rem;
@@ -52,7 +52,7 @@ $yugioh-gold-dark: #FFA500;
   margin-top: 1rem;
   padding: 1.5rem;
   background: rgba(26, 26, 26, 0.8);
-  border: 2px solid rgba(123, 44, 191, 0.3);
+  border: 2px solid rgba(100, 100, 100, 0.5);
   border-radius: 12px;
   animation: slideDown 0.2s ease;
 }
@@ -94,7 +94,7 @@ $yugioh-gold-dark: #FFA500;
   input {
     padding: 0.75rem;
     background: rgba(10, 10, 10, 0.8);
-    border: 2px solid rgba(123, 44, 191, 0.3);
+    border: 2px solid rgba(100, 100, 100, 0.5);
     border-radius: 8px;
     color: white;
     font-size: 0.875rem;
@@ -103,7 +103,6 @@ $yugioh-gold-dark: #FFA500;
     &:focus {
       outline: none;
       border-color: $yugioh-gold;
-      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
     }
 
     &::placeholder {
@@ -152,12 +151,10 @@ $yugioh-gold-dark: #FFA500;
 
 .btnApply {
   background: linear-gradient(135deg, $yugioh-gold 0%, $yugioh-gold-dark 100%);
-  color: $yugioh-purple-dark;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  color: #3A3A3A;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
   }
 
   &:active {

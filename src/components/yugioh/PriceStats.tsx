@@ -2,6 +2,7 @@
 
 import { CardInList } from '@/types/yugioh';
 import { formatPrice } from '@/lib/services/ygoprodeck';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import styles from './PriceStats.module.scss';
 
 interface PriceStatsProps {
@@ -9,6 +10,7 @@ interface PriceStatsProps {
 }
 
 export default function PriceStats({ cards }: PriceStatsProps) {
+  const { t } = useYugiohLanguage();
   if (cards.length === 0) {
     return null;
   }
@@ -43,28 +45,28 @@ export default function PriceStats({ cards }: PriceStatsProps) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>📊 Estadísticas de Precios</h3>
+      <h3 className={styles.title}>{t('stats.title')}</h3>
 
       <div className={styles.grid}>
         {/* Main Stats */}
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Valor Total</div>
+          <div className={styles.statLabel}>{t('stats.total')}</div>
           <div className={styles.statValue}>{formatPrice(totalValue)}</div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Precio Promedio</div>
+          <div className={styles.statLabel}>{t('stats.average')}</div>
           <div className={styles.statValue}>{formatPrice(averagePrice)}</div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Carta Más Cara</div>
+          <div className={styles.statLabel}>{t('stats.highest')}</div>
           <div className={styles.statValue}>{formatPrice(mostExpensive.price || 0)}</div>
           <div className={styles.statSubtext}>{mostExpensive.cardName}</div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statLabel}>Carta Más Barata</div>
+          <div className={styles.statLabel}>{t('stats.lowest')}</div>
           <div className={styles.statValue}>{formatPrice(leastExpensive.price || 0)}</div>
           <div className={styles.statSubtext}>{leastExpensive.cardName}</div>
         </div>
@@ -72,10 +74,10 @@ export default function PriceStats({ cards }: PriceStatsProps) {
 
       {/* Price Distribution */}
       <div className={styles.distribution}>
-        <h4 className={styles.subtitle}>Distribución de Precios</h4>
+        <h4 className={styles.subtitle}>{t('stats.distribution')}</h4>
         <div className={styles.chart}>
           <div className={styles.chartRow}>
-            <div className={styles.chartLabel}>Menos de $1</div>
+            <div className={styles.chartLabel}>{t('stats.priceRange.under1')}</div>
             <div className={styles.chartBarContainer}>
               <div
                 className={styles.chartBar}
@@ -86,7 +88,7 @@ export default function PriceStats({ cards }: PriceStatsProps) {
           </div>
 
           <div className={styles.chartRow}>
-            <div className={styles.chartLabel}>$1 - $5</div>
+            <div className={styles.chartLabel}>{t('stats.priceRange.1to5')}</div>
             <div className={styles.chartBarContainer}>
               <div
                 className={styles.chartBar}
@@ -97,7 +99,7 @@ export default function PriceStats({ cards }: PriceStatsProps) {
           </div>
 
           <div className={styles.chartRow}>
-            <div className={styles.chartLabel}>$5 - $10</div>
+            <div className={styles.chartLabel}>{t('stats.priceRange.5to10')}</div>
             <div className={styles.chartBarContainer}>
               <div
                 className={styles.chartBar}
@@ -108,7 +110,7 @@ export default function PriceStats({ cards }: PriceStatsProps) {
           </div>
 
           <div className={styles.chartRow}>
-            <div className={styles.chartLabel}>$10 - $50</div>
+            <div className={styles.chartLabel}>{t('stats.priceRange.10to50')}</div>
             <div className={styles.chartBarContainer}>
               <div
                 className={styles.chartBar}
@@ -119,7 +121,7 @@ export default function PriceStats({ cards }: PriceStatsProps) {
           </div>
 
           <div className={styles.chartRow}>
-            <div className={styles.chartLabel}>Más de $50</div>
+            <div className={styles.chartLabel}>{t('stats.priceRange.over50')}</div>
             <div className={styles.chartBarContainer}>
               <div
                 className={styles.chartBar}
@@ -132,7 +134,7 @@ export default function PriceStats({ cards }: PriceStatsProps) {
       </div>
 
       <div className={styles.note}>
-        💡 Los precios se actualizan automáticamente desde TCGPlayer
+        {t('stats.note')}
       </div>
     </div>
   );

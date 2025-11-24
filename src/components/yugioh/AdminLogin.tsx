@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import {
   Button,
   Column,
@@ -16,6 +17,7 @@ interface AdminLoginProps {
 
 export default function AdminLogin({ onClose }: AdminLoginProps) {
   const { login } = useYugiohAuth();
+  const { t } = useYugiohLanguage();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +32,7 @@ export default function AdminLogin({ onClose }: AdminLoginProps) {
     if (success) {
       onClose();
     } else {
-      setError('Contraseña incorrecta');
+      setError(t('admin.error'));
     }
 
     setIsLoading(false);
@@ -47,13 +49,13 @@ export default function AdminLogin({ onClose }: AdminLoginProps) {
       radius="l"
       maxWidth={24}
     >
-      <Heading variant="heading-strong-l">Acceso Administrador</Heading>
+      <Heading variant="heading-strong-l">{t('admin.title')}</Heading>
 
       <form onSubmit={handleSubmit}>
         <Column fillWidth gap="16">
           <PasswordInput
             id="yugioh-password"
-            label="Contraseña"
+            label={t('admin.password')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             errorMessage={error}
@@ -67,17 +69,17 @@ export default function AdminLogin({ onClose }: AdminLoginProps) {
               fillWidth
               disabled={isLoading || !password}
             >
-              {isLoading ? 'Verificando...' : 'Ingresar'}
+              {isLoading ? t('admin.loading') : t('admin.login')}
             </Button>
             <Button variant="tertiary" fillWidth onClick={onClose}>
-              Cancelar
+              {t('admin.cancel')}
             </Button>
           </Column>
         </Column>
       </form>
 
       <Text variant="body-default-s" onBackground="neutral-weak">
-        Ingresa la contraseña para poder agregar cartas a tus listas.
+        {t('admin.helpText')}
       </Text>
     </Column>
   );

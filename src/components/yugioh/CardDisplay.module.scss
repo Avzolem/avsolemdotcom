@@ -1,10 +1,9 @@
-$yugioh-purple: #7B2CBF;
 $yugioh-gold: #FFD700;
 $yugioh-gray: #2a2a2a;
 
 .card {
   background: rgba(26, 26, 26, 0.8);
-  border: 2px solid rgba(123, 44, 191, 0.3);
+  border: 2px solid rgba(100, 100, 100, 0.5);
   border-radius: 12px;
   padding: 1rem;
   transition: all 0.2s ease;
@@ -14,7 +13,6 @@ $yugioh-gray: #2a2a2a;
 
   &:hover {
     border-color: $yugioh-gold;
-    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
     transform: translateY(-2px);
   }
 
@@ -116,13 +114,13 @@ $yugioh-gray: #2a2a2a;
 }
 
 .badge {
-  background: rgba(123, 44, 191, 0.3);
+  background: rgba(100, 100, 100, 0.5);
   color: rgba(255, 255, 255, 0.9);
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  border: 1px solid rgba(123, 44, 191, 0.5);
+  border: 1px solid rgba(100, 100, 100, 0.7);
 }
 
 // Attribute Colors (Official Yu-Gi-Oh! colors)
@@ -324,7 +322,7 @@ $yugioh-gray: #2a2a2a;
 
 .expandButton {
   margin-top: 0.5rem;
-  background: rgba(123, 44, 191, 0.2);
+  background: rgba(42, 42, 42, 0.8);
   border: 1px solid rgba(255, 215, 0, 0.3);
   color: $yugioh-gold;
   padding: 0.5rem 1rem;
@@ -340,7 +338,7 @@ $yugioh-gray: #2a2a2a;
   align-self: flex-start;
 
   &:hover {
-    background: rgba(123, 44, 191, 0.3);
+    background: rgba(100, 100, 100, 0.5);
     border-color: $yugioh-gold;
     transform: translateY(-1px);
   }
@@ -355,8 +353,8 @@ $yugioh-gray: #2a2a2a;
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem;
-  background: rgba(123, 44, 191, 0.1);
-  border: 1px solid rgba(123, 44, 191, 0.2);
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(42, 42, 42, 0.8);
   border-radius: 8px;
 }
 
@@ -411,8 +409,8 @@ $yugioh-gray: #2a2a2a;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  background: rgba(123, 44, 191, 0.15);
-  border: 1px solid rgba(123, 44, 191, 0.3);
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(100, 100, 100, 0.5);
   border-radius: 8px;
   color: $yugioh-gold;
   font-size: 0.875rem;
@@ -422,7 +420,7 @@ $yugioh-gray: #2a2a2a;
   font-family: inherit;
 
   &:hover {
-    background: rgba(123, 44, 191, 0.25);
+    background: rgba(80, 80, 80, 0.6);
     border-color: $yugioh-gold;
   }
 }
@@ -442,7 +440,7 @@ $yugioh-gray: #2a2a2a;
   margin-top: 0.5rem;
   padding: 0.5rem;
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(123, 44, 191, 0.2);
+  border: 1px solid rgba(42, 42, 42, 0.8);
   border-radius: 8px;
   max-height: 400px;
   overflow-y: auto;
@@ -458,11 +456,11 @@ $yugioh-gray: #2a2a2a;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(123, 44, 191, 0.5);
+    background: rgba(100, 100, 100, 0.7);
     border-radius: 4px;
 
     &:hover {
-      background: rgba(123, 44, 191, 0.7);
+      background: rgba(100, 100, 100, 0.8);
     }
   }
 }
@@ -474,7 +472,7 @@ $yugioh-gray: #2a2a2a;
   padding: 0.75rem;
   margin-bottom: 0.5rem;
   background: rgba(26, 26, 26, 0.6);
-  border: 1px solid rgba(123, 44, 191, 0.2);
+  border: 1px solid rgba(42, 42, 42, 0.8);
   border-radius: 6px;
   transition: all 0.2s ease;
 
@@ -484,7 +482,7 @@ $yugioh-gray: #2a2a2a;
 
   &:hover {
     background: rgba(26, 26, 26, 0.8);
-    border-color: rgba(123, 44, 191, 0.4);
+    border-color: rgba(100, 100, 100, 0.6);
     transform: translateX(2px);
   }
 }
@@ -498,7 +496,7 @@ $yugioh-gray: #2a2a2a;
 .setCode {
   flex-shrink: 0;
   font-family: 'Geist Mono', monospace;
-  background: rgba(123, 44, 191, 0.3);
+  background: rgba(100, 100, 100, 0.5);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   color: $yugioh-gold;
@@ -552,12 +550,12 @@ $yugioh-gray: #2a2a2a;
   justify-content: center;
   margin-top: 0.25rem;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(123, 44, 191, 0.2);
+  border-top: 1px solid rgba(42, 42, 42, 0.8);
 }
 
 .setActionButton {
-  background: rgba(123, 44, 191, 0.2);
-  border: 1px solid rgba(123, 44, 191, 0.4);
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(100, 100, 100, 0.6);
   border-radius: 6px;
   padding: 0.375rem 0.5rem;
   font-size: 1rem;
@@ -570,7 +568,7 @@ $yugioh-gray: #2a2a2a;
   height: 32px;
 
   &:hover {
-    background: rgba(123, 44, 191, 0.4);
+    background: rgba(100, 100, 100, 0.6);
     border-color: $yugioh-gold;
     transform: translateY(-1px);
   }
@@ -648,9 +646,9 @@ $yugioh-gray: #2a2a2a;
 
 .addButton {
   flex: 1;
-  background: rgba(123, 44, 191, 0.3);
+  background: rgba(100, 100, 100, 0.5);
   color: $yugioh-gold;
-  border: 1px solid rgba(123, 44, 191, 0.5);
+  border: 1px solid rgba(100, 100, 100, 0.7);
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   font-weight: 600;
@@ -662,7 +660,7 @@ $yugioh-gray: #2a2a2a;
   z-index: 10;
 
   &:hover:not(:disabled) {
-    background: rgba(123, 44, 191, 0.5);
+    background: rgba(100, 100, 100, 0.7);
     border-color: $yugioh-gold;
     transform: translateY(-1px);
   }
@@ -684,7 +682,7 @@ $yugioh-gray: #2a2a2a;
 // Compact version
 .cardCompact {
   background: rgba(42, 42, 42, 0.8);
-  border: 2px solid rgba(123, 44, 191, 0.3);
+  border: 2px solid rgba(100, 100, 100, 0.5);
   border-radius: 8px;
   padding: 1rem;
   display: flex;

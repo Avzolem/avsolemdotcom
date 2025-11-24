@@ -2,6 +2,7 @@
 
 import { CardInList } from '@/types/yugioh';
 import { exportToCSV, exportToPDF } from '@/lib/utils/exportLists';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import styles from './ExportButtons.module.scss';
 
 interface ExportButtonsProps {
@@ -11,6 +12,8 @@ interface ExportButtonsProps {
 }
 
 export default function ExportButtons({ cards, listName, totalValue }: ExportButtonsProps) {
+  const { t } = useYugiohLanguage();
+
   if (cards.length === 0) {
     return null;
   }
@@ -25,10 +28,10 @@ export default function ExportButtons({ cards, listName, totalValue }: ExportBut
           e.stopPropagation();
           exportToCSV(cards, listName);
         }}
-        title="Exportar a CSV"
+        title={t('export.csv.title')}
       >
         <span className={styles.icon}>📊</span>
-        Exportar CSV
+        {t('export.csv')}
       </button>
       <button
         type="button"
@@ -38,10 +41,10 @@ export default function ExportButtons({ cards, listName, totalValue }: ExportBut
           e.stopPropagation();
           exportToPDF(cards, listName, totalValue);
         }}
-        title="Exportar a PDF"
+        title={t('export.pdf.title')}
       >
         <span className={styles.icon}>📄</span>
-        Exportar PDF
+        {t('export.pdf')}
       </button>
     </div>
   );
