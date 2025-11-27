@@ -16,13 +16,22 @@ import { ThemeBackground } from '@/components/ThemeBackground';
 import styles from './layout.module.scss';
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
     image: home.image,
+    canonical: baseURL,
   });
+
+  return {
+    ...metadata,
+    keywords: home.keywords,
+    authors: [{ name: 'Andrés Aguilar', url: baseURL }],
+    creator: 'Andrés Aguilar',
+    publisher: 'Andrés Aguilar',
+  };
 }
 
 export default async function RootLayout({

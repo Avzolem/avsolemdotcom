@@ -64,10 +64,11 @@ const social = [
 
 const home = {
   path: "/",
-  image: "/images/og/home.jpg",
+  image: "/images/og/home.png",
   label: "Home",
   title: `△VSOLEM.`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
+  keywords: "Andrés Aguilar, avsolem, web developer, full stack developer, React, Next.js, portfolio, Chihuahua, México, blockchain, Web3",
   headline: <>Building the future with React & NextJS</>,  
   featured: {
     display: true,
