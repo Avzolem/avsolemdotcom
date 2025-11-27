@@ -1,5 +1,6 @@
 'use client';
 
+import { SessionProvider } from 'next-auth/react';
 import { YugiohLanguageProvider } from '@/contexts/YugiohLanguageContext';
 import { YugiohAuthProvider } from '@/contexts/YugiohAuthContext';
 import { ToastProvider } from '@/contexts/ToastContext';
@@ -22,17 +23,19 @@ export default function YugiohLayout({
   children: React.ReactNode;
 }) {
   return (
-    <YugiohLanguageProvider>
-      <YugiohAuthProvider>
-        <ToastProvider>
-          <ToastContainer />
-          <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
-            <YugiohHeader />
-            <main className="yugioh-main">{children}</main>
-            <YugiohFooter />
-          </div>
-        </ToastProvider>
-      </YugiohAuthProvider>
-    </YugiohLanguageProvider>
+    <SessionProvider>
+      <YugiohLanguageProvider>
+        <YugiohAuthProvider>
+          <ToastProvider>
+            <ToastContainer />
+            <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
+              <YugiohHeader />
+              <main className="yugioh-main">{children}</main>
+              <YugiohFooter />
+            </div>
+          </ToastProvider>
+        </YugiohAuthProvider>
+      </YugiohLanguageProvider>
+    </SessionProvider>
   );
 }

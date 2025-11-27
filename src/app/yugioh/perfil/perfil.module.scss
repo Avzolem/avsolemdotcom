@@ -1,0 +1,387 @@
+// Yu-Gi-Oh Theme Colors
+$yugioh-gold: #FFD700;
+$yugioh-gold-dark: #FFA500;
+$yugioh-black: #0A0A0A;
+$yugioh-gray: #1a1a1a;
+$yugioh-gray-light: #2a2a2a;
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  color: $yugioh-gold;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: $yugioh-gold;
+  gap: 1rem;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 215, 0, 0.2);
+    border-top-color: $yugioh-gold;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(10, 10, 10, 0.9) 100%);
+  border: 2px solid rgba(100, 100, 100, 0.4);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(255, 215, 0, 0.3);
+  }
+}
+
+.cardTitle {
+  color: $yugioh-gold;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+}
+
+// Profile Header
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid $yugioh-gold;
+}
+
+.avatarFallback {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $yugioh-gold 0%, $yugioh-gold-dark 100%);
+  color: $yugioh-black;
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.userName {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.userEmail {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9375rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.providerBadge {
+  display: inline-block;
+  background: rgba(255, 215, 0, 0.1);
+  color: $yugioh-gold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.memberSince {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  .label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+  }
+
+  .value {
+    color: white;
+    font-weight: 500;
+  }
+}
+
+// Stats
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.statIcon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  color: $yugioh-gold;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8125rem;
+  margin-top: 0.375rem;
+}
+
+// Preferences
+.preference {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.preferenceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.preferenceLabel {
+  color: white;
+  font-weight: 500;
+}
+
+.preferenceDesc {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8125rem;
+}
+
+.languageToggle {
+  display: flex;
+  gap: 0.25rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.25rem;
+}
+
+.langButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $yugioh-gold;
+    background: rgba(255, 215, 0, 0.1);
+  }
+}
+
+.langButtonActive {
+  background: linear-gradient(135deg, $yugioh-gold 0%, $yugioh-gold-dark 100%);
+  color: $yugioh-black;
+
+  &:hover {
+    color: $yugioh-black;
+  }
+}
+
+// Toggle Switch
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  flex-shrink: 0;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .toggleSlider {
+      background: linear-gradient(135deg, $yugioh-gold 0%, $yugioh-gold-dark 100%);
+
+      &::before {
+        transform: translateX(24px);
+      }
+    }
+
+    &:disabled + .toggleSlider {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(100, 100, 100, 0.5);
+  transition: 0.3s;
+  border-radius: 28px;
+
+  &::before {
+    position: absolute;
+    content: '';
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: 0.3s;
+    border-radius: 50%;
+  }
+}
+
+// Danger Zone
+.dangerCard {
+  border-color: rgba(239, 68, 68, 0.3);
+
+  .cardTitle {
+    color: #EF4444;
+  }
+}
+
+.dangerText {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9375rem;
+  margin: 0 0 1rem 0;
+}
+
+.deleteButton {
+  background: transparent;
+  color: #EF4444;
+  border: 2px solid rgba(239, 68, 68, 0.5);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #EF4444;
+  }
+}
+
+.confirmDelete {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.confirmText {
+  color: #EF4444;
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cancelButton {
+  flex: 1;
+  background: rgba(100, 100, 100, 0.3);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(100, 100, 100, 0.5);
+  }
+}
+
+.confirmDeleteButton {
+  flex: 1;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+}

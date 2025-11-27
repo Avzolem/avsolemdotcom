@@ -1,13 +1,26 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useSession, signIn, signOut } from 'next-auth/react';
+
+interface User {
+  id: string;
+  email: string;
+  name?: string | null;
+  image?: string | null;
+  newsletterSubscribed?: boolean;
+  language?: 'es' | 'en';
+}
 
 interface YugiohAuthContextType {
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (password: string) => Promise<boolean>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithCredentials: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (email: string, password: string, name: string, language?: 'es' | 'en', subscribeNewsletter?: boolean) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
+  updateSession: () => Promise<void>;
 }
 
 const YugiohAuthContext = createContext<YugiohAuthContextType | undefined>(
@@ -15,56 +28,107 @@ const YugiohAuthContext = createContext<YugiohAuthContextType | undefined>(
 );
 
 export function YugiohAuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: session, status, update } = useSession();
+  const [registerError, setRegisterError] = useState<string | null>(null);
 
-  const checkAuth = async () => {
-    try {
-      const response = await fetch('/api/yugioh/auth');
-      setIsAuthenticated(response.ok);
-    } catch (error) {
-      console.error('Error checking auth:', error);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const isLoading = status === 'loading';
+  const isAuthenticated = !!session?.user;
 
-  const login = async (password: string): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/yugioh/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
-
-      if (response.ok) {
-        setIsAuthenticated(true);
-        return true;
+  const user: User | null = session?.user
+    ? {
+        id: session.user.id,
+        email: session.user.email || '',
+        name: session.user.name,
+        image: session.user.image,
+        newsletterSubscribed: session.user.newsletterSubscribed,
+        language: session.user.language,
       }
-      return false;
-    } catch (error) {
-      console.error('Error logging in:', error);
-      return false;
-    }
-  };
+    : null;
 
-  const logout = async () => {
-    try {
-      await fetch('/api/yugioh/auth', { method: 'DELETE' });
-      setIsAuthenticated(false);
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
+  const signInWithGoogle = useCallback(async () => {
+    await signIn('google', { callbackUrl: '/yugioh' });
   }, []);
+
+  const signInWithCredentials = useCallback(
+    async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+      try {
+        const result = await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          return { success: false, error: result.error };
+        }
+
+        return { success: true };
+      } catch (error) {
+        console.error('Sign in error:', error);
+        return { success: false, error: 'UNKNOWN_ERROR' };
+      }
+    },
+    []
+  );
+
+  const register = useCallback(
+    async (
+      email: string,
+      password: string,
+      name: string,
+      language: 'es' | 'en' = 'es',
+      subscribeNewsletter: boolean = false
+    ): Promise<{ success: boolean; error?: string }> => {
+      try {
+        const response = await fetch('/api/yugioh/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            password,
+            name,
+            language,
+            subscribeNewsletter,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          return { success: false, error: data.message || 'REGISTRATION_FAILED' };
+        }
+
+        // Auto sign in after registration
+        const signInResult = await signInWithCredentials(email, password);
+        return signInResult;
+      } catch (error) {
+        console.error('Registration error:', error);
+        return { success: false, error: 'UNKNOWN_ERROR' };
+      }
+    },
+    [signInWithCredentials]
+  );
+
+  const logout = useCallback(async () => {
+    await signOut({ callbackUrl: '/yugioh' });
+  }, []);
+
+  const updateSession = useCallback(async () => {
+    await update();
+  }, [update]);
 
   return (
     <YugiohAuthContext.Provider
-      value={{ isAuthenticated, isLoading, login, logout, checkAuth }}
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        signInWithGoogle,
+        signInWithCredentials,
+        register,
+        logout,
+        updateSession,
+      }}
     >
       {children}
     </YugiohAuthContext.Provider>

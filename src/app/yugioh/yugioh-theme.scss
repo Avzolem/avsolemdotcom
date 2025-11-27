@@ -27,14 +27,34 @@ $yugioh-white: #FFFFFF;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    #000000 0%,
-    #0a0a0a 20%,
-    #1a1a1a 50%,
-    #0a0a0a 80%,
-    #000000 100%
-  );
+  position: relative;
+
+  // Sidebar images for large screens
+  &::before,
+  &::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: calc((100vw - 1400px) / 2);
+    pointer-events: none;
+    z-index: 0;
+    display: none;
+
+    @media (min-width: 1500px) {
+      display: block;
+    }
+  }
+
+  &::before {
+    left: 0;
+    background: url('/images/yugioh-sidebar-left.webp') right center/cover no-repeat;
+  }
+
+  &::after {
+    right: 0;
+    background: url('/images/yugioh-sidebar-right.webp') left center/cover no-repeat;
+  }
 
   // Ensure all headings use gold color
   h1, h2, h3, h4, h5, h6 {
@@ -48,6 +68,14 @@ $yugioh-white: #FFFFFF;
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    #0a0a0a 0%,
+    #1a1a1a 50%,
+    #0a0a0a 100%
+  );
 
   @media (max-width: 768px) {
     padding: 1.5rem 1rem;

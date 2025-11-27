@@ -41,6 +41,11 @@ const nextConfig = {
         hostname: 'www.svgrepo.com',
         pathname: '/show/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
     ],
     dangerouslyAllowSVG: true,
   },

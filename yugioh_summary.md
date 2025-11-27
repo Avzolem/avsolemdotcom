@@ -66,11 +66,12 @@ A comprehensive Yu-Gi-Oh! card search and management system integrated into the 
 ### Tech Stack
 - **Framework**: Next.js 15 (App Router)
 - **UI**: React 19 with SCSS modules
-- **State Management**: React Context API (Toast notifications, Authentication)
+- **State Management**: React Context API (Toast notifications, Authentication, Language)
 - **OCR**: Tesseract.js v5
 - **API**: YGOPRODeck API (primary source)
 - **Database**: MongoDB for persistent list storage
-- **Authentication**: Cookie-based sessions
+- **Authentication**: NextAuth.js 4 (Google OAuth + Credentials)
+- **Password Hashing**: bcryptjs
 - **Image Processing**: Canvas API for cropping
 
 ### Key Files
@@ -81,8 +82,15 @@ A comprehensive Yu-Gi-Oh! card search and management system integrated into the 
 
 #### Context & State Management
 - `src/contexts/ToastContext.tsx` - Global toast notification system
-- `src/contexts/YugiohAuthContext.tsx` - Authentication state management
-- `src/app/yugioh/layout.tsx` - Layout with ToastProvider for all yugioh pages
+- `src/contexts/YugiohAuthContext.tsx` - Authentication state management (NextAuth wrapper)
+- `src/contexts/YugiohLanguageContext.tsx` - Bilingual support (ES/EN)
+- `src/app/yugioh/layout.tsx` - Layout with providers (Session, Toast, Language, Auth)
+
+#### Authentication
+- `src/lib/auth/options.ts` - NextAuth configuration (Google + Credentials providers)
+- `src/app/api/auth/[...nextauth]/route.ts` - NextAuth API handler
+- `src/lib/mongodb/models/User.ts` - User model with CRUD operations
+- `src/components/yugioh/AuthModal.tsx` - Login/Register modal
 
 #### Components
 - `src/components/yugioh/CardSearch.tsx` - Main search interface with debouncing
@@ -338,7 +346,7 @@ $yugioh-gray: #2a2a2a;
     ```
 - **User Experience**: Users always see pricing information, even when specific set price is unavailable
 
-### Phase 12: Camera UI Improvements (Latest)
+### Phase 12: Camera UI Improvements
 - **Feature**: Improved scanner button positioning for better mobile and desktop UX
 - **Implementation**:
   - Moved camera control buttons (Capturar, Cerrar) below camera preview in `CardScanner.tsx`
@@ -351,6 +359,62 @@ $yugioh-gray: #2a2a2a;
   - Prevents buttons from obstructing camera view
   - Consistent experience across mobile and desktop devices
   - Better thumb reach on mobile devices
+
+### Phase 13: User Authentication System (Latest)
+- **Feature**: Complete user authentication with personal collections
+- **Tech Stack**: NextAuth.js 4 with JWT strategy
+- **Authentication Methods**:
+  - **Google OAuth**: One-click sign-in with Google account
+  - **Email/Password**: Traditional credentials with bcrypt hashing
+- **Implementation**:
+  - **NextAuth Configuration** (`src/lib/auth/options.ts`):
+    - Google Provider with OAuth 2.0
+    - Credentials Provider with email/password
+    - JWT session strategy (30 days expiry)
+    - Custom callbacks for user data enrichment
+  - **User Model** (`src/lib/mongodb/models/User.ts`):
+    - Fields: email, name, password (hashed), provider, newsletterSubscribed, language
+    - Functions: createUserWithCredentials, verifyPassword, upsertOAuthUser, updateUserPreferences, deleteUser
+  - **Auth Context** (`src/contexts/YugiohAuthContext.tsx`):
+    - Uses NextAuth's useSession
+    - Exposes: user, isAuthenticated, isLoading, signInWithGoogle, signInWithCredentials, register, logout
+  - **Auth Modal** (`src/components/yugioh/AuthModal.tsx`):
+    - Tabbed interface: Login / Register
+    - Google OAuth button with official styling
+    - Email/password forms with validation
+    - Newsletter subscription checkbox on registration
+  - **User Menu** (`src/components/yugioh/YugiohHeader.tsx`):
+    - Avatar display (Google profile image or initials fallback)
+    - Dropdown with profile link and logout
+  - **Profile Page** (`src/app/yugioh/perfil/page.tsx`):
+    - User stats (collection count, for-sale count, wishlist count, total value)
+    - Language preference toggle (ES/EN)
+    - Newsletter subscription toggle
+    - Account deletion with confirmation
+- **User-Scoped Data**:
+  - All lists (Collection, For-Sale, Wishlist) now linked to userId
+  - Updated YugiohList model to require userId parameter
+  - Shared links preserve owner's userId for data retrieval
+- **Security**:
+  - Passwords hashed with bcrypt (12 rounds)
+  - JWT tokens with secure secret
+  - Session validation on all protected API routes
+- **i18n Support**:
+  - All auth-related strings translated (ES/EN)
+  - Profile page fully bilingual
+- **Mobile Responsive**:
+  - Auth modal adapts to small screens (480px breakpoint)
+  - Profile stats grid collapses to single column on mobile
+- **Environment Variables Required**:
+  ```
+  NEXTAUTH_SECRET=<random-string>
+  NEXTAUTH_URL=https://yourdomain.com
+  GOOGLE_CLIENT_ID=<from-google-console>
+  GOOGLE_CLIENT_SECRET=<from-google-console>
+  ```
+- **Google Cloud Console Setup**:
+  - Authorized JavaScript origins: `https://yourdomain.com`
+  - Authorized redirect URIs: `https://yourdomain.com/api/auth/callback/google`
 
 ## Known Patterns and Solutions
 
@@ -498,15 +562,17 @@ Following CLAUDE.md policies:
 
 ---
 
-**Last Updated**: November 24, 2025
-**Status**: Production ready - Complete Yu-Gi-Oh! color system, enhanced filters, mobile-optimized scanner
-**Version**: Next.js 15, React 19, MongoDB, Tesseract.js 5
-**Build Time**: ~25.5s | **Bundle Size**: 24.4 kB (main) | **Pages**: 42
+**Last Updated**: November 27, 2025
+**Status**: Production ready - Full user authentication with personal collections
+**Version**: Next.js 15, React 19, MongoDB, NextAuth.js 4, Tesseract.js 5
+**Build Time**: ~41s | **Bundle Size**: 10.4 kB (main) | **Pages**: 46
 **Recent Improvements**:
+- ✅ User authentication (Google OAuth + Email/Password)
+- ✅ Personal collections per user (Collection, For-Sale, Wishlist)
+- ✅ User profile page with stats and preferences
+- ✅ Newsletter subscription system
+- ✅ Login-aware empty state messages
 - ✅ Official Yu-Gi-Oh! color system for all card types and attributes
 - ✅ Complete advanced filters (26 card types, 26 monster races, 7 attributes)
-- ✅ Expandable descriptions for long card text
-- ✅ Price fallback system for cards without set pricing
-- ✅ Improved camera UI with buttons below preview
 - ✅ Multi-language set code support with automatic EN fallback
 - ✅ 50+ mobile responsive breakpoints

@@ -163,16 +163,86 @@ $yugioh-gray: #1a1a1a;
   width: 100%;
 }
 
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 .resultsTitle {
   color: $yugioh-gold;
   font-size: 1.5rem;
   font-weight: 700;
-  text-align: center;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
-    margin-bottom: 1rem;
+    text-align: center;
+  }
+}
+
+.sortSection {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.sortLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sortSelect {
+  background: rgba(26, 26, 26, 0.9);
+  border: 2px solid rgba(100, 100, 100, 0.6);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.875rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  min-width: 180px;
+
+  // Custom arrow
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFD700' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+
+  &:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $yugioh-gold;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+  }
+
+  option {
+    background: #1a1a1a;
+    color: white;
+    padding: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: unset;
   }
 }
 

@@ -78,6 +78,7 @@ export interface CardInList {
 
 export interface YugiohList {
   _id?: string;
+  userId?: string; // Optional for backward compatibility, required for new lists
   type: ListType;
   cards: CardInList[];
   createdAt?: Date;

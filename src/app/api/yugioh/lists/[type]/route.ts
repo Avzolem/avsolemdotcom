@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cookie from 'cookie';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/options';
 import { ListType } from '@/types/yugioh';
 import {
   getOrCreateList,
@@ -8,13 +9,12 @@ import {
   updateCardQuantity,
   updateCardDetails,
   updateCardField,
-  clearList,
   getListValue,
 } from '@/lib/mongodb/models/YugiohList';
 
-function isAuthenticated(request: NextRequest): boolean {
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
-  return cookies.yugioh_auth === 'authenticated';
+async function getUserId(request: NextRequest): Promise<string | null> {
+  const session = await getServerSession(authOptions);
+  return session?.user?.id || null;
 }
 
 function validateListType(type: string): type is ListType {
@@ -27,14 +27,24 @@ export async function GET(
   { params }: { params: Promise<{ type: string }> }
 ) {
   try {
+    const userId = await getUserId(request);
+
+    if (!userId) {
+      return NextResponse.json({
+        list: { cards: [] },
+        totalValue: 0,
+        message: 'Not authenticated - showing empty list'
+      });
+    }
+
     const { type } = await params;
 
     if (!validateListType(type)) {
       return NextResponse.json({ message: 'Invalid list type' }, { status: 400 });
     }
 
-    const list = await getOrCreateList(type);
-    const totalValue = await getListValue(type);
+    const list = await getOrCreateList(type, userId);
+    const totalValue = await getListValue(type, userId);
 
     return NextResponse.json({
       list,
@@ -55,7 +65,9 @@ export async function POST(
   { params }: { params: Promise<{ type: string }> }
 ) {
   try {
-    if (!isAuthenticated(request)) {
+    const userId = await getUserId(request);
+
+    if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -76,7 +88,7 @@ export async function POST(
     }
 
     // Add to the requested list
-    await addCardToList(type, {
+    await addCardToList(type, userId, {
       cardId,
       cardName,
       cardImage,
@@ -92,15 +104,15 @@ export async function POST(
     // If adding to for-sale, also add to collection with isForSale: true
     if (type === 'for-sale') {
       // Check if card already exists in collection
-      const collection = await getOrCreateList('collection');
+      const collection = await getOrCreateList('collection', userId);
       const existingCard = collection.cards.find((c) => c.setCode === setCode);
 
       if (existingCard) {
         // Update isForSale to true
-        await updateCardField('collection', setCode, 'isForSale', true);
+        await updateCardField('collection', userId, setCode, 'isForSale', true);
       } else {
         // Add to collection with isForSale: true
-        await addCardToList('collection', {
+        await addCardToList('collection', userId, {
           cardId,
           cardName,
           cardImage,
@@ -132,7 +144,9 @@ export async function DELETE(
   { params }: { params: Promise<{ type: string }> }
 ) {
   try {
-    if (!isAuthenticated(request)) {
+    const userId = await getUserId(request);
+
+    if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -155,28 +169,28 @@ export async function DELETE(
     const deletedFrom: ListType[] = [type];
 
     // Get card info before deleting (for the response)
-    const list = await getOrCreateList(type);
+    const list = await getOrCreateList(type, userId);
     const card = list.cards.find((c) => c.setCode === setCode);
 
     // Remove from the requested list
-    await removeCardFromList(type, setCode);
+    await removeCardFromList(type, userId, setCode);
 
     // Bidirectional sync logic
     if (type === 'for-sale') {
       // If deleting from for-sale, update isForSale to false in collection
-      const collection = await getOrCreateList('collection');
+      const collection = await getOrCreateList('collection', userId);
       const cardInCollection = collection.cards.find((c) => c.setCode === setCode);
 
       if (cardInCollection) {
-        await updateCardField('collection', setCode, 'isForSale', false);
+        await updateCardField('collection', userId, setCode, 'isForSale', false);
       }
     } else if (type === 'collection') {
       // If deleting from collection, also remove from for-sale if it exists there
-      const forSaleList = await getOrCreateList('for-sale');
+      const forSaleList = await getOrCreateList('for-sale', userId);
       const cardInForSale = forSaleList.cards.find((c) => c.setCode === setCode);
 
       if (cardInForSale) {
-        await removeCardFromList('for-sale', setCode);
+        await removeCardFromList('for-sale', userId, setCode);
         deletedFrom.push('for-sale');
       }
     }
@@ -202,7 +216,9 @@ export async function PATCH(
   { params }: { params: Promise<{ type: string }> }
 ) {
   try {
-    if (!isAuthenticated(request)) {
+    const userId = await getUserId(request);
+
+    if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -223,11 +239,11 @@ export async function PATCH(
     }
 
     if (quantity !== undefined) {
-      await updateCardQuantity(type, setCode, quantity);
+      await updateCardQuantity(type, userId, setCode, quantity);
     }
 
     if (price !== undefined || notes !== undefined) {
-      await updateCardDetails(type, setCode, { price, notes });
+      await updateCardDetails(type, userId, setCode, { price, notes });
     }
 
     return NextResponse.json({ success: true });

@@ -527,6 +527,112 @@ $yugioh-gray: #2a2a2a;
   margin-top: 0.25rem;
 }
 
+// Rarity Badge Base Styles
+.rarityIcon {
+  margin-right: 0.25rem;
+  font-size: 0.875em;
+}
+
+.rarityBadge,
+.setRarityBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+// Common - Gray/Silver
+.rarityCommon {
+  background: rgba(156, 163, 175, 0.2);
+  border: 1px solid rgba(156, 163, 175, 0.4);
+  color: #9CA3AF;
+}
+
+// Rare - Blue
+.rarityRare {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+// Super Rare - Light Blue/Cyan
+.raritySuperRare {
+  background: rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  color: #22D3EE;
+}
+
+// Ultra Rare - Gold
+.rarityUltraRare {
+  background: rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  color: #FFD700;
+}
+
+// Secret Rare - Rainbow/Prismatic effect
+.raritySecretRare {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  color: #C084FC;
+}
+
+// Ultimate Rare - Embossed Gold
+.rarityUltimateRare {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+  border: 1px solid rgba(255, 165, 0, 0.6);
+  color: #FFA500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+// Ghost Rare - Ghostly white/silver
+.rarityGhostRare {
+  background: rgba(229, 231, 235, 0.15);
+  border: 1px solid rgba(229, 231, 235, 0.4);
+  color: #E5E7EB;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+// Gold Rare - Rich gold
+.rarityGoldRare {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(218, 165, 32, 0.2));
+  border: 1px solid rgba(218, 165, 32, 0.6);
+  color: #DAA520;
+}
+
+// Starlight Rare - Sparkle effect
+.rarityStarlightRare {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 215, 0, 0.15), rgba(255, 255, 255, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #FFFBEB;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+}
+
+// Collector's Rare - Premium feel
+.rarityCollectorRare {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(236, 72, 153, 0.15));
+  border: 1px solid rgba(192, 132, 252, 0.5);
+  color: #E879F9;
+}
+
+// Mosaic/Shatterfoil Rare - Pattern effect
+.rarityMosaicRare {
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15));
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #60A5FA;
+}
+
+// Parallel Rare - Holographic feel
+.rarityParallelRare {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  color: #A78BFA;
+}
+
+// Legacy setRarity (keeping for backwards compatibility)
 .setRarity {
   font-size: 0.75rem;
   color: rgba(255, 215, 0, 0.8);

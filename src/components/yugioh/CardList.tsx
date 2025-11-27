@@ -12,6 +12,45 @@ import ShareButton from './ShareButton';
 import Image from 'next/image';
 import styles from './CardList.module.scss';
 
+// Rarity configuration with icons and colors
+const RARITY_CONFIG: Record<string, { icon: string; className: string }> = {
+  'Common': { icon: '○', className: 'rarityCommon' },
+  'Short Print': { icon: '○', className: 'rarityCommon' },
+  'Rare': { icon: '◆', className: 'rarityRare' },
+  'Super Rare': { icon: '★', className: 'raritySuperRare' },
+  'Super Short Print': { icon: '★', className: 'raritySuperRare' },
+  'Ultra Rare': { icon: '★', className: 'rarityUltraRare' },
+  'Secret Rare': { icon: '✦', className: 'raritySecretRare' },
+  'Prismatic Secret Rare': { icon: '✦', className: 'raritySecretRare' },
+  'Ultimate Rare': { icon: '◈', className: 'rarityUltimateRare' },
+  'Ghost Rare': { icon: '👻', className: 'rarityGhostRare' },
+  'Gold Rare': { icon: '✧', className: 'rarityGoldRare' },
+  'Gold Secret Rare': { icon: '✧', className: 'rarityGoldRare' },
+  'Starlight Rare': { icon: '✨', className: 'rarityStarlightRare' },
+  'Collector\'s Rare': { icon: '✨', className: 'rarityCollectorRare' },
+  'Mosaic Rare': { icon: '▣', className: 'rarityMosaicRare' },
+  'Shatterfoil Rare': { icon: '▣', className: 'rarityMosaicRare' },
+  'Parallel Rare': { icon: '∥', className: 'rarityParallelRare' },
+};
+
+function getRarityConfig(rarity: string): { icon: string; className: string } {
+  if (RARITY_CONFIG[rarity]) return RARITY_CONFIG[rarity];
+
+  const rarityLower = rarity.toLowerCase();
+  if (rarityLower.includes('starlight')) return RARITY_CONFIG['Starlight Rare'];
+  if (rarityLower.includes('collector')) return RARITY_CONFIG['Collector\'s Rare'];
+  if (rarityLower.includes('ghost')) return RARITY_CONFIG['Ghost Rare'];
+  if (rarityLower.includes('ultimate')) return RARITY_CONFIG['Ultimate Rare'];
+  if (rarityLower.includes('secret')) return RARITY_CONFIG['Secret Rare'];
+  if (rarityLower.includes('ultra')) return RARITY_CONFIG['Ultra Rare'];
+  if (rarityLower.includes('super')) return RARITY_CONFIG['Super Rare'];
+  if (rarityLower.includes('gold')) return RARITY_CONFIG['Gold Rare'];
+  if (rarityLower.includes('parallel')) return RARITY_CONFIG['Parallel Rare'];
+  if (rarityLower.includes('rare') && !rarityLower.includes('common')) return RARITY_CONFIG['Rare'];
+
+  return RARITY_CONFIG['Common'];
+}
+
 interface CardListProps {
   type: ListType;
   title?: string;
@@ -316,9 +355,13 @@ export default function CardList({ type, title }: CardListProps) {
       {/* Cards Grid */}
       {cards.length === 0 ? (
         <div className={styles.empty}>
-          <div className={styles.emptyIcon}>📦</div>
-          <h2 className={styles.emptyTitle}>{t('list.empty.title')}</h2>
-          <p className={styles.emptyText}>{t('list.empty.description')}</p>
+          <div className={styles.emptyIcon}>{isAuthenticated ? '📦' : '🔐'}</div>
+          <h2 className={styles.emptyTitle}>
+            {isAuthenticated ? t('list.empty.title') : t('list.empty.notLoggedIn.title')}
+          </h2>
+          <p className={styles.emptyText}>
+            {isAuthenticated ? t('list.empty.description') : t('list.empty.notLoggedIn.description')}
+          </p>
         </div>
       ) : filteredCards.length === 0 ? (
         <div className={styles.empty}>
@@ -371,7 +414,15 @@ export default function CardList({ type, title }: CardListProps) {
                     </div>
                     <div className={styles.infoRow}>
                       <span className={styles.infoLabel}>{t('list.rarity')}</span>
-                      <span className={styles.rarityValue}>{card.setRarity}</span>
+                      {(() => {
+                        const rarityConfig = getRarityConfig(card.setRarity);
+                        return (
+                          <span className={`${styles.rarityBadge} ${styles[rarityConfig.className]}`}>
+                            <span className={styles.rarityIcon}>{rarityConfig.icon}</span>
+                            {card.setRarity}
+                          </span>
+                        );
+                      })()}
                     </div>
                   </div>
 

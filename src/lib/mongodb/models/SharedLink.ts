@@ -1,16 +1,14 @@
 import { getDatabase } from '../connection';
-import { Collection, MongoClient } from 'mongodb';
+import { Collection } from 'mongodb';
 import { ListType } from '@/types/yugioh';
 
 export interface SharedLink {
   token: string;
   listType: ListType;
-  userId?: string; // Optional: if you want to track who created the link
+  userId: string; // Required: track who created the link
   createdAt: Date;
   expiresAt: Date;
 }
-
-let client: MongoClient | null = null;
 
 async function getSharedLinksCollection(): Promise<Collection<SharedLink>> {
   const db = await getDatabase();
@@ -23,6 +21,7 @@ async function getSharedLinksCollection(): Promise<Collection<SharedLink>> {
 export async function createSharedLink(
   token: string,
   listType: ListType,
+  userId: string,
   expiresInDays: number = 7
 ): Promise<SharedLink> {
   const collection = await getSharedLinksCollection();
@@ -34,6 +33,7 @@ export async function createSharedLink(
   const sharedLink: SharedLink = {
     token,
     listType,
+    userId,
     createdAt,
     expiresAt,
   };
@@ -83,4 +83,5 @@ export async function createSharedLinksIndexes(): Promise<void> {
 
   await collection.createIndex({ token: 1 }, { unique: true });
   await collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
+  await collection.createIndex({ userId: 1 });
 }

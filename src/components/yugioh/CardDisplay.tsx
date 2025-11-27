@@ -19,6 +19,89 @@ function getTypeClassName(type: string): string {
     .replace(/^./, (str) => str.toLowerCase());
 }
 
+// Rarity configuration with icons and colors
+const RARITY_CONFIG: Record<string, { icon: string; className: string; label: string }> = {
+  // Common rarities
+  'Common': { icon: '○', className: 'rarityCommon', label: 'C' },
+  'Short Print': { icon: '○', className: 'rarityCommon', label: 'SP' },
+
+  // Rare
+  'Rare': { icon: '◆', className: 'rarityRare', label: 'R' },
+
+  // Super Rare
+  'Super Rare': { icon: '★', className: 'raritySuperRare', label: 'SR' },
+  'Super Short Print': { icon: '★', className: 'raritySuperRare', label: 'SSP' },
+
+  // Ultra Rare
+  'Ultra Rare': { icon: '★', className: 'rarityUltraRare', label: 'UR' },
+  'Ultra Rare (Pharaoh\'s Rare)': { icon: '★', className: 'rarityUltraRare', label: 'UR' },
+
+  // Secret Rare
+  'Secret Rare': { icon: '✦', className: 'raritySecretRare', label: 'ScR' },
+  'Prismatic Secret Rare': { icon: '✦', className: 'raritySecretRare', label: 'PScR' },
+  'Extra Secret Rare': { icon: '✦', className: 'raritySecretRare', label: 'EScR' },
+  '20th Secret Rare': { icon: '✦', className: 'raritySecretRare', label: '20ScR' },
+  '10000 Secret Rare': { icon: '✦', className: 'raritySecretRare', label: '10000ScR' },
+
+  // Ultimate Rare
+  'Ultimate Rare': { icon: '◈', className: 'rarityUltimateRare', label: 'UtR' },
+
+  // Ghost Rare
+  'Ghost Rare': { icon: '👻', className: 'rarityGhostRare', label: 'GR' },
+  'Ghost/Gold Rare': { icon: '👻', className: 'rarityGhostRare', label: 'GGR' },
+
+  // Gold Rare
+  'Gold Rare': { icon: '✧', className: 'rarityGoldRare', label: 'GUR' },
+  'Gold Secret Rare': { icon: '✧', className: 'rarityGoldRare', label: 'GScR' },
+  'Premium Gold Rare': { icon: '✧', className: 'rarityGoldRare', label: 'PGR' },
+
+  // Starlight/Collector's Rare
+  'Starlight Rare': { icon: '✨', className: 'rarityStarlightRare', label: 'StR' },
+  'Collector\'s Rare': { icon: '✨', className: 'rarityCollectorRare', label: 'CR' },
+  'Quarter Century Secret Rare': { icon: '✨', className: 'rarityStarlightRare', label: 'QCScR' },
+
+  // Mosaic/Shatterfoil
+  'Mosaic Rare': { icon: '▣', className: 'rarityMosaicRare', label: 'MR' },
+  'Shatterfoil Rare': { icon: '▣', className: 'rarityMosaicRare', label: 'SHR' },
+  'Starfoil Rare': { icon: '▣', className: 'rarityMosaicRare', label: 'SFR' },
+
+  // Parallel Rare
+  'Parallel Rare': { icon: '∥', className: 'rarityParallelRare', label: 'PR' },
+  'Duel Terminal Normal Parallel Rare': { icon: '∥', className: 'rarityParallelRare', label: 'DTNPR' },
+  'Duel Terminal Rare Parallel Rare': { icon: '∥', className: 'rarityParallelRare', label: 'DTRPR' },
+  'Duel Terminal Super Parallel Rare': { icon: '∥', className: 'rarityParallelRare', label: 'DTSPR' },
+  'Duel Terminal Ultra Parallel Rare': { icon: '∥', className: 'rarityParallelRare', label: 'DTUPR' },
+  'Duel Terminal Secret Parallel Rare': { icon: '∥', className: 'rarityParallelRare', label: 'DTScPR' },
+};
+
+// Get rarity configuration with fallback
+function getRarityConfig(rarity: string): { icon: string; className: string; label: string } {
+  // Try exact match first
+  if (RARITY_CONFIG[rarity]) {
+    return RARITY_CONFIG[rarity];
+  }
+
+  // Try partial match for variations
+  const rarityLower = rarity.toLowerCase();
+
+  if (rarityLower.includes('starlight')) return RARITY_CONFIG['Starlight Rare'];
+  if (rarityLower.includes('collector')) return RARITY_CONFIG['Collector\'s Rare'];
+  if (rarityLower.includes('ghost')) return RARITY_CONFIG['Ghost Rare'];
+  if (rarityLower.includes('ultimate')) return RARITY_CONFIG['Ultimate Rare'];
+  if (rarityLower.includes('secret')) return RARITY_CONFIG['Secret Rare'];
+  if (rarityLower.includes('ultra')) return RARITY_CONFIG['Ultra Rare'];
+  if (rarityLower.includes('super')) return RARITY_CONFIG['Super Rare'];
+  if (rarityLower.includes('gold')) return RARITY_CONFIG['Gold Rare'];
+  if (rarityLower.includes('parallel')) return RARITY_CONFIG['Parallel Rare'];
+  if (rarityLower.includes('mosaic') || rarityLower.includes('shatter') || rarityLower.includes('starfoil')) {
+    return RARITY_CONFIG['Mosaic Rare'];
+  }
+  if (rarityLower.includes('rare') && !rarityLower.includes('common')) return RARITY_CONFIG['Rare'];
+
+  // Default to common
+  return RARITY_CONFIG['Common'];
+}
+
 interface CardDisplayProps {
   card: YugiohCard;
   compact?: boolean;
@@ -58,14 +141,19 @@ function AllSetsDropdown({
 
       {isExpanded && (
         <div className={styles.setsList}>
-          {sets.map((set, index) => (
+          {sets.map((set, index) => {
+            const rarityConfig = getRarityConfig(set.set_rarity);
+            return (
             <div key={index} className={styles.setItem}>
               <div className={styles.setItemContent}>
                 <div className={styles.setCode}>{set.set_code}</div>
                 <div className={styles.setDetails}>
                   <div className={styles.setName}>{set.set_name}</div>
                   <div className={styles.setMeta}>
-                    <span className={styles.setRarity}>{set.set_rarity}</span>
+                    <span className={`${styles.setRarityBadge} ${styles[rarityConfig.className]}`}>
+                      <span className={styles.rarityIcon}>{rarityConfig.icon}</span>
+                      {set.set_rarity}
+                    </span>
                     <span className={styles.setPrice}>
                       {formatPrice(parseFloat(set.set_price))}
                     </span>
@@ -112,7 +200,8 @@ function AllSetsDropdown({
                 </div>
               )}
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
     </div>
@@ -355,7 +444,15 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
             </div>
             <div className={styles.codeItem}>
               <strong>{t('card.rarity')}:</strong>{' '}
-              <span className={styles.rarity}>{card.specificSetInfo.setRarity}</span>
+              {(() => {
+                const rarityConfig = getRarityConfig(card.specificSetInfo.setRarity);
+                return (
+                  <span className={`${styles.rarityBadge} ${styles[rarityConfig.className]}`}>
+                    <span className={styles.rarityIcon}>{rarityConfig.icon}</span>
+                    {card.specificSetInfo.setRarity}
+                  </span>
+                );
+              })()}
             </div>
           </div>
         ) : (

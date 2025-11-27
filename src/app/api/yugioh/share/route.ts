@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cookie from 'cookie';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/options';
 import { randomBytes } from 'crypto';
 import { ListType } from '@/types/yugioh';
 import { getOrCreateList } from '@/lib/mongodb/models/YugiohList';
@@ -10,11 +11,6 @@ import {
   deleteSharedLink,
 } from '@/lib/mongodb/models/SharedLink';
 
-function isAuthenticated(request: NextRequest): boolean {
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
-  return cookies.yugioh_auth === 'authenticated';
-}
-
 function validateListType(type: string): type is ListType {
   return ['collection', 'for-sale', 'wishlist'].includes(type);
 }
@@ -24,7 +20,10 @@ function validateListType(type: string): type is ListType {
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!isAuthenticated(request)) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -38,7 +37,7 @@ export async function POST(request: NextRequest) {
     const token = randomBytes(16).toString('hex');
 
     // Create shared link in MongoDB
-    const sharedLink = await createSharedLink(token, listType, expiresInDays);
+    const sharedLink = await createSharedLink(token, listType, userId, expiresInDays);
 
     // Clean up expired links in the background (don't await)
     cleanupExpiredLinks().catch(console.error);
@@ -94,8 +93,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get the list data
-    const list = await getOrCreateList(shareData.listType);
+    // Get the list data for the user who created the share link
+    const list = await getOrCreateList(shareData.listType, shareData.userId);
 
     return NextResponse.json({
       success: true,

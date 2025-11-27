@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cookie from 'cookie';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/options';
 import { clearList } from '@/lib/mongodb/models/YugiohList';
-
-function isAuthenticated(request: NextRequest): boolean {
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
-  return cookies.yugioh_auth === 'authenticated';
-}
 
 /**
  * POST: Clear all lists (collection, for-sale, wishlist)
@@ -13,15 +9,18 @@ function isAuthenticated(request: NextRequest): boolean {
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!isAuthenticated(request)) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Clear all three lists
+    // Clear all three lists for this user
     await Promise.all([
-      clearList('collection'),
-      clearList('for-sale'),
-      clearList('wishlist'),
+      clearList('collection', userId),
+      clearList('for-sale', userId),
+      clearList('wishlist', userId),
     ]);
 
     return NextResponse.json({

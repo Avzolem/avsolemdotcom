@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cookie from 'cookie';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/options';
 import {
   getOrCreateList,
   addCardToList,
   removeCardFromList,
   updateCardField,
 } from '@/lib/mongodb/models/YugiohList';
-
-function isAuthenticated(request: NextRequest): boolean {
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
-  return cookies.yugioh_auth === 'authenticated';
-}
 
 /**
  * POST: Toggle el estado isForSale de una carta en Colección
@@ -19,7 +15,10 @@ function isAuthenticated(request: NextRequest): boolean {
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!isAuthenticated(request)) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -30,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get collection list
-    const collectionList = await getOrCreateList('collection');
+    const collectionList = await getOrCreateList('collection', userId);
     const card = collectionList.cards.find((c) => c.setCode === setCode);
 
     if (!card) {
@@ -44,12 +43,12 @@ export async function POST(request: NextRequest) {
     const newIsForSale = !card.isForSale;
 
     // Update in collection
-    await updateCardField('collection', setCode, 'isForSale', newIsForSale);
+    await updateCardField('collection', userId, setCode, 'isForSale', newIsForSale);
 
     // Sync with for-sale list
     if (newIsForSale) {
       // Add to for-sale list
-      await addCardToList('for-sale', {
+      await addCardToList('for-sale', userId, {
         cardId: card.cardId,
         cardName: card.cardName,
         cardImage: card.cardImage,
@@ -63,11 +62,11 @@ export async function POST(request: NextRequest) {
       });
     } else {
       // Remove from for-sale list
-      await removeCardFromList('for-sale', setCode);
+      await removeCardFromList('for-sale', userId, setCode);
     }
 
     // Get updated collection
-    const updatedCollection = await getOrCreateList('collection');
+    const updatedCollection = await getOrCreateList('collection', userId);
     const updatedCard = updatedCollection.cards.find((c) => c.setCode === setCode);
 
     return NextResponse.json({

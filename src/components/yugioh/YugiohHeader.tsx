@@ -1,23 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useYugiohAuth } from '@/contexts/YugiohAuthContext';
 import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import AdminLogin from './AdminLogin';
+import AuthModal from './AuthModal';
 import styles from './YugiohHeader.module.scss';
 
 export default function YugiohHeader() {
-  const { isAuthenticated, logout } = useYugiohAuth();
+  const { user, isAuthenticated, isLoading, logout } = useYugiohAuth();
   const { language, setLanguage, t } = useYugiohLanguage();
-  const [showLogin, setShowLogin] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const pathname = usePathname();
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLoginClick = () => {
-    console.log('Login button clicked');
-    setShowLogin(true);
+    setShowAuthModal(true);
+  };
+
+  const handleLogout = async () => {
+    setShowUserMenu(false);
+    await logout();
   };
 
   const navItems = [
@@ -26,6 +44,16 @@ export default function YugiohHeader() {
     { href: '/yugioh/venta', label: t('header.forSale'), icon: '💰' },
     { href: '/yugioh/wishlist', label: t('header.wishlist'), icon: '⭐' },
   ];
+
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    if (!user?.name) return '?';
+    const names = user.name.split(' ');
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[1][0]}`.toUpperCase();
+    }
+    return user.name.substring(0, 2).toUpperCase();
+  };
 
   return (
     <>
@@ -63,7 +91,7 @@ export default function YugiohHeader() {
             />
           </div>
 
-          {/* Auth Status */}
+          {/* Auth Section */}
           <div className={styles.authSection}>
             {/* Language Toggle */}
             <div className={styles.languageToggle}>
@@ -72,32 +100,72 @@ export default function YugiohHeader() {
                 className={`${styles.langButton} ${language === 'en' ? styles.langButtonActive : ''}`}
                 type="button"
               >
-                English
+                EN
               </button>
               <button
                 onClick={() => setLanguage('es')}
                 className={`${styles.langButton} ${language === 'es' ? styles.langButtonActive : ''}`}
                 type="button"
               >
-                Español
+                ES
               </button>
             </div>
 
-            {isAuthenticated ? (
-              <div className={styles.authInfo}>
-                <span className={styles.authBadge}>✓ Admin</span>
-                <button onClick={logout} className={styles.btnLogout}>
-                  {t('header.logout')}
+            {isLoading ? (
+              <div className={styles.loadingAuth}>
+                <span className={styles.spinner}></span>
+              </div>
+            ) : isAuthenticated && user ? (
+              <div className={styles.userSection} ref={userMenuRef}>
+                <button
+                  className={styles.userButton}
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  type="button"
+                >
+                  {user.image ? (
+                    <Image
+                      src={user.image}
+                      alt={user.name || 'User'}
+                      width={36}
+                      height={36}
+                      className={styles.userAvatar}
+                    />
+                  ) : (
+                    <span className={styles.userInitials}>{getUserInitials()}</span>
+                  )}
+                  <span className={styles.userName}>{user.name?.split(' ')[0]}</span>
+                  <span className={styles.chevron}>▼</span>
                 </button>
+
+                {showUserMenu && (
+                  <div className={styles.userMenu}>
+                    <div className={styles.userMenuHeader}>
+                      <span className={styles.userMenuEmail}>{user.email}</span>
+                    </div>
+                    <div className={styles.userMenuDivider}></div>
+                    <Link
+                      href="/yugioh/perfil"
+                      className={styles.userMenuItem}
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      👤 {t('userMenu.profile')}
+                    </Link>
+                    <button
+                      className={styles.userMenuItem}
+                      onClick={handleLogout}
+                    >
+                      🚪 {t('userMenu.logout')}
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <button
                 onClick={handleLoginClick}
-                className={styles.btnAdminIcon}
+                className={styles.btnLogin}
                 type="button"
-                title={t('header.adminAccess')}
               >
-                🔐
+                {t('auth.login')}
               </button>
             )}
           </div>
@@ -125,17 +193,11 @@ export default function YugiohHeader() {
         </nav>
       </header>
 
-      {/* Login Modal */}
-      {showLogin && !isAuthenticated && (
-        <div className={styles.modal} onClick={() => setShowLogin(false)}>
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AdminLogin onClose={() => setShowLogin(false)} />
-          </div>
-        </div>
-      )}
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </>
   );
 }

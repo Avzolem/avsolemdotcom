@@ -1,14 +1,18 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import { YugiohCard } from '@/types/yugioh';
-import { searchCardsByName, searchCardsAdvanced } from '@/lib/services/ygoprodeck';
+import { searchCardsByName, searchCardsAdvanced, getCardPrice } from '@/lib/services/ygoprodeck';
 import CardDisplay from './CardDisplay';
+import CardSkeleton from './CardSkeleton';
 import AdvancedFilters, { FilterOptions } from './AdvancedFilters';
 import styles from './CardSearch.module.scss';
+
+// Sort options type
+type SortOption = 'default' | 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'atk-desc' | 'atk-asc' | 'def-desc' | 'def-asc' | 'level-desc' | 'level-asc';
 
 // Dynamic import CardScanner to avoid SSR issues with Tesseract.js
 const CardScanner = dynamic(() => import('./CardScanner'), {
@@ -112,8 +116,41 @@ export default function CardSearch() {
   const [activeFilters, setActiveFilters] = useState<FilterOptions>({});
   const [showScanner, setShowScanner] = useState(false);
   const [fallbackWarning, setFallbackWarning] = useState<string | null>(null);
+  const [sortOption, setSortOption] = useState<SortOption>('default');
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  // Sort cards based on selected option
+  const sortedCards = useMemo(() => {
+    if (sortOption === 'default' || cards.length === 0) return cards;
+
+    const sorted = [...cards];
+
+    switch (sortOption) {
+      case 'name-asc':
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      case 'name-desc':
+        return sorted.sort((a, b) => b.name.localeCompare(a.name));
+      case 'price-asc':
+        return sorted.sort((a, b) => getCardPrice(a) - getCardPrice(b));
+      case 'price-desc':
+        return sorted.sort((a, b) => getCardPrice(b) - getCardPrice(a));
+      case 'atk-desc':
+        return sorted.sort((a, b) => (b.atk ?? -1) - (a.atk ?? -1));
+      case 'atk-asc':
+        return sorted.sort((a, b) => (a.atk ?? Infinity) - (b.atk ?? Infinity));
+      case 'def-desc':
+        return sorted.sort((a, b) => (b.def ?? -1) - (a.def ?? -1));
+      case 'def-asc':
+        return sorted.sort((a, b) => (a.def ?? Infinity) - (b.def ?? Infinity));
+      case 'level-desc':
+        return sorted.sort((a, b) => (b.level ?? -1) - (a.level ?? -1));
+      case 'level-asc':
+        return sorted.sort((a, b) => (a.level ?? Infinity) - (b.level ?? Infinity));
+      default:
+        return sorted;
+    }
+  }, [cards, sortOption]);
 
   const performSearch = useCallback(async (query: string, filters: FilterOptions = {}) => {
     const hasQuery = query && query.trim().length >= 2;
@@ -273,11 +310,17 @@ export default function CardSearch() {
         onClear={handleClearFilters}
       />
 
-      {/* Loading State */}
+      {/* Loading State with Skeleton */}
       {isLoading && (
-        <div className="yugioh-loading">
-          <div className={styles.spinner}></div>
-          <p>{t('search.loading')}</p>
+        <div className={styles.results}>
+          <div className={styles.resultsHeader}>
+            <h2 className={styles.resultsTitle}>🎴 {t('search.loading')}</h2>
+          </div>
+          <div className={styles.resultsGrid}>
+            {[...Array(6)].map((_, index) => (
+              <CardSkeleton key={index} />
+            ))}
+          </div>
         </div>
       )}
 
@@ -299,12 +342,39 @@ export default function CardSearch() {
       {/* Results */}
       {!isLoading && cards.length > 0 && (
         <div className={styles.results}>
-          <h2 className={styles.resultsTitle}>
-            🎴 {t('search.resultsCount', { count: cards.length })}
-          </h2>
+          <div className={styles.resultsHeader}>
+            <h2 className={styles.resultsTitle}>
+              🎴 {t('search.resultsCount', { count: cards.length })}
+            </h2>
+
+            {/* Sort Dropdown */}
+            <div className={styles.sortSection}>
+              <label htmlFor="sort-select" className={styles.sortLabel}>
+                {t('sort.label')}:
+              </label>
+              <select
+                id="sort-select"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value as SortOption)}
+                className={styles.sortSelect}
+              >
+                <option value="default">{t('sort.default')}</option>
+                <option value="name-asc">{t('sort.name.asc')}</option>
+                <option value="name-desc">{t('sort.name.desc')}</option>
+                <option value="price-desc">{t('sort.price.desc')}</option>
+                <option value="price-asc">{t('sort.price.asc')}</option>
+                <option value="atk-desc">{t('sort.atk.desc')}</option>
+                <option value="atk-asc">{t('sort.atk.asc')}</option>
+                <option value="def-desc">{t('sort.def.desc')}</option>
+                <option value="def-asc">{t('sort.def.asc')}</option>
+                <option value="level-desc">{t('sort.level.desc')}</option>
+                <option value="level-asc">{t('sort.level.asc')}</option>
+              </select>
+            </div>
+          </div>
 
           <div className={styles.resultsGrid}>
-            {cards.map((card) => (
+            {sortedCards.map((card) => (
               <CardDisplay key={card.id} card={card} />
             ))}
           </div>
