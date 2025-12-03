@@ -68,6 +68,18 @@ Routes can be password-protected via `protectedRoutes` in `/src/resources/once-u
 
 ## Git Workflow Policies
 
+### **⛔ ABSOLUTE RULE - READ THIS FIRST ⛔**
+
+```
+╔════════════════════════════════════════════════════════════════════╗
+║  NEVER EXECUTE `git push` WITHOUT USER SAYING "push", "haz push"  ║
+║  OR SIMILAR EXPLICIT COMMAND. THIS IS NON-NEGOTIABLE.             ║
+║                                                                    ║
+║  EVEN IF THE USER SAYS "si" TO COMMIT, THAT DOES NOT MEAN PUSH.   ║
+║  COMMIT AND PUSH ARE SEPARATE ACTIONS. ALWAYS ASK FOR BOTH.       ║
+╚════════════════════════════════════════════════════════════════════╝
+```
+
 ### **CRITICAL: Git Commit and Push Policy**
 - **🚨 NEVER EVER commit or push without EXPLICIT user request**
 - **🚨 DO NOT commit automatically, even when making fixes or changes**
@@ -76,10 +88,12 @@ Routes can be password-protected via `protectedRoutes` in `/src/resources/once-u
 - **🚨 ALWAYS ask "¿Puedo hacer push?" or "Can I push?" BEFORE pushing**
 - **🚨 WAIT for user confirmation before executing git commands**
 - **🚨 Do NOT execute `git commit` or `git push` commands automatically**
-- **🚨 Treat commit and push as separate actions that require explicit permission**
-- Only commit when the user explicitly says "haz commit" or "make a commit"
-- Only push when the user gives clear authorization like "yes, push" or "haz push"
+- **🚨 Treat commit and push as COMPLETELY SEPARATE actions that each require explicit permission**
+- **🚨 After a commit, STOP and ASK before pushing. Do NOT chain commit+push together.**
+- Only commit when the user explicitly says "haz commit", "make a commit", "commit" or similar
+- Only push when the user explicitly says "push", "haz push", "yes push", "sube los cambios" or similar
 - If unsure about commit/push authorization, ASK FIRST
+- **🚨 "si" or "yes" to a commit question does NOT authorize push - you must ask separately**
 
 ### **Commit Message Policy**  
 - **DO NOT include Claude Code co-authorship in commits**
