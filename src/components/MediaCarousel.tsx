@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Flex, IconButton } from '@once-ui-system/core';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { OptimizedMedia } from './OptimizedMedia';
 import styles from './MediaCarousel.module.scss';
 
@@ -47,19 +47,15 @@ export function MediaCarousel({ media }: MediaCarouselProps) {
         radius="l"
         priority
       />
-      <Flex
-        className={styles.controls}
-        horizontal="between"
-        vertical="center"
-        fillWidth
-      >
-        <IconButton
-          icon="chevronLeft"
+      <div className={`${styles.controls} flex items-center justify-between w-full`}>
+        <button
           onClick={handlePrevious}
-          variant="secondary"
-          size="m"
-        />
-        <Flex gap="4" horizontal="center">
+          className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Previous"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+        </button>
+        <div className="flex gap-1 justify-center">
           {media.map((_, index) => (
             <button
               key={index}
@@ -68,14 +64,15 @@ export function MediaCarousel({ media }: MediaCarouselProps) {
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
-        </Flex>
-        <IconButton
-          icon="chevronRight"
+        </div>
+        <button
           onClick={handleNext}
-          variant="secondary"
-          size="m"
-        />
-      </Flex>
+          className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Next"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+        </button>
+      </div>
     </div>
   );
 }

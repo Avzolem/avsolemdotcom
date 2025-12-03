@@ -56,7 +56,7 @@ const nextConfig = {
   // 4. Performance optimizations
   experimental: {
     optimizePackageImports: [
-      '@once-ui-system/core',
+      'lucide-react',
       'react-icons',
       'react-masonry-css'
     ], // Tree-shake libraries

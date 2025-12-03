@@ -1,30 +1,60 @@
-import React from "react";
+import React from 'react';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ChevronRight } from 'lucide-react';
 
-import { Heading, Flex, Text, Button, Avatar, RevealFx, Column, Badge, Row, Meta, Schema } from "@once-ui-system/core";
-import { home, about, person, newsletter, baseURL, routes } from "@/resources";
-import { Mailchimp } from "@/components";
-import { Projects } from "@/components/work/Projects";
-import { Posts } from "@/components/blog/Posts";
+import { home, about, person, newsletter, baseURL, routes } from '@/resources';
+import { Mailchimp } from '@/components';
+import { Projects } from '@/components/work/Projects';
+import { Posts } from '@/components/blog/Posts';
+import { SchemaScript } from '@/lib/seo';
 
 // Force static generation at build time
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-export async function generateMetadata() {
-  return Meta.generate({
+export async function generateMetadata(): Promise<Metadata> {
+  return {
     title: home.title,
     description: home.description,
-    baseURL: baseURL,
-    image: home.image,
-    path: home.path,
-    canonical: baseURL,
-  });
+    metadataBase: new URL(baseURL),
+    openGraph: {
+      title: home.title,
+      description: home.description,
+      url: baseURL,
+      images: [{ url: home.image || `/api/og/generate?title=${encodeURIComponent(home.title)}` }],
+    },
+    alternates: {
+      canonical: baseURL,
+    },
+  };
+}
+
+// RevealFx component for animations
+function RevealFx({
+  children,
+  delay = 0,
+  className = '',
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`animate-fade-in ${className}`}
+      style={{ animationDelay: `${delay}s` }}
+    >
+      {children}
+    </div>
+  );
 }
 
 export default function Home() {
   return (
-    <Column maxWidth="m" gap="xl" horizontal="center">
-      <Schema
+    <div className="flex flex-col items-center gap-12 max-w-3xl w-full">
+      <SchemaScript
         as="webPage"
         baseURL={baseURL}
         path={home.path}
@@ -37,68 +67,94 @@ export default function Home() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Column fillWidth paddingY="24" gap="m">
-        <Column maxWidth="s">
-          {home.featured.display && (
-          <RevealFx fillWidth horizontal="start" paddingTop="16" paddingBottom="32" paddingLeft="12">
-            <Badge background="brand-alpha-weak" paddingX="12" paddingY="4" onBackground="neutral-strong" textVariant="label-default-s" arrow={false}
-              href={home.featured.href}>
-              <Row paddingY="2">{home.featured.title}</Row>
-            </Badge>
-          </RevealFx>
+
+      {/* Hero Section */}
+      <div className="w-full py-6">
+        <div className="max-w-lg">
+          {/* Featured Badge */}
+          {home.featured?.display && (
+            <RevealFx className="pt-4 pb-8 pl-3">
+              <Link
+                href={home.featured.href}
+                className="
+                  inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium
+                  bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300
+                  hover:bg-cyan-200 dark:hover:bg-cyan-900/50 transition-colors
+                "
+              >
+                {home.featured.title}
+                <ChevronRight className="w-3 h-3" />
+              </Link>
+            </RevealFx>
           )}
-          <RevealFx translateY="4" fillWidth horizontal="start" paddingBottom="16">
-            <Heading wrap="balance" variant="display-strong-l">
+
+          {/* Headline */}
+          <RevealFx delay={0.1} className="pb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white text-balance">
               {home.headline}
-            </Heading>
+            </h1>
           </RevealFx>
-          <RevealFx translateY="8" delay={0.2} fillWidth horizontal="start" paddingBottom="32">
-            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+
+          {/* Subline */}
+          <RevealFx delay={0.2} className="pb-8">
+            <p className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 text-balance">
               {home.subline}
-            </Text>
+            </p>
           </RevealFx>
-          <RevealFx paddingTop="12" delay={0.4} horizontal="start" paddingLeft="12">
-            <Button
-              id="about"
-              data-border="rounded"
+
+          {/* CTA Button */}
+          <RevealFx delay={0.4} className="pt-3 pl-3">
+            <Link
               href={about.path}
-              variant="secondary"
-              size="m"
-              weight="default"
-              arrowIcon
+              className="
+                inline-flex items-center gap-2 px-4 py-2 rounded-lg
+                bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700
+                text-gray-900 dark:text-white font-medium
+                border border-gray-200 dark:border-gray-700
+                transition-colors duration-200
+              "
             >
-              <Flex gap="8" vertical="center" paddingRight="4">
-                {about.avatar.display && (
-                  <Avatar
-                    marginRight="8"
-                    style={{ marginLeft: "-0.75rem" }}
+              {about.avatar?.display && (
+                <div className="relative w-8 h-8 rounded-full overflow-hidden -ml-1">
+                  <Image
                     src={person.avatar}
-                    size="m"
+                    alt={person.name}
+                    fill
+                    className="object-cover"
                   />
-                )}
-                {about.title}
-              </Flex>
-            </Button>
+                </div>
+              )}
+              {about.title}
+              <ChevronRight className="w-4 h-4" />
+            </Link>
           </RevealFx>
-        </Column>
-      </Column>
-      <RevealFx translateY="16" delay={0.6}>
+        </div>
+      </div>
+
+      {/* Featured Project */}
+      <RevealFx delay={0.6} className="w-full">
         <Projects range={[1, 1]} />
       </RevealFx>
-      {routes["/blog"] && (
-        <Flex fillWidth gap="24" direction="column">
-          <Flex flex={1} paddingLeft="l" paddingTop="24">
-            <Heading as="h2" variant="display-strong-xs" wrap="balance">
+
+      {/* Blog Posts */}
+      {routes['/blog'] && (
+        <div className="w-full flex flex-col gap-6">
+          <div className="pl-4 pt-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
               Latest from the blog
-            </Heading>
-          </Flex>
-          <Flex flex={3} paddingX="20">
+            </h2>
+          </div>
+          <div className="px-5">
             <Posts range={[1, 2]} columns="2" />
-          </Flex>
-        </Flex>
+          </div>
+        </div>
       )}
+
+      {/* More Projects */}
       <Projects range={[2]} />
-      {newsletter.display && <Mailchimp newsletter={newsletter} />}
-    </Column>
+
+      {/* Newsletter */}
+      {newsletter?.display && <Mailchimp newsletter={newsletter} />}
+    </div>
   );
 }

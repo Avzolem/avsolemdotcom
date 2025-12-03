@@ -1,12 +1,13 @@
-import { Column, Meta, Schema } from "@once-ui-system/core";
+import { Metadata } from 'next';
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
+import { SchemaScript, Meta } from '@/lib/seo';
 
 // Force static generation at build time
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   return Meta.generate({
     title: work.title,
     description: work.description,
@@ -18,8 +19,8 @@ export async function generateMetadata() {
 
 export default function Work() {
   return (
-    <Column maxWidth="m">
-      <Schema
+    <div className="flex flex-col max-w-3xl w-full">
+      <SchemaScript
         as="webPage"
         baseURL={baseURL}
         path={work.path}
@@ -33,6 +34,6 @@ export default function Work() {
         }}
       />
       <Projects />
-    </Column>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Flex, Text, Heading, Badge, Textarea, Column } from '@once-ui-system/core'
 
 interface SendResult {
   number: string
@@ -63,104 +62,111 @@ export default function WhatsAppPage() {
   }
 
   return (
-    <Column maxWidth="m" fillWidth gap="xl" paddingX="l" paddingTop="xl" paddingBottom="xl">
-      <Flex direction="column" gap="m" align="center">
-        <Heading variant="display-strong-s">WhatsApp Bulk Messaging</Heading>
-        <Text variant="body-default-m" onBackground="neutral-weak">
+    <div className="flex flex-col max-w-3xl w-full gap-8 px-6 py-8">
+      <div className="flex flex-col gap-4 items-center text-center">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+          WhatsApp Bulk Messaging
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400">
           Send messages to multiple WhatsApp numbers at once
-        </Text>
-      </Flex>
+        </p>
+      </div>
 
-      <Flex fillWidth direction="column" gap="l">
-        <Flex direction="column" gap="s">
-          <Text variant="label-default-s">Phone Numbers</Text>
-          <Textarea
+      <div className="flex flex-col w-full gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Phone Numbers
+          </label>
+          <textarea
             id="numbers"
             placeholder="Enter phone numbers, one per line (e.g., +521234567890)"
             value={numbers}
             onChange={(e) => setNumbers(e.target.value)}
             rows={6}
             required
+            className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-gray-900 dark:text-white placeholder-gray-500 resize-none"
           />
-          <Text variant="body-default-xs" onBackground="neutral-weak">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             Include country code (e.g., +52 for Mexico)
-          </Text>
-        </Flex>
+          </span>
+        </div>
 
-        <Flex direction="column" gap="s">
-          <Text variant="label-default-s">Message</Text>
-          <Textarea
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Message
+          </label>
+          <textarea
             id="message"
             placeholder="Enter your message here..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={4}
             required
+            className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-gray-900 dark:text-white placeholder-gray-500 resize-none"
           />
-        </Flex>
+        </div>
 
-        <Button
+        <button
           onClick={handleSubmit}
           disabled={loading || !numbers.trim() || !message.trim()}
-          variant="primary"
-          size="l"
+          className="w-full px-6 py-4 bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
         >
           {loading ? 'Sending...' : 'Send Messages'}
-        </Button>
-      </Flex>
+        </button>
+      </div>
 
       {summary && (
-        <Flex direction="column" gap="m" fillWidth>
-          <Heading variant="heading-strong-m">Results Summary</Heading>
-          <Flex gap="s" wrap>
-            <Badge background="neutral-alpha-weak" paddingX="12" paddingY="4">
+        <div className="flex flex-col gap-4 w-full">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Results Summary
+          </h2>
+          <div className="flex gap-2 flex-wrap">
+            <span className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 rounded-full">
               Total: {summary.total}
-            </Badge>
-            <Badge background="success-alpha-weak" paddingX="12" paddingY="4">
+            </span>
+            <span className="px-3 py-1 text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full">
               Sent: {summary.successful}
-            </Badge>
-            <Badge background="danger-alpha-weak" paddingX="12" paddingY="4">
+            </span>
+            <span className="px-3 py-1 text-sm bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-full">
               Failed: {summary.failed}
-            </Badge>
-          </Flex>
-        </Flex>
+            </span>
+          </div>
+        </div>
       )}
 
       {results.length > 0 && (
-        <Flex direction="column" gap="m" fillWidth>
-          <Heading variant="heading-strong-m">Detailed Results</Heading>
-          <Flex direction="column" gap="s">
+        <div className="flex flex-col gap-4 w-full">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Detailed Results
+          </h2>
+          <div className="flex flex-col gap-2">
             {results.map((result, index) => (
-              <Flex
+              <div
                 key={index}
-                padding="m"
-                border="neutral-medium"
-                radius="m"
-                direction="row"
-                align="center"
-                gap="m"
-                style={{ justifyContent: 'space-between' }}
+                className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg gap-4"
               >
-                <Text variant="body-default-s" style={{ fontFamily: 'monospace' }}>
+                <span className="text-sm font-mono text-gray-900 dark:text-white">
                   {result.number}
-                </Text>
-                <Flex align="center" gap="s">
-                  <Badge 
-                    background={result.status === 'success' ? 'success-alpha-weak' : 'danger-alpha-weak'} 
-                    paddingX="12" 
-                    paddingY="4"
+                </span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`px-3 py-1 text-xs rounded-full ${
+                      result.status === 'success'
+                        ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                        : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                    }`}
                   >
                     {result.status}
-                  </Badge>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
                     {result.message}
-                  </Text>
-                </Flex>
-              </Flex>
+                  </span>
+                </div>
+              </div>
             ))}
-          </Flex>
-        </Flex>
+          </div>
+        </div>
       )}
-    </Column>
+    </div>
   )
 }

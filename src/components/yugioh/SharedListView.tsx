@@ -4,16 +4,8 @@ import { useState, useEffect, use } from 'react';
 import { CardInList } from '@/types/yugioh';
 import { formatPrice } from '@/lib/services/ygoprodeck';
 import Link from 'next/link';
-import {
-  Column,
-  Row,
-  Text,
-  Heading,
-  Badge,
-  Spinner,
-  Flex,
-} from '@once-ui-system/core';
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 
 interface SharedListViewProps {
   params: Promise<{ token: string }>;
@@ -76,89 +68,78 @@ export default function SharedListView({ params }: SharedListViewProps) {
 
   if (isLoading) {
     return (
-      <Column fillWidth horizontal="center" paddingY="64">
-        <Spinner size="l" />
-        <Text variant="body-default-m" onBackground="neutral-weak">
+      <div className="flex flex-col w-full items-center py-16">
+        <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
+        <span className="text-gray-500 dark:text-gray-400 mt-4">
           Cargando lista compartida...
-        </Text>
-      </Column>
+        </span>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Column fillWidth horizontal="center" paddingY="64" gap="16">
-        <Text variant="heading-default-xl" align="center">
+      <div className="flex flex-col w-full items-center py-16 gap-4">
+        <span className="text-4xl text-center">
           ⚠️
-        </Text>
-        <Heading variant="heading-strong-l" align="center">
+        </span>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-white text-center">
           {error}
-        </Heading>
-        <Link href="/yugioh">
-          <Text variant="body-default-m" onBackground="brand-strong">
-            Volver a Yu-Gi-Oh! Manager
-          </Text>
+        </h1>
+        <Link href="/yugioh" className="text-cyan-600 dark:text-cyan-400 hover:underline">
+          Volver a Yu-Gi-Oh! Manager
         </Link>
-      </Column>
+      </div>
     );
   }
 
   return (
-    <Column fillWidth gap="24">
+    <div className="flex flex-col w-full gap-6">
       {/* Header */}
-      <Column gap="12">
-        <Row gap="12" vertical="center">
-          <Text variant="body-default-s" onBackground="neutral-weak">
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-3 items-center">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
             🔗 Vista Pública
-          </Text>
-        </Row>
-        <Heading variant="heading-strong-xl">{getListTitle()}</Heading>
-        <Row gap="16" wrap>
-          <Badge background="brand-alpha-weak" paddingX="12" paddingY="4">
+          </span>
+        </div>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+          {getListTitle()}
+        </h1>
+        <div className="flex gap-4 flex-wrap">
+          <span className="px-3 py-1 text-sm bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 rounded-full">
             {cards.length} {cards.length === 1 ? 'carta' : 'cartas'}
-          </Badge>
-          <Badge background="accent-alpha-weak" paddingX="12" paddingY="4">
+          </span>
+          <span className="px-3 py-1 text-sm bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full">
             Valor Total: {formatPrice(totalValue)}
-          </Badge>
+          </span>
           {expiresAt && (
-            <Badge background="neutral-alpha-weak" paddingX="12" paddingY="4">
+            <span className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 rounded-full">
               Expira: {new Date(expiresAt).toLocaleDateString('es-MX')}
-            </Badge>
+            </span>
           )}
-        </Row>
-      </Column>
+        </div>
+      </div>
 
       {/* Cards Grid */}
       {cards.length === 0 ? (
-        <Column
-          fillWidth
-          horizontal="center"
-          paddingY="64"
-          gap="16"
-        >
-          <Text variant="heading-default-xl" onBackground="neutral-weak" align="center">
+        <div className="flex flex-col w-full items-center py-16 gap-4">
+          <span className="text-4xl text-gray-400 dark:text-gray-500 text-center">
             📦
-          </Text>
-          <Text variant="heading-strong-l" align="center">
+          </span>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center">
             Lista vacía
-          </Text>
-        </Column>
+          </h2>
+        </div>
       ) : (
-        <Flex gap="16" fillWidth wrap>
+        <div className="flex gap-4 w-full flex-wrap">
           {cards.map((card) => (
-            <Column
+            <div
               key={card.cardId}
-              gap="12"
-              padding="16"
-              background="surface"
-              border="neutral-medium"
-              borderStyle="solid"
-              radius="m"
-              minWidth={20}
-              style={{ flex: '1 1 280px' }}
+              className="flex flex-col gap-3 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg"
+              style={{ flex: '1 1 280px', minWidth: '280px' }}
             >
               {/* Card Image */}
-              <Column fillWidth horizontal="center">
+              <div className="flex w-full justify-center">
                 <Image
                   src={card.localImagePath || card.cardImage}
                   alt={card.cardName}
@@ -167,56 +148,58 @@ export default function SharedListView({ params }: SharedListViewProps) {
                   style={{ borderRadius: '4px', objectFit: 'contain' }}
                   unoptimized={!card.localImagePath}
                 />
-              </Column>
+              </div>
 
               {/* Card Info */}
-              <Column gap="8">
-                <Heading variant="heading-strong-s">{card.cardName}</Heading>
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {card.cardName}
+                </h3>
 
-                <Row gap="8" vertical="center">
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                <div className="flex gap-2 items-center">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     Cantidad:
-                  </Text>
-                  <Text variant="body-default-m">{card.quantity}</Text>
-                </Row>
+                  </span>
+                  <span className="text-gray-900 dark:text-white">
+                    {card.quantity}
+                  </span>
+                </div>
 
                 {card.price && (
-                  <Row gap="8" vertical="center">
-                    <Text variant="label-default-s" onBackground="neutral-weak">
+                  <div className="flex gap-2 items-center">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
                       Precio:
-                    </Text>
-                    <Text variant="body-default-m" onBackground="brand-strong">
+                    </span>
+                    <span className="text-cyan-600 dark:text-cyan-400">
                       {formatPrice(card.price)}
-                    </Text>
-                  </Row>
+                    </span>
+                  </div>
                 )}
 
                 {card.notes && (
-                  <Text variant="body-default-s" onBackground="neutral-weak">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {card.notes}
-                  </Text>
+                  </p>
                 )}
 
-                <Text variant="label-default-xs" onBackground="neutral-weak">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   Agregada: {new Date(card.addedAt).toLocaleDateString('es-MX')}
-                </Text>
-              </Column>
-            </Column>
+                </span>
+              </div>
+            </div>
           ))}
-        </Flex>
+        </div>
       )}
 
       {/* Footer */}
-      <Column horizontal="center" paddingY="24" gap="8">
-        <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+      <div className="flex flex-col items-center py-6 gap-2">
+        <span className="text-sm text-gray-500 dark:text-gray-400 text-center">
           ¿Quieres tu propia colección Yu-Gi-Oh!?
-        </Text>
-        <Link href="/yugioh">
-          <Text variant="body-default-m" onBackground="brand-strong">
-            Ir a Yu-Gi-Oh! Manager
-          </Text>
+        </span>
+        <Link href="/yugioh" className="text-cyan-600 dark:text-cyan-400 hover:underline">
+          Ir a Yu-Gi-Oh! Manager
         </Link>
-      </Column>
-    </Column>
+      </div>
+    </div>
   );
 }

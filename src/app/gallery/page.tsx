@@ -1,8 +1,9 @@
-import { Flex, Meta, Schema } from "@once-ui-system/core";
+import { Metadata } from 'next';
 import MasonryGrid from "@/components/gallery/MasonryGrid";
 import { baseURL, gallery, person } from "@/resources";
+import { SchemaScript, Meta } from '@/lib/seo';
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   return Meta.generate({
     title: gallery.title,
     description: gallery.description,
@@ -14,8 +15,8 @@ export async function generateMetadata() {
 
 export default function Gallery() {
   return (
-    <Flex maxWidth="l">
-      <Schema
+    <div className="flex w-full max-w-5xl">
+      <SchemaScript
         as="webPage"
         baseURL={baseURL}
         title={gallery.title}
@@ -29,6 +30,6 @@ export default function Gallery() {
         }}
       />
       <MasonryGrid />
-    </Flex>
+    </div>
   );
 }

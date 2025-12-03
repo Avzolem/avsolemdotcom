@@ -1,6 +1,6 @@
 'use client';
 
-import { Media } from '@once-ui-system/core';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface OptimizedMediaProps {
@@ -8,11 +8,19 @@ interface OptimizedMediaProps {
   alt: string;
   fill?: boolean;
   sizes?: string;
-  radius?: any;
+  radius?: string;
   loading?: 'lazy' | 'eager';
   priority?: boolean;
   className?: string;
 }
+
+const radiusMap: Record<string, string> = {
+  's': 'rounded',
+  'm': 'rounded-lg',
+  'l': 'rounded-xl',
+  'xl': 'rounded-2xl',
+  'full': 'rounded-full',
+};
 
 export function OptimizedMedia({
   src,
@@ -53,29 +61,63 @@ export function OptimizedMedia({
     };
   }, [src, priority, loading]);
 
+  const radiusClass = radius ? radiusMap[radius] || '' : '';
+
   if (!isInView && !priority) {
     return (
       <div
         data-media-src={src}
-        className={className}
+        className={`bg-gray-200 dark:bg-gray-800 ${radiusClass} ${className || ''}`}
         style={{
-          backgroundColor: 'var(--background-neutral-weak)',
           aspectRatio: fill ? 'auto' : '16/9',
           width: '100%',
-          borderRadius: radius ? `var(--border-radius-${radius})` : undefined
         }}
       />
     );
   }
 
+  const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(src);
+
+  if (isVideo) {
+    return (
+      <div className={`relative overflow-hidden ${radiusClass} ${className || ''}`}>
+        <video
+          src={src}
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      </div>
+    );
+  }
+
+  if (fill) {
+    return (
+      <div className={`relative w-full h-full overflow-hidden ${radiusClass} ${className || ''}`}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes || '100vw'}
+          priority={priority}
+          className="object-cover"
+        />
+      </div>
+    );
+  }
+
   return (
-    <Media
-      src={src}
-      alt={alt}
-      fill={fill}
-      sizes={sizes}
-      radius={radius}
-      className={className}
-    />
+    <div className={`relative overflow-hidden ${radiusClass} ${className || ''}`} style={{ aspectRatio: '16/9' }}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes || '100vw'}
+        priority={priority}
+        className="object-cover"
+      />
+    </div>
   );
 }

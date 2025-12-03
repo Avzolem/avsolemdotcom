@@ -1,5 +1,3 @@
-import { Logo } from "@once-ui-system/core";
-
 const person = {
   firstName: "Andrés",
   lastName: "Aguilar",
@@ -69,7 +67,7 @@ const home = {
   title: `△VSOLEM.`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
   keywords: "Andrés Aguilar, avsolem, web developer, full stack developer, React, Next.js, portfolio, Chihuahua, México, blockchain, Web3",
-  headline: <>Building the future with React & NextJS</>,  
+  headline: <>Building the future with React & NextJS</>,
   featured: {
     display: true,
     title: <>Recent project: <strong className="ml-4">Estampanda.com</strong></>,
@@ -104,13 +102,13 @@ const about = {
     title: "👋 Introduction",
     description: (
       <>
-        I am a software developer and project manager with extensive experience in creating development and logistics departments, 
-        as well as managing tasks and projects. I&apos;ve had the fortune to work with multinational companies such as 
-        Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr, and Intermetro, in addition to the Government of the 
+        I am a software developer and project manager with extensive experience in creating development and logistics departments,
+        as well as managing tasks and projects. I&apos;ve had the fortune to work with multinational companies such as
+        Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr, and Intermetro, in addition to the Government of the
         State of Chihuahua, Digital Policy, and municipal IT liaison offices.
         <br /><br />
-        I&apos;m passionate about React+NextJS development 🚀, constantly learning new technologies, creating virtual worlds 
-        in VR, and building innovative Web3 applications 🦈. My goal is to combine my extensive project management 
+        I&apos;m passionate about React+NextJS development 🚀, constantly learning new technologies, creating virtual worlds
+        in VR, and building innovative Web3 applications 🦈. My goal is to combine my extensive project management
         experience with cutting-edge web development to deliver exceptional solutions.
       </>
     ),

@@ -1,14 +1,9 @@
-"use client";
+'use client';
 
-import {
-  AvatarGroup,
-  Column,
-  Flex,
-  Heading,
-  SmartLink,
-  Text,
-} from "@once-ui-system/core";
-import { OptimizedCarousel } from "./OptimizedCarousel";
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowRight, ExternalLink } from 'lucide-react';
+import { OptimizedCarousel } from './OptimizedCarousel';
 
 interface ProjectCardProps {
   href: string;
@@ -32,59 +27,82 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   link,
 }) => {
   return (
-    <Column fillWidth gap="m">
+    <div className="flex flex-col w-full gap-4">
       <OptimizedCarousel
         images={images}
         title={title}
         priority={priority}
         sizes="(max-width: 960px) 100vw, 960px"
       />
-      <Flex
-        direction="column"
-        fillWidth
-        paddingX="s"
-        paddingTop="12"
-        paddingBottom="24"
-        gap="l"
-      >
+      <div className="flex flex-col w-full px-2 pt-3 pb-6 gap-4">
         {title && (
-          <Flex flex={5}>
-            <Heading as="h2" wrap="balance" variant="heading-strong-xl">
+          <div className="flex-[5]">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white text-balance">
               {title}
-            </Heading>
-          </Flex>
+            </h2>
+          </div>
         )}
         {(avatars?.length > 0 || description?.trim() || content?.trim()) && (
-          <Column flex={7} gap="16">
-            {avatars?.length > 0 && <AvatarGroup avatars={avatars} size="m" reverse />}
-            {description?.trim() && (
-              <Text wrap="balance" variant="body-default-s" onBackground="neutral-weak">
-                {description}
-              </Text>
+          <div className="flex-[7] flex flex-col gap-4">
+            {/* Avatar Group */}
+            {avatars?.length > 0 && (
+              <div className="flex -space-x-2">
+                {avatars.slice(0, 4).map((avatar, index) => (
+                  <div
+                    key={index}
+                    className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white dark:border-gray-900"
+                  >
+                    <Image
+                      src={avatar.src}
+                      alt={`Team member ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+                {avatars.length > 4 && (
+                  <div className="relative w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 border-2 border-white dark:border-gray-900 flex items-center justify-center">
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                      +{avatars.length - 4}
+                    </span>
+                  </div>
+                )}
+              </div>
             )}
-            <Flex gap="24" wrap>
+
+            {/* Description */}
+            {description?.trim() && (
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-balance">
+                {description}
+              </p>
+            )}
+
+            {/* Links */}
+            <div className="flex gap-6 flex-wrap">
               {content?.trim() && (
-                <SmartLink
-                  suffixIcon="arrowRight"
-                  style={{ margin: "0", width: "fit-content" }}
+                <Link
                   href={href}
+                  className="inline-flex items-center gap-1 text-sm text-cyan-600 dark:text-cyan-400 hover:underline"
                 >
-                  <Text variant="body-default-s">More Info</Text>
-                </SmartLink>
+                  More Info
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
               )}
               {link && (
-                <SmartLink
-                  suffixIcon="arrowUpRightFromSquare"
-                  style={{ margin: "0", width: "fit-content" }}
+                <a
                   href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-cyan-600 dark:text-cyan-400 hover:underline"
                 >
-                  <Text variant="body-default-s">View project</Text>
-                </SmartLink>
+                  View project
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               )}
-            </Flex>
-          </Column>
+            </div>
+          </div>
         )}
-      </Flex>
-    </Column>
+      </div>
+    </div>
   );
 };

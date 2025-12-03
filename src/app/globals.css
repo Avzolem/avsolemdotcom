@@ -1,7 +1,4 @@
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Custom CSS Variables for theme compatibility */
 @layer base {
@@ -59,4 +56,21 @@
     rgba(30, 64, 175, 0.2) 50%,    /* Darker blue */
     transparent 80%
   );
+}
+
+/* RevealFx Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+  opacity: 0;
 }

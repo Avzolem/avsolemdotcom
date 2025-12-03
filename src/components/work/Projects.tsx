@@ -1,6 +1,5 @@
-import { getPosts } from "@/utils/utils";
-import { Column } from "@once-ui-system/core";
-import { LazyProjectCard } from "@/components/LazyProjectCard";
+import { getPosts } from '@/utils/utils';
+import { LazyProjectCard } from '@/components/LazyProjectCard';
 
 interface ProjectsProps {
   range?: [number, number?];
@@ -8,7 +7,7 @@ interface ProjectsProps {
 
 export function Projects({ range }: ProjectsProps) {
   // Direct call without caching to avoid production issues
-  let allProjects = getPosts(["src", "app", "work", "projects"]);
+  let allProjects = getPosts(['src', 'app', 'work', 'projects']);
 
   console.log('[Projects] Loaded projects count:', allProjects.length);
 
@@ -23,7 +22,7 @@ export function Projects({ range }: ProjectsProps) {
   console.log('[Projects] Displaying projects count:', displayedProjects.length);
 
   return (
-    <Column fillWidth gap="xl" marginBottom="40" paddingX="l">
+    <div className="flex flex-col w-full gap-8 mb-10 px-4">
       {displayedProjects.map((post, index) => (
         <LazyProjectCard
           priority={index === 0}
@@ -34,9 +33,9 @@ export function Projects({ range }: ProjectsProps) {
           description={post.metadata.summary}
           content={post.content}
           avatars={post.metadata.team?.map((member: any) => ({ src: member.avatar })) || []}
-          link={post.metadata.link || ""}
+          link={post.metadata.link || ''}
         />
       ))}
-    </Column>
+    </div>
   );
 }

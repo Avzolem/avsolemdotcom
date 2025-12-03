@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Column, Flex, Text } from "@once-ui-system/core";
 import styles from "./about.module.scss";
 
 interface TableOfContentsProps {
@@ -35,53 +34,46 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
   if (!about.tableOfContent.display) return null;
 
   return (
-    <Column
-      left="0"
+    <div
+      className={`fixed left-0 pl-6 flex flex-col gap-8 ${styles.hideOnMedium}`}
       style={{
         top: "50%",
         transform: "translateY(-50%)",
         whiteSpace: "nowrap",
       }}
-      position="fixed"
-      paddingLeft="24"
-      gap="32"
-      className={styles.hideOnMedium}
     >
       {structure
         .filter((section) => section.display)
         .map((section, sectionIndex) => (
-          <Column key={sectionIndex} gap="12">
-            <Flex
-              cursor="interactive"
-              className={styles.hover}
-              gap="8"
-              vertical="center"
+          <div key={sectionIndex} className="flex flex-col gap-3">
+            <div
+              className={`flex gap-2 items-center cursor-pointer ${styles.hover}`}
               onClick={() => scrollTo(section.title, 80)}
             >
-              <Flex height="1" minWidth="16" background="neutral-strong"></Flex>
-              <Text>{section.title}</Text>
-            </Flex>
+              <div className="h-px min-w-4 bg-gray-900 dark:bg-white" />
+              <span className="text-sm text-gray-900 dark:text-white">
+                {section.title}
+              </span>
+            </div>
             {about.tableOfContent.subItems && (
               <>
                 {section.items.map((item, itemIndex) => (
-                  <Flex
-                    className={`${styles.hideOnLarge} ${styles.hover}`}
+                  <div
+                    className={`${styles.hideOnLarge} ${styles.hover} cursor-pointer flex gap-3 pl-6 items-center`}
                     key={itemIndex}
-                    style={{ cursor: "pointer" }}
-                    gap="12"
-                    paddingLeft="24"
-                    vertical="center"
                     onClick={() => scrollTo(item, 80)}
                   >
-                    <Flex height="1" minWidth="8" background="neutral-strong"></Flex>
-                    <Text>{item}</Text>
-                  </Flex>
+                    <div className="h-px min-w-2 bg-gray-900 dark:bg-white" />
+                    <span className="text-sm text-gray-900 dark:text-white">
+                      {item}
+                    </span>
+                  </div>
                 ))}
               </>
             )}
-          </Column>
+          </div>
         ))}
-    </Column>
+    </div>
   );
 };
 

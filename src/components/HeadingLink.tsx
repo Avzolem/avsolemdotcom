@@ -1,69 +1,65 @@
-"use client";
+'use client';
 
-import React, { JSX } from "react";
-import { Heading, Flex, IconButton, useToast } from "@once-ui-system/core";
-
-import styles from "@/components/HeadingLink.module.scss";
+import React, { JSX } from 'react';
+import { Link2 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
+import styles from '@/components/HeadingLink.module.scss';
 
 interface HeadingLinkProps {
   id: string;
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   children: React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
 }
 
-export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, style }) => {
+export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, as, children, style, className }) => {
+  // Support both `level` and `as` props
+  const headingLevel = level || (as ? parseInt(as.replace('h', '')) as 1 | 2 | 3 | 4 | 5 | 6 : 2);
   const { addToast } = useToast();
 
   const copyURL = (id: string): void => {
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
     navigator.clipboard.writeText(url).then(
       () => {
-        addToast({
-          variant: "success",
-          message: "Link copied to clipboard.",
-        });
+        addToast('Link copied to clipboard.', 'success');
       },
       () => {
-        addToast({
-          variant: "danger",
-          message: "Failed to copy link.",
-        });
+        addToast('Failed to copy link.', 'error');
       },
     );
   };
 
-  const variantMap = {
-    1: "display-strong-xs",
-    2: "heading-strong-xl",
-    3: "heading-strong-l",
-    4: "heading-strong-m",
-    5: "heading-strong-s",
-    6: "heading-strong-xs",
+  const variantClasses = {
+    1: 'text-3xl md:text-4xl font-bold',
+    2: 'text-2xl md:text-3xl font-semibold',
+    3: 'text-xl md:text-2xl font-semibold',
+    4: 'text-lg md:text-xl font-semibold',
+    5: 'text-base md:text-lg font-semibold',
+    6: 'text-sm md:text-base font-semibold',
   } as const;
 
-  const variant = variantMap[level];
-  const asTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${headingLevel}` as keyof JSX.IntrinsicElements;
 
   return (
-    <Flex
+    <div
       style={style}
       onClick={() => copyURL(id)}
-      className={styles.control}
-      vertical="center"
-      gap="4"
+      className={`${styles.control} flex items-center gap-1 cursor-pointer ${className || ''}`}
     >
-      <Heading className={styles.text} id={id} variant={variant} as={asTag}>
+      <HeadingTag
+        id={id}
+        className={`${styles.text} ${variantClasses[headingLevel]} text-gray-900 dark:text-white`}
+      >
         {children}
-      </Heading>
-      <IconButton
-        className={styles.visibility}
-        size="s"
-        icon="openLink"
-        variant="ghost"
-        tooltip="Copy"
-        tooltipPosition="right"
-      />
-    </Flex>
+      </HeadingTag>
+      <button
+        className={`${styles.visibility} p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}
+        title="Copy link"
+      >
+        <Link2 className="w-4 h-4" />
+      </button>
+    </div>
   );
 };
