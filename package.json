@@ -43,6 +43,9 @@
     "tesseract.js": "^6.0.1",
     "web-vitals": "^5.1.0"
   },
+  "resolutions": {
+    "mdast-util-to-hast": ">=13.2.1"
+  },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie": "^0.6.0",
