@@ -24,18 +24,30 @@
 - `src/app/yugioh/venta/page.tsx` - Lista de ventas
 - `src/app/yugioh/wishlist/page.tsx` - Lista wishlist
 - `src/app/yugioh/shared/[token]/page.tsx` - Vista pública de listas compartidas
+- `src/app/yugioh/catalogo/page.tsx` - **NUEVO**: Catálogo de productos en venta
+- `src/app/yugioh/noticias/page.tsx` - **NUEVO**: Noticias y anuncios
+- `src/app/yugioh/admin/page.tsx` - Panel de administración con CMS
 
 #### API Routes
-- `src/app/api/yugioh/auth/route.ts` - Autenticación
+- `src/app/api/auth/[...nextauth]/route.ts` - Autenticación NextAuth.js
+- `src/app/api/yugioh/auth/register/route.ts` - Registro de usuarios
 - `src/app/api/yugioh/lists/[type]/route.ts` - CRUD de listas
 - `src/app/api/yugioh/download-image/route.ts` - Descarga de imágenes
 - `src/app/api/yugioh/share/route.ts` - Generación de enlaces compartidos
+- `src/app/api/yugioh/admin/route.ts` - Estadísticas y datos de admin
+- `src/app/api/yugioh/admin/send-email/route.ts` - Envío de emails masivos
+- `src/app/api/yugioh/admin/products/route.ts` - **NUEVO**: CRUD de productos (admin)
+- `src/app/api/yugioh/admin/news/route.ts` - **NUEVO**: CRUD de noticias (admin)
+- `src/app/api/yugioh/catalog/route.ts` - **NUEVO**: API pública de catálogo
+- `src/app/api/yugioh/news/route.ts` - **NUEVO**: API pública de noticias
 
 #### Backend/Services
 - `src/lib/services/ygoprodeck.ts` - Cliente API con cache y rate limiting
 - `src/lib/mongodb/connection.ts` - Conexión MongoDB
 - `src/lib/mongodb/models/YugiohList.ts` - Modelo de listas
 - `src/lib/mongodb/models/SharedLink.ts` - Modelo de enlaces compartidos
+- `src/lib/mongodb/models/Product.ts` - **NUEVO**: Modelo de productos
+- `src/lib/mongodb/models/News.ts` - **NUEVO**: Modelo de noticias
 
 #### Context & Types
 - `src/contexts/YugiohAuthContext.tsx` - Context de autenticación
@@ -82,8 +94,8 @@
 ✅ Responsive design mobile-first
 ✅ Acceder a listas compartidas sin login
 
-### Para Administrador (con contraseña)
-✅ Login con contraseña en modal
+### Para Administrador (con NextAuth.js)
+✅ Login con Google OAuth o Email/Password
 ✅ Badge de estado "✓ Admin" en header
 ✅ Agregar cartas a listas con notas opcionales
 ✅ Modificar cantidades con controles +/-
@@ -93,6 +105,33 @@
 ✅ Exportar listas a CSV/PDF
 ✅ Compartir listas con enlaces temporales (7 días)
 ✅ Persistencia en MongoDB
+
+### Panel de Administración (`/yugioh/admin`)
+✅ Acceso restringido por email (configurable via `YUGIOH_ADMIN_EMAILS`)
+✅ **Tab Estadísticas**: Total usuarios, por proveedor, newsletter, nuevos este mes/semana
+✅ **Tab Usuarios**: Listado completo con email, nombre, proveedor, newsletter, idioma, fecha
+✅ **Tab Email**: Compositor con soporte Markdown y vista previa
+✅ **Tab Catálogo** (CMS): Gestión de productos con CRUD completo
+✅ **Tab Noticias** (CMS): Gestión de noticias con soporte Markdown
+✅ Envío de emails masivos via Resend API
+✅ Variable `{nombre}` para personalización de emails
+✅ Diseño responsive para mobile (cards en lugar de tabla)
+
+### Catálogo de Productos (`/yugioh/catalogo`)
+✅ Vista pública de productos en venta
+✅ Filtros por categoría (Cartas, Decks, Accesorios, Otros)
+✅ Búsqueda por nombre/descripción
+✅ Información de precio, stock, condición
+✅ Badges de destacados
+✅ Diseño responsive mobile-first
+
+### Noticias (`/yugioh/noticias`)
+✅ Vista pública de noticias y anuncios
+✅ Búsqueda por título/resumen
+✅ Vista detallada de artículos con Markdown
+✅ Información de autor y fecha
+✅ Tags y badges de destacados
+✅ Diseño responsive mobile-first
 
 ---
 
@@ -111,7 +150,7 @@
 ### Iconos y Assets
 - Logo Eye of Anubis en header (con caja negra)
 - Icono de fondo en estados vacíos (transparencia 30%)
-- Emojis en navegación: 🔍 Buscar, 🃏 Colección, 💰 En Venta, ⭐ Wishlist
+- Emojis en navegación: 🔍 Buscar, 🃏 Colección, 💰 En Venta, ⭐ Wishlist, 🛒 Catálogo, 📰 Noticias
 
 ### Componentes UI
 - Botones dorados con hover effects
@@ -123,10 +162,11 @@
 
 ## 🔐 Seguridad Implementada
 
-✅ Contraseña en variable de entorno (`YUGIOH_ADMIN_PASSWORD`)
-✅ HttpOnly cookies con SameSite strict
-✅ Sesión de 7 días con auto-logout
+✅ Autenticación NextAuth.js con Google OAuth y Credentials
+✅ Admin emails configurables via `YUGIOH_ADMIN_EMAILS` (variable de entorno)
+✅ JWT sessions con expiración de 30 días
 ✅ Validación server-side en todas las API routes
+✅ Passwords hasheados con bcryptjs (12 rounds)
 ✅ Enlaces compartidos con tokens únicos (UUID v4)
 ✅ Expiración automática de enlaces (7 días)
 ✅ .env NO se sube a git (en .gitignore)
@@ -173,26 +213,30 @@
 
 ## 📊 Estadísticas del Proyecto
 
-- **25+ archivos** TypeScript/React
-- **~2,500 líneas** de código
-- **6 páginas** (búsqueda + 3 listas + compartir + layout)
-- **10+ componentes** React
-- **4+ API routes**
+- **30+ archivos** TypeScript/React
+- **~3,500 líneas** de código
+- **9 páginas** (búsqueda + 3 listas + compartir + catálogo + noticias + admin + layout)
+- **12+ componentes** React
+- **10+ API routes**
 - **2 Context** providers
 - **100% TypeScript** (type-safe)
 - **30 tipos de cartas** en filtros
 - **2 scripts** de backup/restore
+- **2 modelos CMS** (Products, News)
 
 ---
 
 ## 🚀 Para Usar
 
 1. **Configurar MongoDB**: Asegúrate de tener `MONGODB_URI` en `.env`
-2. **Configurar contraseña**: Añade `YUGIOH_ADMIN_PASSWORD` en `.env`
-3. **Instalar dependencias**: `npm install`
-4. **Iniciar servidor**: `npm run dev`
-5. **Navegar a**: `http://localhost:3000/yugioh`
-6. **Login admin**: Click en "🔐 Acceso Admin" y usa tu contraseña
+2. **Configurar NextAuth**: Añade `NEXTAUTH_SECRET` y `NEXTAUTH_URL` en `.env`
+3. **Configurar Google OAuth**: Añade `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`
+4. **Configurar Admin**: Añade `YUGIOH_ADMIN_EMAILS=tu@email.com` en `.env`
+5. **Configurar Resend** (opcional): Añade `RESEND_API_KEY` para envío de emails
+6. **Instalar dependencias**: `npm install`
+7. **Iniciar servidor**: `npm run dev`
+8. **Navegar a**: `http://localhost:3000/yugioh`
+9. **Login**: Usa Google o Email/Password para autenticarte
 
 ---
 
@@ -203,12 +247,16 @@
 - `/yugioh/coleccion` - Mi Colección personal
 - `/yugioh/venta` - Cartas en Venta
 - `/yugioh/wishlist` - Mi Lista de Deseos
+- `/yugioh/catalogo` - Catálogo de productos en venta
+- `/yugioh/noticias` - Noticias y anuncios
 
 ### Páginas Especiales
 - `/yugioh/shared/[token]` - Vista pública de listas compartidas
+- `/yugioh/admin` - Panel de administración (solo admins)
 
 ### API Endpoints
-- `POST /api/yugioh/auth` - Login/Logout
+- `GET/POST /api/auth/[...nextauth]` - NextAuth.js handlers
+- `POST /api/yugioh/auth/register` - Registro de usuarios
 - `GET /api/yugioh/lists/[type]` - Obtener lista
 - `POST /api/yugioh/lists/[type]` - Agregar carta
 - `PATCH /api/yugioh/lists/[type]` - Actualizar cantidad
@@ -216,6 +264,12 @@
 - `POST /api/yugioh/download-image` - Descargar imagen
 - `POST /api/yugioh/share` - Generar enlace compartido
 - `GET /api/yugioh/share?token=[token]` - Obtener lista compartida
+- `GET /api/yugioh/admin` - Estadísticas y usuarios (solo admin)
+- `POST /api/yugioh/admin/send-email` - Enviar emails masivos (solo admin)
+- `GET/POST/PATCH/DELETE /api/yugioh/admin/products` - CRUD productos (solo admin)
+- `GET/POST/PATCH/DELETE /api/yugioh/admin/news` - CRUD noticias (solo admin)
+- `GET /api/yugioh/catalog` - Obtener productos activos (público)
+- `GET /api/yugioh/news` - Obtener noticias publicadas (público)
 
 ---
 
@@ -223,9 +277,23 @@
 
 Variables de entorno en `.env`:
 ```env
-YUGIOH_ADMIN_PASSWORD=tu_contraseña_segura
+# Base de datos
 MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/database
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+# NextAuth
+NEXTAUTH_SECRET=tu_secreto_aleatorio_32_chars
+NEXTAUTH_URL=http://localhost:3000
+
+# Google OAuth
+GOOGLE_CLIENT_ID=tu_google_client_id
+GOOGLE_CLIENT_SECRET=tu_google_client_secret
+
+# Admin (emails separados por coma)
+YUGIOH_ADMIN_EMAILS=admin@email.com
+
+# Email (opcional, para envío masivo)
+RESEND_API_KEY=tu_resend_api_key
+RESEND_FROM=Yu-Gi-Oh! Manager <noreply@tudominio.com>
 ```
 
 ---
@@ -511,6 +579,108 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 ---
 
+## 🎉 Timeline de Desarrollo - Sesión 2025-12-03
+
+### 1. Sistema de Catálogo y Noticias con CMS
+
+**Nueva Funcionalidad**: Sistema completo de catálogo de productos y noticias
+
+**Modelos MongoDB Creados**:
+- `Product.ts` - Productos con nombre, precio, moneda, stock, categoría, condición, imágenes, tags
+- `News.ts` - Noticias con título, slug, resumen, contenido Markdown, imagen de portada, autor, tags
+
+**APIs Creadas**:
+- `/api/yugioh/catalog` - GET productos activos (público)
+- `/api/yugioh/news` - GET noticias publicadas (público)
+- `/api/yugioh/admin/products` - CRUD completo (admin)
+- `/api/yugioh/admin/news` - CRUD completo (admin)
+
+**Páginas Públicas**:
+- `/yugioh/catalogo` - Catálogo con filtros por categoría y búsqueda
+- `/yugioh/noticias` - Lista de noticias con vista detallada de artículos
+
+**Panel de Administración Actualizado**:
+- Nueva tab "🛒 Catálogo" - Gestión de productos
+- Nueva tab "📰 Noticias" - Gestión de noticias con Markdown
+- Formularios completos con validación
+- Badges de estado (Destacado, Activo, Borrador)
+
+**Optimizaciones Mobile**:
+- Grid responsive para formularios
+- Botones de acción con ancho completo en mobile
+- Cards reorganizados verticalmente
+- Touch-friendly con efecto de escala al presionar
+
+### 2. Mejoras de Navegación
+
+**Header Actualizado**:
+- Agregadas pestañas "Catálogo" y "Noticias" en navegación principal
+- Iconos: 🛒 para Catálogo, 📰 para Noticias
+- Acceso directo al panel admin para usuarios admin
+
+---
+
+## 🎉 Timeline de Desarrollo - Sesión 2025-12-02
+
+### 1. Implementación del Panel de Administración
+
+**Nueva Funcionalidad**: Panel completo de administración en `/yugioh/admin`
+
+**Características Implementadas**:
+
+1. **Tab Estadísticas**:
+   - Total de usuarios registrados
+   - Usuarios por proveedor (Google vs Email/Password)
+   - Suscriptores al newsletter
+   - Nuevos usuarios este mes/semana
+   - Cards con iconos y animaciones
+
+2. **Tab Usuarios**:
+   - Listado completo de todos los usuarios
+   - Columnas: Email, Nombre, Proveedor, Newsletter, Idioma, Fecha registro
+   - Diseño responsive: tabla en desktop, cards en mobile
+   - Badges de color por proveedor
+
+3. **Tab Compositor de Email**:
+   - Editor con soporte Markdown
+   - Vista previa en tiempo real
+   - Selector de destinatarios (newsletter o todos)
+   - Variable `{nombre}` para personalización
+   - Envío masivo via Resend API
+   - Template HTML con diseño Yu-Gi-Oh!
+
+**Archivos Creados/Modificados**:
+- `src/app/yugioh/admin/page.tsx` - Componente principal
+- `src/app/yugioh/admin/admin.module.scss` - Estilos con responsive design
+- `src/app/api/yugioh/admin/route.ts` - API de estadísticas
+- `src/app/api/yugioh/admin/send-email/route.ts` - API de envío de emails
+
+### 2. Migración del Sistema de Autenticación
+
+**Cambio**: De sistema legacy con contraseña a NextAuth.js
+
+**Eliminado**:
+- `src/app/api/yugioh/auth/route.ts` - Sistema de auth legacy
+- Variable `YUGIOH_ADMIN_PASSWORD`
+- Cookie `yugioh_auth`
+
+**Nuevo Sistema**:
+- NextAuth.js con Google OAuth y Credentials
+- Variable `YUGIOH_ADMIN_EMAILS` para configurar admins
+- Soporte para múltiples emails de admin (separados por coma)
+- Validación server-side en todos los endpoints
+
+### 3. Mejoras de Responsividad Mobile
+
+**Cambios en CSS**:
+- Tabs con scroll horizontal en mobile
+- Tabla de usuarios convertida a cards en mobile
+- Data-labels para mostrar nombres de columnas
+- Ajustes de padding y font-size
+- Textarea y preview optimizados
+
+---
+
 ## ✨ Características Destacadas
 
 ### 1. Búsqueda Inteligente
@@ -620,8 +790,8 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 ## 📊 Estado del Proyecto
 
-**Proyecto Completado**: ✅ 100% + Mejoras Avanzadas + UI Refinements + Set Code Scanner
-**Última Actualización**: 2025-11-23
+**Proyecto Completado**: ✅ 100% + Mejoras Avanzadas + UI Refinements + Set Code Scanner + Admin Panel + CMS
+**Última Actualización**: 2025-12-03
 **Estado**: ✅ Production Ready
 **Cumplimiento API**: ✅ Rate Limiting | ✅ Imágenes Locales | ✅ YugiohPrices Integration
 **Seguridad**: ✅ Todas las medidas implementadas

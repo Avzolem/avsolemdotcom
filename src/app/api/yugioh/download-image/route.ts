@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cookie from 'cookie';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/options';
 import fs from 'fs/promises';
 import path from 'path';
 
-function isAuthenticated(request: NextRequest): boolean {
-  const cookies = cookie.parse(request.headers.get('cookie') || '');
-  return cookies.yugioh_auth === 'authenticated';
-}
-
 export async function POST(request: NextRequest) {
   try {
-    if (!isAuthenticated(request)) {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 

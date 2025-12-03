@@ -14,8 +14,23 @@ export default function YugiohHeader() {
   const { language, setLanguage, t } = useYugiohLanguage();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Check if user is admin
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      // Verify admin status via API
+      fetch('/api/yugioh/admin')
+        .then(res => {
+          setIsAdmin(res.ok);
+        })
+        .catch(() => setIsAdmin(false));
+    } else {
+      setIsAdmin(false);
+    }
+  }, [isAuthenticated, user?.email]);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -43,6 +58,8 @@ export default function YugiohHeader() {
     { href: '/yugioh/coleccion', label: t('header.collection'), icon: '🃏' },
     { href: '/yugioh/venta', label: t('header.forSale'), icon: '💰' },
     { href: '/yugioh/wishlist', label: t('header.wishlist'), icon: '⭐' },
+    { href: '/yugioh/catalogo', label: language === 'es' ? 'Catálogo' : 'Catalog', icon: '🛒' },
+    { href: '/yugioh/noticias', label: language === 'es' ? 'Noticias' : 'News', icon: '📰' },
   ];
 
   // Get user initials for avatar fallback
@@ -141,8 +158,18 @@ export default function YugiohHeader() {
                   <div className={styles.userMenu}>
                     <div className={styles.userMenuHeader}>
                       <span className={styles.userMenuEmail}>{user.email}</span>
+                      {isAdmin && <span className={styles.adminBadge}>Admin</span>}
                     </div>
                     <div className={styles.userMenuDivider}></div>
+                    {isAdmin && (
+                      <Link
+                        href="/yugioh/admin"
+                        className={`${styles.userMenuItem} ${styles.adminMenuItem}`}
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        ⚙️ {language === 'es' ? 'Panel Admin' : 'Admin Panel'}
+                      </Link>
+                    )}
                     <Link
                       href="/yugioh/perfil"
                       className={styles.userMenuItem}

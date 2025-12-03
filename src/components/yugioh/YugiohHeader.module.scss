@@ -410,15 +410,31 @@ $yugioh-gray-light: #2a2a2a;
 .userMenuHeader {
   padding: 0.75rem 1rem;
   background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .userMenuEmail {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.8125rem;
-  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+}
+
+.adminBadge {
+  background: linear-gradient(135deg, #7B2CBF 0%, #5a1f8c 100%);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .userMenuDivider {
@@ -448,6 +464,16 @@ $yugioh-gray-light: #2a2a2a;
 
   &:visited {
     color: white !important;
+  }
+}
+
+.adminMenuItem {
+  background: rgba(123, 44, 191, 0.1);
+  border-left: 3px solid #7B2CBF;
+
+  &:hover {
+    background: rgba(123, 44, 191, 0.2);
+    color: #a855f7 !important;
   }
 }
 
