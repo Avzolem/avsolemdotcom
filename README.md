@@ -69,9 +69,8 @@ avsolem.com/
 
 **Frontend & Frameworks:**
 - Next.js 15 + React 19
-- Once UI System
+- Tailwind CSS v4
 - TypeScript
-- TailwindCSS
 
 **Web3 & Blockchain:**
 - Solana Web3.js
@@ -111,9 +110,6 @@ avsolem.com/
 ## 📈 Professional Experience
 Currently serving as **Department Head** at the Government of Chihuahua, leading technology initiatives and digital transformation projects. Previously developed web applications at Universidad Autónoma de Chihuahua and managed IT infrastructure for various organizations.
 
-## 🎨 Built With Magic Portfolio
-This portfolio is built using the [Magic Portfolio](https://github.com/once-ui-system/magic-portfolio) template by [Once UI System](https://once-ui.com), customized and enhanced with personal branding and content.
-
 ---
 
-**© 2024 Andrés Aguilar (△VSOLEM.) - Department Head & Web Developer**
+**© 2025 Andrés Aguilar (△VSOLEM.) - Department Head & Web Developer**

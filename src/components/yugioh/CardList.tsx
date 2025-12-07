@@ -501,6 +501,7 @@ export default function CardList({ type, title }: CardListProps) {
                         }}
                         disabled={isTogglingForSale === card.setCode}
                         title={card.isForSale ? t('list.forSale.remove') : t('list.forSale.add')}
+                        style={{ '--remove-text': `'${t('list.forSale.remove')}'` } as React.CSSProperties}
                       >
                         {isTogglingForSale === card.setCode ? (
                           '...'

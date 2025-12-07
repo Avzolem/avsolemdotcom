@@ -63,15 +63,15 @@ Cada lista incluye:
 
 ## Tecnologías
 
-- **Frontend**: Next.js 15, React 19, Once UI
+- **Frontend**: Next.js 15, React 19, Tailwind CSS
 - **Backend**: Next.js API Routes
 - **Base de Datos**: MongoDB
 - **API Externa**: YGOPRODeck API v7
 - **OCR**: Tesseract.js para reconocimiento de texto
 - **Fuzzy Matching**: Fuse.js para búsqueda difusa inteligente
-- **Autenticación**: Cookie-based sessions
+- **Autenticación**: NextAuth.js (Google OAuth + Credentials)
 - **TypeScript**: Tipado completo
-- **Estilos**: Once UI Design System
+- **Estilos**: SCSS Modules + Tailwind CSS
 
 ## API Endpoints
 
@@ -249,5 +249,5 @@ Los precios se actualizan automáticamente al buscar cartas (se obtienen de TCGP
 
 - **API**: [YGOPRODeck](https://ygoprodeck.com)
 - **Precios**: TCGPlayer
-- **UI**: Once UI System
+- **UI**: Tailwind CSS + SCSS Modules
 - **Desarrollado por**: Andrés Aguilar

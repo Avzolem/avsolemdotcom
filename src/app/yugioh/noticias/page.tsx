@@ -19,7 +19,7 @@ interface NewsArticle {
 }
 
 export default function NoticiasPage() {
-  const { language } = useYugiohLanguage();
+  const { language, t } = useYugiohLanguage();
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
@@ -75,7 +75,7 @@ export default function NoticiasPage() {
     return (
       <div className={styles.loading}>
         <span className={styles.spinner}></span>
-        <p>{language === 'es' ? 'Cargando noticias...' : 'Loading news...'}</p>
+        <p>{t('news.loading')}</p>
       </div>
     );
   }
@@ -88,7 +88,7 @@ export default function NoticiasPage() {
           className={styles.backButton}
           onClick={() => setSelectedArticle(null)}
         >
-          ← {language === 'es' ? 'Volver a noticias' : 'Back to news'}
+          ← {t('news.backToNews')}
         </button>
 
         <article className={styles.articleDetail}>
@@ -138,12 +138,10 @@ export default function NoticiasPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>
-          📰 {language === 'es' ? 'Noticias' : 'News'}
+          📰 {t('news.title')}
         </h1>
         <p className={styles.subtitle}>
-          {language === 'es'
-            ? 'Últimas novedades y anuncios'
-            : 'Latest updates and announcements'}
+          {t('news.subtitle')}
         </p>
       </div>
 
@@ -151,7 +149,7 @@ export default function NoticiasPage() {
       <div className={styles.searchBox}>
         <input
           type="text"
-          placeholder={language === 'es' ? 'Buscar noticias...' : 'Search news...'}
+          placeholder={t('news.searchPlaceholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className={styles.searchInput}
@@ -172,8 +170,8 @@ export default function NoticiasPage() {
           <span className={styles.emptyIcon}>📰</span>
           <p>
             {searchTerm
-              ? (language === 'es' ? 'No se encontraron noticias' : 'No news found')
-              : (language === 'es' ? 'No hay noticias disponibles' : 'No news available')}
+              ? t('news.noNewsFound')
+              : t('news.noNewsAvailable')}
           </p>
         </div>
       ) : (
@@ -186,7 +184,7 @@ export default function NoticiasPage() {
             >
               {article.isFeatured && (
                 <span className={styles.featuredBadge}>
-                  ⭐ {language === 'es' ? 'Destacado' : 'Featured'}
+                  ⭐ {t('news.featured')}
                 </span>
               )}
 
@@ -226,9 +224,7 @@ export default function NoticiasPage() {
 
       {filteredNews.length > 0 && (
         <div className={styles.resultsCount}>
-          {language === 'es'
-            ? `Mostrando ${filteredNews.length} noticia(s)`
-            : `Showing ${filteredNews.length} article(s)`}
+          {t('news.showingArticles').replace('{count}', String(filteredNews.length))}
         </div>
       )}
     </div>

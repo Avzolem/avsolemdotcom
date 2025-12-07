@@ -27,7 +27,7 @@ const newsletter = {
 
 const social = [
   // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
+  // Import new icons in src/resources/icons.ts
   {
     name: "GitHub",
     icon: "github",
@@ -70,8 +70,8 @@ const home = {
   headline: <>Building the future with React & NextJS</>,
   featured: {
     display: true,
-    title: <>Recent project: <strong className="ml-4">Estampanda.com</strong></>,
-    href: "https://estampanda.com",
+    title: <>Recent project: <strong className="ml-4">Yu-Gi-Oh! Manager</strong></>,
+    href: "/yugioh",
   },
   subline: (
     <>

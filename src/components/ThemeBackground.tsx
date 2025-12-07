@@ -26,19 +26,11 @@ export function ThemeBackground() {
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
       {theme === 'light' ? (
-        // Light theme - Clean beige background
-        <div className="absolute inset-0 bg-beige-100" />
+        // Light theme - Clean white background
+        <div className="absolute inset-0 bg-[#fafafa]" />
       ) : (
-        // Dark theme - Dark radial glow
-        <div className="absolute inset-0 bg-[#020617]">
-          {/* Dark Radial Glow Background */}
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: `radial-gradient(circle 800px at 50% 200px, #3e3e3e, transparent)`,
-            }}
-          />
-        </div>
+        // Dark theme - Pure black background
+        <div className="absolute inset-0 bg-black" />
       )}
     </div>
   );

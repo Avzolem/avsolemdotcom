@@ -52,12 +52,12 @@ const NavButton = ({ href, icon: Icon, label, selected }: NavButtonProps) => (
   <Link
     href={href}
     className={`
-      inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
-      hover:bg-gray-100 dark:hover:bg-gray-800
-      focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900
+      inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200
+      hover:bg-black/5 dark:hover:bg-white/10
+      focus:outline-none
       ${selected
-        ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'
-        : 'text-gray-600 dark:text-gray-400'
+        ? 'bg-black/10 text-gray-900 dark:bg-white/15 dark:text-white'
+        : 'text-gray-600 dark:text-gray-300'
       }
     `}
   >
@@ -70,98 +70,86 @@ export const Header = () => {
   const pathname = usePathname() ?? '';
 
   return (
-    <>
-      {/* Top fade for desktop */}
-      <div
-        className={`fixed top-0 left-0 right-0 h-20 z-[9] pointer-events-none bg-gradient-to-b from-[var(--background)] to-transparent ${styles.hideOnMobile}`}
-      />
-      {/* Bottom fade for mobile */}
-      <div
-        className={`fixed bottom-0 left-0 right-0 h-20 z-[9] pointer-events-none bg-gradient-to-t from-[var(--background)] to-transparent ${styles.showOnMobile}`}
-      />
+    <header
+      className={`
+        ${styles.position}
+        z-[9] w-full py-3 px-4 flex items-center justify-center
+      `}
+    >
+      {/* Left section - Location */}
+      <div className="flex-1 pl-3 flex items-center text-sm text-gray-500 dark:text-gray-400">
+        <span className={styles.hideOnMobile}>
+          {display.location && person.location}
+        </span>
+      </div>
 
-      {/* Header */}
-      <header
-        className={`
-          ${styles.position}
-          z-[9] w-full p-2 flex items-center justify-center
-        `}
-        data-border="rounded"
+      {/* Center - Navigation with Liquid Glass effect */}
+      <nav
+        className="
+          flex items-center gap-1 px-2 py-1.5 rounded-2xl
+          bg-white/70 dark:bg-white/[0.08]
+          backdrop-blur-xl backdrop-saturate-150
+          border border-white/50 dark:border-white/[0.12]
+          shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]
+          dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]
+          transition-all duration-300
+        "
       >
-        {/* Left section - Location */}
-        <div className="flex-1 pl-3 flex items-center text-sm text-gray-600 dark:text-gray-400">
-          <span className={styles.hideOnMobile}>
-            {display.location && person.location}
-          </span>
+        <div className="flex items-center gap-0.5 text-sm" suppressHydrationWarning>
+          {routes['/'] && (
+            <NavButton href="/" icon={Home} selected={pathname === '/'} />
+          )}
+
+          <div className="w-px h-5 bg-gray-300/50 dark:bg-white/10 mx-1" />
+
+          {routes['/about'] && (
+            <NavButton
+              href="/about"
+              icon={User}
+              label={about.label}
+              selected={pathname === '/about'}
+            />
+          )}
+          {routes['/work'] && (
+            <NavButton
+              href="/work"
+              icon={Grid3X3}
+              label={work.label}
+              selected={pathname.startsWith('/work')}
+            />
+          )}
+          {routes['/blog'] && (
+            <NavButton
+              href="/blog"
+              icon={BookOpen}
+              label={blog.label}
+              selected={pathname.startsWith('/blog')}
+            />
+          )}
+          {routes['/gallery'] && (
+            <NavButton
+              href="/gallery"
+              icon={Images}
+              label={gallery.label}
+              selected={pathname.startsWith('/gallery')}
+            />
+          )}
+
+          {display.themeSwitcher && (
+            <>
+              <div className="w-px h-5 bg-gray-300/50 dark:bg-white/10 mx-1" />
+              <ThemeToggle />
+            </>
+          )}
         </div>
+      </nav>
 
-        {/* Center - Navigation */}
-        <div className="flex justify-center">
-          <nav
-            className="
-              flex items-center gap-1 p-1 rounded-xl
-              bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm
-              border border-gray-200 dark:border-gray-800
-              shadow-lg
-            "
-          >
-            <div className="flex items-center gap-1 text-sm" suppressHydrationWarning>
-              {routes['/'] && (
-                <NavButton href="/" icon={Home} selected={pathname === '/'} />
-              )}
-
-              <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
-
-              {routes['/about'] && (
-                <NavButton
-                  href="/about"
-                  icon={User}
-                  label={about.label}
-                  selected={pathname === '/about'}
-                />
-              )}
-              {routes['/work'] && (
-                <NavButton
-                  href="/work"
-                  icon={Grid3X3}
-                  label={work.label}
-                  selected={pathname.startsWith('/work')}
-                />
-              )}
-              {routes['/blog'] && (
-                <NavButton
-                  href="/blog"
-                  icon={BookOpen}
-                  label={blog.label}
-                  selected={pathname.startsWith('/blog')}
-                />
-              )}
-              {routes['/gallery'] && (
-                <NavButton
-                  href="/gallery"
-                  icon={Images}
-                  label={gallery.label}
-                  selected={pathname.startsWith('/gallery')}
-                />
-              )}
-
-              {display.themeSwitcher && (
-                <>
-                  <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
-                  <ThemeToggle />
-                </>
-              )}
-            </div>
-          </nav>
-        </div>
-
-        {/* Right section - Time */}
-        <div className="flex-1 pr-3 flex justify-end items-center text-sm text-gray-600 dark:text-gray-400">
-          <span className={styles.hideOnMobile}>
-            {display.time && <TimeDisplay timeZone={person.location} />}
-          </span>
-        </div>
-      </header>
-    </>
+      {/* Right section - Time */}
+      <div className="flex-1 pr-3 flex justify-end items-center text-sm text-gray-500 dark:text-gray-400">
+        <span className={styles.hideOnMobile}>
+          {display.time && <TimeDisplay timeZone={person.location} />}
+        </span>
+      </div>
+    </header>
   );
 };

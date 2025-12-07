@@ -6,12 +6,14 @@ import { formatPrice } from '@/lib/services/ygoprodeck';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Loader2 } from 'lucide-react';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 
 interface SharedListViewProps {
   params: Promise<{ token: string }>;
 }
 
 export default function SharedListView({ params }: SharedListViewProps) {
+  const { t, language } = useYugiohLanguage();
   const resolvedParams = use(params);
   const [cards, setCards] = useState<CardInList[]>([]);
   const [listType, setListType] = useState<string>('');
@@ -27,7 +29,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
 
         if (!response.ok) {
           const data = await response.json();
-          setError(data.message || 'No se pudo cargar la lista compartida');
+          setError(data.message || t('shared.error.load'));
           return;
         }
 
@@ -44,25 +46,25 @@ export default function SharedListView({ params }: SharedListViewProps) {
         setTotalValue(total);
       } catch (err) {
         console.error('Error loading shared list:', err);
-        setError('Error al cargar la lista compartida');
+        setError(t('shared.error.generic'));
       } finally {
         setIsLoading(false);
       }
     };
 
     loadSharedList();
-  }, [resolvedParams.token]);
+  }, [resolvedParams.token, t]);
 
   const getListTitle = () => {
     switch (listType) {
       case 'collection':
-        return 'Colección Compartida';
+        return t('shared.collection');
       case 'for-sale':
-        return 'Cartas en Venta';
+        return t('shared.forSale');
       case 'wishlist':
-        return 'Wishlist Compartida';
+        return t('shared.wishlist');
       default:
-        return 'Lista Compartida';
+        return t('shared.list');
     }
   };
 
@@ -71,7 +73,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
       <div className="flex flex-col w-full items-center py-16">
         <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
         <span className="text-gray-500 dark:text-gray-400 mt-4">
-          Cargando lista compartida...
+          {t('shared.loading')}
         </span>
       </div>
     );
@@ -87,7 +89,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
           {error}
         </h1>
         <Link href="/yugioh" className="text-cyan-600 dark:text-cyan-400 hover:underline">
-          Volver a Yu-Gi-Oh! Manager
+          {t('shared.backToManager')}
         </Link>
       </div>
     );
@@ -99,7 +101,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
       <div className="flex flex-col gap-3">
         <div className="flex gap-3 items-center">
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            🔗 Vista Pública
+            🔗 {t('shared.publicView')}
           </span>
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
@@ -107,14 +109,14 @@ export default function SharedListView({ params }: SharedListViewProps) {
         </h1>
         <div className="flex gap-4 flex-wrap">
           <span className="px-3 py-1 text-sm bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 rounded-full">
-            {cards.length} {cards.length === 1 ? 'carta' : 'cartas'}
+            {cards.length} {cards.length === 1 ? (language === 'es' ? 'carta' : 'card') : (language === 'es' ? 'cartas' : 'cards')}
           </span>
           <span className="px-3 py-1 text-sm bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full">
-            Valor Total: {formatPrice(totalValue)}
+            {t('list.totalValue')}: {formatPrice(totalValue)}
           </span>
           {expiresAt && (
             <span className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 rounded-full">
-              Expira: {new Date(expiresAt).toLocaleDateString('es-MX')}
+              {t('shared.expires')} {new Date(expiresAt).toLocaleDateString(language === 'es' ? 'es-MX' : 'en-US')}
             </span>
           )}
         </div>
@@ -127,7 +129,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
             📦
           </span>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center">
-            Lista vacía
+            {t('shared.emptyList')}
           </h2>
         </div>
       ) : (
@@ -158,7 +160,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
 
                 <div className="flex gap-2 items-center">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Cantidad:
+                    {t('shared.quantity')}
                   </span>
                   <span className="text-gray-900 dark:text-white">
                     {card.quantity}
@@ -168,7 +170,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
                 {card.price && (
                   <div className="flex gap-2 items-center">
                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                      Precio:
+                      {t('shared.price')}
                     </span>
                     <span className="text-cyan-600 dark:text-cyan-400">
                       {formatPrice(card.price)}
@@ -183,7 +185,7 @@ export default function SharedListView({ params }: SharedListViewProps) {
                 )}
 
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Agregada: {new Date(card.addedAt).toLocaleDateString('es-MX')}
+                  {t('shared.added')} {new Date(card.addedAt).toLocaleDateString(language === 'es' ? 'es-MX' : 'en-US')}
                 </span>
               </div>
             </div>
@@ -194,10 +196,10 @@ export default function SharedListView({ params }: SharedListViewProps) {
       {/* Footer */}
       <div className="flex flex-col items-center py-6 gap-2">
         <span className="text-sm text-gray-500 dark:text-gray-400 text-center">
-          ¿Quieres tu propia colección Yu-Gi-Oh!?
+          {t('shared.wantYourOwn')}
         </span>
         <Link href="/yugioh" className="text-cyan-600 dark:text-cyan-400 hover:underline">
-          Ir a Yu-Gi-Oh! Manager
+          {t('shared.goToManager')}
         </Link>
       </div>
     </div>

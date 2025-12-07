@@ -58,8 +58,8 @@ export default function YugiohHeader() {
     { href: '/yugioh/coleccion', label: t('header.collection'), icon: '🃏' },
     { href: '/yugioh/venta', label: t('header.forSale'), icon: '💰' },
     { href: '/yugioh/wishlist', label: t('header.wishlist'), icon: '⭐' },
-    { href: '/yugioh/catalogo', label: language === 'es' ? 'Catálogo' : 'Catalog', icon: '🛒' },
-    { href: '/yugioh/noticias', label: language === 'es' ? 'Noticias' : 'News', icon: '📰' },
+    { href: '/yugioh/catalogo', label: t('header.catalog'), icon: '🛒' },
+    { href: '/yugioh/noticias', label: t('header.news'), icon: '📰' },
   ];
 
   // Get user initials for avatar fallback
@@ -91,7 +91,7 @@ export default function YugiohHeader() {
               <div className={styles.titleGroup}>
                 <h1 className={styles.title}>Yu-Gi-Oh! Manager</h1>
                 <p className={styles.subtitle}>
-                  {language === 'es' ? 'Gestiona tu colección de cartas' : 'Manage your card collection'}
+                  {t('header.tagline')}
                 </p>
               </div>
             </Link>

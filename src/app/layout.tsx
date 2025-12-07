@@ -1,15 +1,13 @@
 import '@/app/globals.css';
 
 import classNames from "classnames";
-import { headers } from 'next/headers';
 import { Analytics } from '@vercel/analytics/react';
 import { Metadata } from 'next';
 
-import { Footer, Header, RouteGuard, Providers } from '@/components';
-import { baseURL, effects, fonts, style, dataStyle, home } from '@/resources';
-import { ClientWarningSuppress } from '@/components/ClientWarningSuppress';
+import { Providers } from '@/components';
+import { baseURL, fonts, home } from '@/resources';
 import { ThemeBackground } from '@/components/ThemeBackground';
-import styles from './layout.module.scss';
+import { LayoutContent } from '@/components/LayoutContent';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -48,16 +46,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || headersList.get('referer') || '';
-  const isYugiohRoute = pathname.includes('/yugioh');
-  const isRomsRoute = pathname.includes('/roms');
-
   return (
     <html
       suppressHydrationWarning
@@ -109,30 +102,10 @@ export default async function RootLayout({
         />
       </head>
       <body className="m-0 p-0 theme-transition bg-[var(--background)] text-[var(--foreground)] min-h-screen">
-        <ClientWarningSuppress />
         <ThemeBackground />
         <Providers>
           <div className="flex flex-col items-center min-h-screen w-full relative z-[1]">
-            {isYugiohRoute ? (
-              children
-            ) : isRomsRoute ? (
-              <div className="w-full min-h-screen">
-                {children}
-              </div>
-            ) : (
-              <>
-                <div className={`h-16 w-full ${styles.hideOnMobile}`} />
-                <Header />
-                <div className="flex-1 w-full flex justify-center p-4 lg:p-8">
-                  <div className="flex justify-center w-full">
-                    <RouteGuard>
-                      {children}
-                    </RouteGuard>
-                  </div>
-                </div>
-                <Footer />
-              </>
-            )}
+            <LayoutContent>{children}</LayoutContent>
           </div>
         </Providers>
         <Analytics />

@@ -61,7 +61,7 @@ The `/roms` route is a comprehensive gaming console library that provides direct
 #### Visual Style
 - **Background**: Purple gradient (135deg, #667eea 0%, #764ba2 100%)
 - **Full-screen layout**: Fixed position with overflow-y scroll
-- **No Once UI styling**: Completely custom design
+- **Custom design**: Standalone SCSS styling
 
 #### Component Styles
 - **Title**: "💾 ROMS INDEX" - White text, responsive sizing

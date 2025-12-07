@@ -35,7 +35,7 @@ const CATEGORY_LABELS: Record<string, { es: string; en: string }> = {
 };
 
 export default function CatalogoPage() {
-  const { language } = useYugiohLanguage();
+  const { language, t } = useYugiohLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -75,7 +75,7 @@ export default function CatalogoPage() {
     return (
       <div className={styles.loading}>
         <span className={styles.spinner}></span>
-        <p>{language === 'es' ? 'Cargando catálogo...' : 'Loading catalog...'}</p>
+        <p>{t('catalog.loading')}</p>
       </div>
     );
   }
@@ -84,12 +84,10 @@ export default function CatalogoPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>
-          🛒 {language === 'es' ? 'Catálogo' : 'Catalog'}
+          🛒 {t('catalog.title')}
         </h1>
         <p className={styles.subtitle}>
-          {language === 'es'
-            ? 'Productos disponibles para la venta'
-            : 'Products available for sale'}
+          {t('catalog.subtitle')}
         </p>
       </div>
 
@@ -98,7 +96,7 @@ export default function CatalogoPage() {
         <div className={styles.searchBox}>
           <input
             type="text"
-            placeholder={language === 'es' ? 'Buscar productos...' : 'Search products...'}
+            placeholder={t('catalog.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchInput}
@@ -118,7 +116,7 @@ export default function CatalogoPage() {
             className={`${styles.categoryBtn} ${selectedCategory === 'all' ? styles.active : ''}`}
             onClick={() => setSelectedCategory('all')}
           >
-            {language === 'es' ? 'Todos' : 'All'}
+            {t('catalog.all')}
           </button>
           {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
             <button
@@ -138,8 +136,8 @@ export default function CatalogoPage() {
           <span className={styles.emptyIcon}>🛒</span>
           <p>
             {searchTerm
-              ? (language === 'es' ? 'No se encontraron productos' : 'No products found')
-              : (language === 'es' ? 'No hay productos disponibles' : 'No products available')}
+              ? t('catalog.noProductsFound')
+              : t('catalog.noProductsAvailable')}
           </p>
         </div>
       ) : (
@@ -148,7 +146,7 @@ export default function CatalogoPage() {
             <div key={product._id} className={`${styles.productCard} ${product.isFeatured ? styles.featured : ''}`}>
               {product.isFeatured && (
                 <span className={styles.featuredBadge}>
-                  ⭐ {language === 'es' ? 'Destacado' : 'Featured'}
+                  ⭐ {t('catalog.featured')}
                 </span>
               )}
 
@@ -186,8 +184,8 @@ export default function CatalogoPage() {
                   <span className={styles.price}>{formatPrice(product.price, product.currency)}</span>
                   <span className={styles.stock}>
                     {product.stock > 0
-                      ? `${product.stock} ${language === 'es' ? 'disponible(s)' : 'available'}`
-                      : (language === 'es' ? 'Agotado' : 'Sold out')}
+                      ? `${product.stock} ${t('catalog.available')}`
+                      : t('catalog.soldOut')}
                   </span>
                 </div>
 
@@ -206,9 +204,7 @@ export default function CatalogoPage() {
 
       {filteredProducts.length > 0 && (
         <div className={styles.resultsCount}>
-          {language === 'es'
-            ? `Mostrando ${filteredProducts.length} producto(s)`
-            : `Showing ${filteredProducts.length} product(s)`}
+          {t('catalog.showingProducts').replace('{count}', String(filteredProducts.length))}
         </div>
       )}
     </div>

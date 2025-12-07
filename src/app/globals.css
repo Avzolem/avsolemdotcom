@@ -3,59 +3,57 @@
 /* Custom CSS Variables for theme compatibility */
 @layer base {
   :root {
-    /* Light theme defaults - Beige */
-    --background: #f5f0e8;
+    /* Light theme defaults - Clean white */
+    --background: #fafafa;
     --foreground: #111827;
   }
 
   [data-theme="dark"] {
-    /* Dark theme - Navy/Black */
-    --background: #0a0a0a;
+    /* Dark theme - Pure black */
+    --background: #000000;
     --foreground: #f3f4f6;
   }
 }
 
 @layer components {
-  /* Gradient backgrounds */
-  .bg-gradient-light {
-    background: linear-gradient(to bottom right, #faf8f5, #f5f0e8, #ebe3d6);
-  }
-
-  .bg-gradient-dark {
-    background: linear-gradient(to bottom right, #0a0a0a, #000511, #001529);
-    position: relative;
-  }
-
-  .bg-gradient-dark::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(ellipse at top center, rgba(59, 130, 246, 0.6) 0%, rgba(37, 99, 235, 0.4) 30%, rgba(30, 64, 175, 0.2) 50%, transparent 70%);
-    pointer-events: none;
-  }
-
   /* Smooth transitions */
   .theme-transition {
     transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
   }
+
+  /* Liquid Glass effect */
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .liquid-glass-light {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  }
 }
 
-/* Override Once UI with Tailwind */
+/* Theme overrides */
 [data-theme="light"] body {
-  background-color: #f5f0e8;
+  background-color: #fafafa;
   color: #111827;
 }
 
 [data-theme="dark"] body {
-  background-color: #030712;
+  background-color: #000000;
   color: #f3f4f6;
-  background-image: radial-gradient(
-    ellipse at top center,
-    rgba(59, 130, 246, 0.5) 0%,    /* Bright blue */
-    rgba(37, 99, 235, 0.3) 25%,    /* Medium blue */
-    rgba(30, 64, 175, 0.2) 50%,    /* Darker blue */
-    transparent 80%
-  );
 }
 
 /* RevealFx Animation */

@@ -1,0 +1,67 @@
+---
+title: "Yu-Gi-Oh! Card Manager"
+publishedAt: "2025-12-01"
+summary: "Complete card collection manager with OCR scanner, price tracking, and authentication"
+images:
+  - "/images/projects/yugioh-manager/01-search.png"
+  - "/images/projects/yugioh-manager/02-results.png"
+  - "/images/projects/yugioh-manager/03-collection.png"
+  - "/images/projects/yugioh-manager/04-catalog.png"
+team:
+  - name: "Andrés Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Web App"
+tags: ["nextjs", "react", "mongodb", "ocr", "typescript"]
+link: "https://avsolem.com/yugioh"
+---
+
+## Project Overview
+
+A comprehensive Yu-Gi-Oh! card search and collection management system. Search cards by name or set code, scan physical cards with OCR, manage your collection, track prices, and share your lists publicly.
+
+## Key Features
+
+- **Multi-Mode Search**
+  - Search by card name with fuzzy matching
+  - Search by set code (e.g., "LOB-EN001") for specific rarities
+  - Advanced filters: type, attribute, race, level, ATK/DEF ranges
+  - Multi-language support with automatic EN fallback
+
+- **Card Scanner**
+  - OCR-powered scanning using Tesseract.js
+  - Dual-mode: Set Code (recommended) or Name
+  - Camera integration for mobile devices
+  - Image upload support
+
+- **Collection Management**
+  - Three lists: Collection, For Sale, Wishlist
+  - Quantity tracking with notes
+  - Real-time price updates from TCGPlayer
+  - Local image storage for offline access
+
+- **User Authentication**
+  - Google OAuth integration
+  - Email/Password registration
+  - Personal collections per user
+  - Admin panel with CMS
+
+- **Sharing & Export**
+  - Generate shareable links (7-day expiry)
+  - Export to CSV and PDF
+  - Price statistics with charts
+  - Public catalog and news pages
+
+## Technical Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: SCSS Modules + Tailwind CSS
+- **Database**: MongoDB
+- **Auth**: NextAuth.js (Google OAuth + Credentials)
+- **OCR**: Tesseract.js
+- **APIs**: YGOPRODeck, YugiohPrices
+
+## Live Demo
+
+Experience the platform: [avsolem.com/yugioh](https://avsolem.com/yugioh)

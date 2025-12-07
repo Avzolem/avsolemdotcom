@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, ReactNode } from 'react';
+import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import styles from './Toast.module.scss';
 
 interface ToastProps {
@@ -11,6 +12,8 @@ interface ToastProps {
 }
 
 export default function Toast({ message, type = 'success', onClose, duration = 3000 }: ToastProps) {
+  const { t } = useYugiohLanguage();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -33,7 +36,7 @@ export default function Toast({ message, type = 'success', onClose, duration = 3
         type="button"
         className={styles.toastClose}
         onClick={onClose}
-        aria-label="Cerrar"
+        aria-label={t('toast.close')}
       >
         ✕
       </button>
