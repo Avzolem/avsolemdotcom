@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { HeadingLink } from "./HeadingLink";
+import { CopyButton } from "./CopyButton";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -136,14 +137,7 @@ function createCodeBlock(props: any) {
       <div className="mt-2 mb-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
           <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">{label}</span>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(children);
-            }}
-            className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-          >
-            Copy
-          </button>
+          <CopyButton text={children} />
         </div>
         <pre className="p-4 overflow-x-auto bg-gray-50 dark:bg-gray-900">
           <code className="text-sm font-mono text-gray-800 dark:text-gray-200">{children}</code>
@@ -343,14 +337,7 @@ function CodeBlock({ codes, copyButton = true }: { codes: { code: string; langua
     <div className="mt-2 mb-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">{label}</span>
-        {copyButton && (
-          <button
-            onClick={() => navigator.clipboard.writeText(code)}
-            className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-          >
-            Copy
-          </button>
-        )}
+        {copyButton && <CopyButton text={code} />}
       </div>
       <pre className="p-4 overflow-x-auto bg-gray-50 dark:bg-gray-900">
         <code className="text-sm font-mono text-gray-800 dark:text-gray-200">{code}</code>

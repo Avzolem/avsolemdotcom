@@ -11,3 +11,4 @@ export { ThemeToggle } from "@/components/ThemeToggle";
 export { CustomMDX } from "@/components/mdx";
 export { MediaCarousel } from "@/components/MediaCarousel";
 export { OptimizedMedia } from "@/components/OptimizedMedia";
+export { CopyButton } from "@/components/CopyButton";
