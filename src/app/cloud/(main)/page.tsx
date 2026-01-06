@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Cloud, Upload, FolderPlus, Play, Trash2, MoreVertical, Pencil, Folder, Home, ChevronRight } from 'lucide-react';
+import { Cloud, Upload, FolderPlus, Play, Trash2, MoreVertical, Pencil, Folder, Home, ChevronRight, Link2 } from 'lucide-react';
 import CloudHeader from '@/components/cloud/CloudHeader';
 import CloudFooter from '@/components/cloud/CloudFooter';
 import AuthModal from '@/components/cloud/AuthModal';
@@ -15,6 +15,7 @@ interface CloudFile {
   size: number;
   cloudinaryResourceType: string;
   cloudinaryFormat: string;
+  cloudinarySecureUrl: string;
   thumbnailUrl?: string;
   duration?: number;
   folderId?: string | null;
@@ -168,6 +169,16 @@ export default function CloudPage() {
 
   const handlePlay = (fileId: string) => {
     window.location.href = `/cloud/stream/${fileId}`;
+  };
+
+  const handleCopyLink = async (url: string, fileName: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast(`Enlace de "${fileName}" copiado`, 'success');
+    } catch {
+      showToast('Error al copiar enlace', 'error');
+    }
+    setActiveMenu(null);
   };
 
   const handleCreateFolder = async () => {
@@ -589,6 +600,9 @@ export default function CloudPage() {
                                   <Play size={16} /> Reproducir
                                 </button>
                               )}
+                              <button className="cloud-dropdown__item" onClick={() => handleCopyLink(file.cloudinarySecureUrl, file.name)}>
+                                <Link2 size={16} /> Copiar enlace
+                              </button>
                               <button className="cloud-dropdown__item" onClick={() => startRename(file)}>
                                 <Pencil size={16} /> Renombrar
                               </button>
