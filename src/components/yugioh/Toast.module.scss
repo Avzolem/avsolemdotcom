@@ -139,3 +139,17 @@ $yugioh-gold: #FFD700;
   }
 }
 
+// Warning variant
+.warning {
+  border-color: #F59E0B;
+
+  .toastIcon {
+    background: rgba(245, 158, 11, 0.2);
+    color: #F59E0B;
+  }
+
+  .toastMessage {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+

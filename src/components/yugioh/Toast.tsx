@@ -6,7 +6,7 @@ import styles from './Toast.module.scss';
 
 interface ToastProps {
   message: string | ReactNode;
-  type?: 'success' | 'error' | 'info';
+  type?: 'success' | 'error' | 'info' | 'warning';
   onClose: () => void;
   duration?: number;
 }
@@ -29,6 +29,7 @@ export default function Toast({ message, type = 'success', onClose, duration = 3
           {type === 'success' && '✓'}
           {type === 'error' && '✕'}
           {type === 'info' && 'ℹ'}
+          {type === 'warning' && '⚠'}
         </span>
         <span className={styles.toastMessage}>{message}</span>
       </div>
