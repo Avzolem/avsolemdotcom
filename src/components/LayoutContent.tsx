@@ -9,9 +9,10 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isYugiohRoute = pathname?.startsWith('/yugioh');
   const isRomsRoute = pathname?.startsWith('/roms');
+  const isCloudRoute = pathname?.startsWith('/cloud');
 
-  // Yu-Gi-Oh and ROMs have their own layouts - no header/footer
-  if (isYugiohRoute || isRomsRoute) {
+  // Yu-Gi-Oh, ROMs, and Cloud have their own layouts - no header/footer
+  if (isYugiohRoute || isRomsRoute || isCloudRoute) {
     return (
       <div className="w-full min-h-screen">
         {children}

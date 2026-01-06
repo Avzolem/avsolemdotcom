@@ -1,0 +1,605 @@
+// Cloud Storage Theme
+// Color palette inspired by sky/cloud aesthetics
+
+$cloud-primary: #3B82F6;      // Blue
+$cloud-secondary: #1E40AF;    // Dark Blue
+$cloud-accent: #60A5FA;       // Light Blue
+$cloud-background: #0F172A;   // Dark Navy
+$cloud-surface: #1E293B;      // Slate
+$cloud-surface-hover: #334155;
+$cloud-text: #F8FAFC;         // White
+$cloud-text-muted: #94A3B8;   // Gray
+$cloud-border: #334155;
+$cloud-success: #22C55E;
+$cloud-error: #EF4444;
+$cloud-warning: #F59E0B;
+
+.cloud-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $cloud-background;
+  color: $cloud-text;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.cloud-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
+}
+
+// Header styles
+.cloud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba($cloud-surface, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $cloud-border;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  @media (min-width: 768px) {
+    padding: 1rem 2rem;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $cloud-text;
+    text-decoration: none;
+
+    svg {
+      color: $cloud-primary;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: $cloud-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__username {
+    display: none;
+    font-size: 0.875rem;
+    color: $cloud-text-muted;
+
+    @media (min-width: 640px) {
+      display: block;
+    }
+  }
+}
+
+// Footer styles
+.cloud-footer {
+  padding: 1rem 1.5rem;
+  background: $cloud-surface;
+  border-top: 1px solid $cloud-border;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    padding: 1rem 2rem;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: $cloud-text-muted;
+
+    a {
+      color: $cloud-accent;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Button styles
+.cloud-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &--primary {
+    background: $cloud-primary;
+    color: white;
+
+    &:hover {
+      background: #2563EB; // Darker blue
+    }
+  }
+
+  &--secondary {
+    background: $cloud-surface;
+    color: $cloud-text;
+    border: 1px solid $cloud-border;
+
+    &:hover {
+      background: $cloud-surface-hover;
+    }
+  }
+
+  &--danger {
+    background: $cloud-error;
+    color: white;
+
+    &:hover {
+      background: #DC2626; // Darker red
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $cloud-text-muted;
+
+    &:hover {
+      background: $cloud-surface;
+      color: $cloud-text;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Card styles
+.cloud-card {
+  background: $cloud-surface;
+  border: 1px solid $cloud-border;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $cloud-primary;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: $cloud-text-muted;
+  }
+}
+
+// Input styles
+.cloud-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  background: $cloud-background;
+  border: 1px solid $cloud-border;
+  border-radius: 8px;
+  color: $cloud-text;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $cloud-primary;
+    box-shadow: 0 0 0 3px rgba($cloud-primary, 0.2);
+  }
+
+  &::placeholder {
+    color: $cloud-text-muted;
+  }
+}
+
+// Auth modal styles
+.cloud-auth-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  padding: 1rem;
+
+  &__content {
+    background: $cloud-surface;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__tab {
+    flex: 1;
+    padding: 0.75rem;
+    background: transparent;
+    border: none;
+    color: $cloud-text-muted;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+
+    &--active {
+      color: $cloud-primary;
+      border-bottom-color: $cloud-primary;
+    }
+
+    &:hover:not(&--active) {
+      color: $cloud-text;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $cloud-text-muted;
+    }
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    color: $cloud-text-muted;
+    font-size: 0.75rem;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $cloud-border;
+    }
+  }
+
+  &__google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    color: #1f1f1f;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__error {
+    padding: 0.75rem;
+    background: rgba($cloud-error, 0.1);
+    border: 1px solid $cloud-error;
+    border-radius: 8px;
+    color: $cloud-error;
+    font-size: 0.875rem;
+  }
+
+  &__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: $cloud-text-muted;
+    cursor: pointer;
+    padding: 0.5rem;
+
+    &:hover {
+      color: $cloud-text;
+    }
+  }
+}
+
+// Storage quota
+.cloud-quota {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: $cloud-surface;
+  border-radius: 8px;
+
+  &__bar {
+    flex: 1;
+    height: 8px;
+    background: $cloud-background;
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 100px;
+  }
+
+  &__fill {
+    height: 100%;
+    background: $cloud-primary;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+
+    &--warning {
+      background: $cloud-warning;
+    }
+
+    &--danger {
+      background: $cloud-error;
+    }
+  }
+
+  &__text {
+    font-size: 0.75rem;
+    color: $cloud-text-muted;
+    white-space: nowrap;
+  }
+}
+
+// Empty state
+.cloud-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+
+  &__icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: $cloud-text-muted;
+    margin-bottom: 1.5rem;
+    max-width: 400px;
+  }
+}
+
+// File grid
+.cloud-files {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+// File card
+.cloud-file {
+  background: $cloud-surface;
+  border: 1px solid $cloud-border;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    border-color: $cloud-primary;
+    transform: translateY(-2px);
+  }
+
+  &__thumbnail {
+    aspect-ratio: 16/9;
+    background: $cloud-background;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px 12px 0 0;
+
+    img, video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--icon {
+      font-size: 2.5rem;
+      color: $cloud-text-muted;
+    }
+  }
+
+  &__info {
+    padding: 0.75rem;
+  }
+
+  &__name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: $cloud-text-muted;
+  }
+
+  &__duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.75rem;
+    color: white;
+  }
+}
+
+// Dropdown menu
+.cloud-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: $cloud-surface;
+  border: 1px solid $cloud-border;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 50;
+  min-width: 140px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    color: $cloud-text;
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-align: left;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: $cloud-surface-hover;
+    }
+
+    &--danger {
+      color: $cloud-error;
+
+      &:hover {
+        background: rgba($cloud-error, 0.1);
+      }
+    }
+  }
+}
+
+// Loading spinner
+.cloud-spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid $cloud-border;
+  border-top-color: $cloud-primary;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive utilities
+.cloud-hide-mobile {
+  @media (max-width: 639px) {
+    display: none !important;
+  }
+}
+
+.cloud-hide-desktop {
+  @media (min-width: 640px) {
+    display: none !important;
+  }
+}
