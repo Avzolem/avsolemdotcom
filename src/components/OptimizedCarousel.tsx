@@ -17,6 +17,12 @@ const isVideo = (src: string) => {
   return videoExtensions.some(ext => src.toLowerCase().endsWith(ext));
 };
 
+// Check if image is likely mobile/portrait based on filename
+const isMobileImage = (src: string) => {
+  const mobilePatterns = ['mobile', 'portrait', 'phone', 'iphone', 'android', '03-mobile'];
+  return mobilePatterns.some(pattern => src.toLowerCase().includes(pattern));
+};
+
 export function OptimizedCarousel({
   images = [],
   title,
@@ -86,35 +92,38 @@ export function OptimizedCarousel({
   return (
     <div data-carousel-id={title} className="relative w-full aspect-video rounded-xl overflow-hidden group">
       {/* Images and Videos */}
-      {loadedImages.map((media, index) => (
-        <div
-          key={media}
-          className={`absolute inset-0 transition-opacity duration-300 ${
-            index === currentIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-        >
-          {isVideo(media) ? (
-            <video
-              ref={(el) => { videoRefs.current[index] = el; }}
-              src={media}
-              className="w-full h-full object-cover"
-              muted
-              loop
-              playsInline
-              autoPlay={index === currentIndex}
-            />
-          ) : (
-            <Image
-              src={media}
-              alt={`${title} - Image ${index + 1}`}
-              fill
-              sizes={sizes}
-              className="object-cover"
-              priority={priority && index === 0}
-            />
-          )}
-        </div>
-      ))}
+      {loadedImages.map((media, index) => {
+        const isMobile = isMobileImage(media);
+        return (
+          <div
+            key={media}
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            } ${isMobile ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+          >
+            {isVideo(media) ? (
+              <video
+                ref={(el) => { videoRefs.current[index] = el; }}
+                src={media}
+                className="w-full h-full object-cover"
+                muted
+                loop
+                playsInline
+                autoPlay={index === currentIndex}
+              />
+            ) : (
+              <Image
+                src={media}
+                alt={`${title} - Image ${index + 1}`}
+                fill
+                sizes={sizes}
+                className={isMobile ? 'object-contain' : 'object-cover'}
+                priority={priority && index === 0}
+              />
+            )}
+          </div>
+        );
+      })}
 
       {/* Navigation Arrows */}
       {loadedImages.length > 1 && (

@@ -1,6 +1,7 @@
 'use client';
 
 import { CloudAuthProvider } from '@/contexts/CloudAuthContext';
+import { ToastProvider } from '@/contexts/ToastContext';
 
 export default function MainCloudLayout({
   children,
@@ -9,9 +10,11 @@ export default function MainCloudLayout({
 }) {
   return (
     <CloudAuthProvider>
-      <div className="cloud-layout">
-        {children}
-      </div>
+      <ToastProvider>
+        <div className="cloud-layout">
+          {children}
+        </div>
+      </ToastProvider>
     </CloudAuthProvider>
   );
 }

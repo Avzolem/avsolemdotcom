@@ -1,30 +1,40 @@
 'use client';
 
 import Link from 'next/link';
-import { Cloud, LogOut, Upload, FolderOpen } from 'lucide-react';
+import { Cloud, LogOut, Upload, FolderPlus } from 'lucide-react';
 import { useCloudAuth } from '@/contexts/CloudAuthContext';
+import StorageQuota from './StorageQuota';
 
 interface CloudHeaderProps {
   onUploadClick?: () => void;
+  onNewFolderClick?: () => void;
 }
 
-export default function CloudHeader({ onUploadClick }: CloudHeaderProps) {
+export default function CloudHeader({ onUploadClick, onNewFolderClick }: CloudHeaderProps) {
   const { isAuthenticated, logout } = useCloudAuth();
 
   return (
     <header className="cloud-header">
       <Link href="/cloud" className="cloud-header__logo">
-        <Cloud size={28} />
-        <span>Cloud</span>
+        <Cloud size={24} />
+        <span>Cloudsolem</span>
       </Link>
+
+      {isAuthenticated && (
+        <div className="cloud-header__storage">
+          <StorageQuota />
+        </div>
+      )}
 
       <nav className="cloud-header__nav">
         {isAuthenticated && (
           <>
-            <Link href="/cloud" className="cloud-btn cloud-btn--ghost">
-              <FolderOpen size={18} />
-              <span className="cloud-hide-mobile">Archivos</span>
-            </Link>
+            {onNewFolderClick && (
+              <button onClick={onNewFolderClick} className="cloud-btn cloud-btn--secondary">
+                <FolderPlus size={18} />
+                <span className="cloud-hide-mobile">Nueva Carpeta</span>
+              </button>
+            )}
 
             {onUploadClick && (
               <button onClick={onUploadClick} className="cloud-btn cloud-btn--primary">

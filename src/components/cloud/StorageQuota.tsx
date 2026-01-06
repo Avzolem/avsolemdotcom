@@ -43,11 +43,11 @@ export default function StorageQuota() {
   if (isLoading) {
     return (
       <div className="cloud-quota">
-        <HardDrive size={16} style={{ color: '#94A3B8' }} />
+        <HardDrive size={16} className="cloud-quota__icon" />
         <div className="cloud-quota__bar">
           <div className="cloud-quota__fill" style={{ width: '0%' }} />
         </div>
-        <span className="cloud-quota__text">Cargando...</span>
+        <span className="cloud-quota__text">...</span>
       </div>
     );
   }
@@ -62,7 +62,7 @@ export default function StorageQuota() {
 
   return (
     <div className="cloud-quota">
-      <HardDrive size={16} style={{ color: '#94A3B8' }} />
+      <HardDrive size={16} className="cloud-quota__icon" />
       <div className="cloud-quota__bar">
         <div
           className={getBarClass()}

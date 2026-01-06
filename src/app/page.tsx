@@ -108,9 +108,10 @@ export default function Home() {
               href={about.path}
               className="
                 inline-flex items-center gap-2 px-4 py-2 rounded-lg
-                bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700
+                bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700
                 text-gray-900 dark:text-white font-medium
-                border border-gray-200 dark:border-gray-700
+                border border-gray-300 dark:border-gray-700
+                shadow-sm dark:shadow-none
                 transition-colors duration-200
               "
             >

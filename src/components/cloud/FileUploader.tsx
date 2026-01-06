@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { Upload, X, File, Video, Image as ImageIcon, CheckCircle, AlertCircle } from 'lucide-react';
+import { useToast } from '@/contexts/ToastContext';
 
 interface UploadFile {
   id: string;
@@ -28,6 +29,7 @@ function formatBytes(bytes: number): string {
 }
 
 export default function FileUploader({ folderId, onUploadComplete, onClose }: FileUploaderProps) {
+  const { showToast } = useToast();
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -140,6 +142,7 @@ export default function FileUploader({ folderId, onUploadComplete, onClose }: Fi
                   f.id === uploadFile.id ? { ...f, status: 'complete' as const } : f
                 )
               );
+              showToast(`"${uploadFile.name}" subido correctamente`, 'success');
               resolve();
             } else {
               throw new Error('Failed to save file');
@@ -169,6 +172,7 @@ export default function FileUploader({ folderId, onUploadComplete, onClose }: Fi
             : f
         )
       );
+      showToast(`Error al subir "${uploadFile.name}"`, 'error');
     }
   };
 

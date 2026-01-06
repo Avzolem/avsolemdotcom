@@ -52,7 +52,7 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
   };
 
   return (
-    <div className="relative overflow-hidden w-full p-8 rounded-xl mb-4 flex flex-col items-center text-center bg-white dark:bg-gray-900 border border-gray-200/50 dark:border-gray-800/50">
+    <div className="relative overflow-hidden w-full p-8 rounded-xl mb-4 flex flex-col items-center text-center bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 shadow-sm dark:shadow-none">
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none">
         {mailchimp.effects.gradient.display && (
@@ -115,10 +115,10 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
                 }
               }}
               onBlur={handleBlur}
-              className={`w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-800 border ${
+              className={`w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border ${
                 error
                   ? 'border-red-500'
-                  : 'border-gray-200 dark:border-gray-700'
+                  : 'border-gray-300 dark:border-gray-700'
               } focus:outline-none focus:ring-2 focus:ring-cyan-500 text-gray-900 dark:text-white placeholder-gray-500`}
             />
             {error && (

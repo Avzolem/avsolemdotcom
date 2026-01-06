@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save, Cloud } from 'lucide-react';
 import { person, social } from '@/resources';
 import styles from './Footer.module.scss';
 
@@ -117,6 +117,24 @@ export const Footer = () => {
               </Link>
             );
           })}
+
+          {/* Cloud Storage Link */}
+          <a
+            href="/cloud"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/cloud';
+            }}
+            className="
+              p-1.5 rounded-lg text-gray-500 dark:text-gray-400
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              hover:text-cyan-600 dark:hover:text-cyan-400
+              transition-colors duration-200
+            "
+            title="Cloudsolem"
+          >
+            <Cloud className="w-4 h-4" />
+          </a>
         </div>
       </div>
 

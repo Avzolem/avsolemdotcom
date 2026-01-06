@@ -249,3 +249,9 @@ export async function moveFilesToFolder(
 
   return result.modifiedCount;
 }
+
+// Get all files in a specific folder (for deletion)
+export async function getFilesByFolder(folderId: string, userId: string): Promise<CloudFile[]> {
+  const collection = await getCollection();
+  return collection.find({ userId, folderId }).toArray();
+}

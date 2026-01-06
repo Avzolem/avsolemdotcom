@@ -25,7 +25,13 @@ export function ThemeProvider({
   storageKey = 'theme',
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(defaultTheme);
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('dark');
+  // Initialize with current DOM state to prevent flash
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
+    if (typeof document !== 'undefined') {
+      return document.documentElement.getAttribute('data-theme') as ResolvedTheme || 'dark';
+    }
+    return 'dark';
+  });
   const [mounted, setMounted] = useState(false);
 
   // Resolve system theme

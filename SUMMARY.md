@@ -180,3 +180,66 @@ The middleware detects these User-Agents and redirects to `/cloud/lite`:
 - PLAYSTATION 3
 
 The lite version uses Route Handlers that return raw HTML without any JavaScript, making it compatible with browsers that don't support modern JS.
+
+---
+
+## Session 5: Cloud UI Enhancements & Light Theme Fix (2025-01-06)
+
+### Cloud Storage UI Improvements
+- **Folder System**: Full CRUD operations for folders
+  - Created `/api/cloud/folders/route.ts` (GET, POST)
+  - Created `/api/cloud/folders/[folderId]/route.ts` (GET, PATCH, DELETE)
+  - Tree navigation sidebar with nested folder support
+  - Breadcrumb navigation for folder path
+  - Files filtered by current folder
+
+- **Header Redesign**:
+  - Renamed title to "Cloudsolem"
+  - Moved storage quota to header (horizontal layout)
+  - Added "Nueva Carpeta" and "Subir" buttons to header
+  - Thinner storage bar (6px mobile, 8px desktop)
+
+- **Toast Notifications**:
+  - Updated `ToastContext.tsx` with UI rendering
+  - Toast styles in `cloud-theme.scss`
+  - Notifications for: upload, delete, rename, create folder
+
+- **Mobile Optimizations**:
+  - Compact header with smaller buttons
+  - 2-column file grid on small screens
+  - Touch-friendly toast positioning
+
+### Light Theme Fixes
+- **Imported `theme-overrides.css`** (was never being used!)
+- **Darker colors for light mode**:
+  - Cyan text: `cyan-400/500/600` → `cyan-700` (#0e7490)
+  - Gray text: Each shade one level darker
+  - Headers forced to `#111827`
+  - Body text forced to `#111827`
+
+- **Component fixes**:
+  - Newsletter box: `border-gray-300` + `shadow-sm`
+  - About button: `bg-white` + `border-gray-300` + `shadow-sm`
+  - Input fields: `bg-gray-50` + `border-gray-300`
+
+### Mobile Image Display Fix
+- Added `isMobileImage()` detection in `OptimizedCarousel.tsx`
+- Portrait images use `object-contain` instead of `object-cover`
+- Gray background for mobile images to prevent cropping
+
+### Portfolio Entry
+- Created `cloudsolem-storage.mdx` project entry
+- Captured screenshots with Playwright (1920x1080, 390x844)
+- Added Cloud icon to Footer linking to `/cloud`
+
+### Files Changed
+| File | Changes |
+|------|---------|
+| `src/app/cloud/(main)/page.tsx` | Folder system, toast integration |
+| `src/app/cloud/cloud-theme.scss` | Sidebar, tree, toast, mobile styles |
+| `src/app/globals.css` | Import theme-overrides.css |
+| `src/app/theme-overrides.css` | Light mode color overrides |
+| `src/components/Footer.tsx` | Cloud icon link |
+| `src/components/OptimizedCarousel.tsx` | Mobile image handling |
+| `src/contexts/ToastContext.tsx` | Toast UI rendering |
+| `src/contexts/ThemeContext.tsx` | Dark mode defaults |
