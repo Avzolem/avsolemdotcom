@@ -1,6 +1,6 @@
 import '@/app/globals.css';
 
-import classNames from "classnames";
+import { clsx } from "clsx";
 import { Analytics } from '@vercel/analytics/react';
 import { Metadata } from 'next';
 
@@ -55,7 +55,7 @@ export default function RootLayout({
     <html
       suppressHydrationWarning
       lang="en"
-      className={classNames(
+      className={clsx(
         fonts.heading.variable,
         fonts.body.variable,
         fonts.label.variable,

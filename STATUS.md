@@ -176,23 +176,33 @@ public/images/consoles/ - 29 imágenes de consolas
 #### Features Implementados
 - [x] DiabloWeb iframe (WebAssembly port)
 - [x] Dark theme con estética Diablo
-- [x] Header con controles (fullscreen, mute, info)
+- [x] Header con logo oficial de Diablo
+- [x] Fuente Cinzel Decorative (estilo medieval)
+- [x] Controles: fullscreen, mute, info, home
 - [x] Modal informativo (controles, shareware vs full)
+- [x] Branding "Powered by Avsolem"
+- [x] Icono en footer (GiDevilMask)
+- [x] Portfolio entry con 3 imágenes
 - [x] Metadata SEO
 
 #### Stack Técnico
 - Frontend: Next.js 15, React, Tailwind CSS
 - Game: DiabloWeb (d07RiV) via iframe
 - Engine: DevilutionX compiled to WebAssembly
+- Font: Cinzel Decorative (Google Fonts)
 
 #### Estructura de Archivos
 ```
 src/app/diablo/
-├── page.tsx - Game iframe + UI
-└── layout.tsx - Metadata
+├── page.tsx - Game iframe + UI con logo y controles
+└── layout.tsx - Metadata + Cinzel Decorative font
 
-public/images/projects/diablo/
-└── 01-gameplay.png - Screenshot para portfolio
+public/images/
+├── diablo-logo.webp - Logo oficial de Diablo
+└── projects/diablo/
+    ├── 01-cover.webp - Portada icónica
+    ├── 02-gameplay.webp - Screenshot gameplay
+    └── 03-screenshot.webp - Screenshot oficial Blizzard
 ```
 
 #### Notas
@@ -206,6 +216,13 @@ public/images/projects/diablo/
 
 ### 2025-01-09
 - **Diablo Web**: Nuevo proyecto `/diablo` con DiabloWeb iframe
+- **Diablo Web**: Logo oficial, fuente Cinzel Decorative, branding Avsolem
+- **Diablo Web**: Botón home, icono en footer (GiDevilMask)
+- **Diablo Web**: Portfolio entry con 3 imágenes optimizadas
+- **Optimización**: Removidas dependencias no usadas (classnames, nodemailer, simplex-noise, class-variance-authority)
+- **Optimización**: Convertidas 46 imágenes PNG a WebP (ahorro: 34 MB)
+- **Optimización**: Eliminados archivos duplicados (Providers.new.tsx, LazyProjectCard.tsx)
+- **Footer**: Hover cyan uniforme en todos los iconos
 - **CLAUDE.md**: Actualizado con regla de crear portfolio entries automáticamente
 - **STATUS.md**: Creado archivo centralizado de estado
 

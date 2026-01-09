@@ -24,7 +24,7 @@ import {
 } from "react-icons/pi";
 
 import { FaDiscord, FaGithub, FaLinkedin, FaX, FaThreads } from "react-icons/fa6";
-import { GiDragonHead } from "react-icons/gi";
+import { GiDragonHead, GiDevilMask } from "react-icons/gi";
 
 export const iconLibrary: Record<string, IconType> = {
   arrowUpRight: HiArrowUpRight,
@@ -49,7 +49,8 @@ export const iconLibrary: Record<string, IconType> = {
   document: HiOutlineDocument,
   rocket: HiOutlineRocketLaunch,
   dragon: GiDragonHead,
-  save: FaSave
+  save: FaSave,
+  diablo: GiDevilMask
 };
 
 export type IconLibrary = typeof iconLibrary;

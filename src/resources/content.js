@@ -58,6 +58,11 @@ const social = [
     icon: "save",
     link: "/roms",
   },
+  {
+    name: "Diablo",
+    icon: "diablo",
+    link: "/diablo",
+  },
 ];
 
 const home = {

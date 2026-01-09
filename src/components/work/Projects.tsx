@@ -1,5 +1,5 @@
 import { getPosts } from '@/utils/utils';
-import { LazyProjectCard } from '@/components/LazyProjectCard';
+import { ProjectCard } from '@/components/ProjectCard';
 
 interface ProjectsProps {
   range?: [number, number?];
@@ -24,7 +24,7 @@ export function Projects({ range }: ProjectsProps) {
   return (
     <div className="flex flex-col w-full gap-8 mb-10 px-4">
       {displayedProjects.map((post, index) => (
-        <LazyProjectCard
+        <ProjectCard
           priority={index === 0}
           key={post.slug}
           href={`work/${post.slug}`}

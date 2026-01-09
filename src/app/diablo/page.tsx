@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Skull, Maximize2, Volume2, VolumeX, Info, X } from 'lucide-react';
+import { Maximize2, Volume2, VolumeX, Info, X, Home } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function DiabloPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -25,18 +27,19 @@ export default function DiabloPage() {
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-black to-black pointer-events-none" />
-      <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-5 pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-red-900/30 bg-black/80 backdrop-blur-sm">
+      <header className="relative z-10 flex items-center justify-between px-4 py-2 border-b border-red-900/30 bg-black/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <Skull className="w-8 h-8 text-red-600" />
-          <div>
-            <h1 className="text-xl font-bold text-red-500 tracking-wider" style={{ fontFamily: 'serif' }}>
-              DIABLO
-            </h1>
-            <p className="text-xs text-gray-500">Powered by DiabloWeb</p>
-          </div>
+          <Image
+            src="/images/diablo-logo.webp"
+            alt="Diablo"
+            width={150}
+            height={44}
+            className="h-10 w-auto"
+            priority
+          />
+          <p className="text-xs text-white font-bold hidden sm:block" style={{ fontFamily: 'var(--font-diablo), serif' }}>Powered by Avsolem</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -61,6 +64,13 @@ export default function DiabloPage() {
           >
             <Maximize2 className="w-5 h-5" />
           </button>
+          <Link
+            href="/"
+            className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+            title="Back to avsolem.com"
+          >
+            <Home className="w-5 h-5" />
+          </Link>
         </div>
       </header>
 
@@ -87,18 +97,23 @@ export default function DiabloPage() {
             </button>
 
             <div className="flex items-center gap-3 mb-4">
-              <Skull className="w-8 h-8 text-red-600" />
-              <h2 className="text-xl font-bold text-red-500">About DiabloWeb</h2>
+              <Image
+                src="/images/diablo-logo.webp"
+                alt="Diablo"
+                width={120}
+                height={35}
+                className="h-8 w-auto"
+              />
             </div>
 
             <div className="space-y-4 text-gray-300 text-sm">
               <p>
-                This is <strong className="text-white">DiabloWeb</strong>, a port of the original Diablo game
-                that runs entirely in your browser using WebAssembly.
+                This is <strong className="text-white">Diablo</strong>, a port of the original Diablo game
+                that runs entirely in your browser using WebAssembly. Powered by <strong className="text-red-500">Avsolem</strong>.
               </p>
 
               <div>
-                <h3 className="text-white font-semibold mb-2">How to Play:</h3>
+                <h3 className="text-white font-semibold mb-2" style={{ fontFamily: 'var(--font-diablo), serif' }}>How to Play:</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400">
                   <li>The <strong className="text-gray-200">Shareware version</strong> is available for free</li>
                   <li>For the <strong className="text-gray-200">full game</strong>, you need to provide your own DIABDAT.MPQ file</li>
@@ -107,7 +122,7 @@ export default function DiabloPage() {
               </div>
 
               <div>
-                <h3 className="text-white font-semibold mb-2">Controls:</h3>
+                <h3 className="text-white font-semibold mb-2" style={{ fontFamily: 'var(--font-diablo), serif' }}>Controls:</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400">
                   <li><strong className="text-gray-200">Left Click</strong> - Move / Attack / Interact</li>
                   <li><strong className="text-gray-200">Right Click</strong> - Use spell</li>
@@ -119,8 +134,7 @@ export default function DiabloPage() {
               </div>
 
               <p className="text-xs text-gray-500 pt-2 border-t border-gray-800">
-                Based on <a href="https://github.com/AJenbo/devilutionX" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">DevilutionX</a> and{' '}
-                <a href="https://github.com/AJenbo/devilutionX" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">DiabloWeb</a> by d07RiV.
+                Based on <a href="https://github.com/AJenbo/devilutionX" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">DevilutionX</a>.
                 Diablo is a trademark of Blizzard Entertainment.
               </p>
             </div>

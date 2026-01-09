@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save, Cloud } from 'lucide-react';
+import { GiDevilMask } from 'react-icons/gi';
 import { person, social } from '@/resources';
 import styles from './Footer.module.scss';
 
@@ -27,6 +28,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   cards: Layers,
   dragon: DragonIcon,
   save: Save,
+  diablo: GiDevilMask,
 };
 
 const getIcon = (iconName: string) => {
@@ -57,7 +59,7 @@ export const Footer = () => {
 
             const Icon = getIcon(item.icon);
             const isExternal = item.link.startsWith('http');
-            const isSpecialRoute = item.link.includes('/yugioh') || item.link.includes('/roms');
+            const isSpecialRoute = item.link.includes('/yugioh') || item.link.includes('/roms') || item.link.includes('/diablo');
 
             if (isSpecialRoute) {
               return (
@@ -71,7 +73,7 @@ export const Footer = () => {
                   className="
                     p-1.5 rounded-lg text-gray-500 dark:text-gray-400
                     hover:bg-gray-100 dark:hover:bg-gray-800
-                    hover:text-gray-700 dark:hover:text-gray-200
+                    hover:text-cyan-600 dark:hover:text-cyan-400
                     transition-colors duration-200
                   "
                   title={item.name}
@@ -91,7 +93,7 @@ export const Footer = () => {
                   className="
                     p-1.5 rounded-lg text-gray-500 dark:text-gray-400
                     hover:bg-gray-100 dark:hover:bg-gray-800
-                    hover:text-gray-700 dark:hover:text-gray-200
+                    hover:text-cyan-600 dark:hover:text-cyan-400
                     transition-colors duration-200
                   "
                   title={item.name}
@@ -108,7 +110,7 @@ export const Footer = () => {
                 className="
                   p-1.5 rounded-lg text-gray-500 dark:text-gray-400
                   hover:bg-gray-100 dark:hover:bg-gray-800
-                  hover:text-gray-700 dark:hover:text-gray-200
+                  hover:text-cyan-600 dark:hover:text-cyan-400
                   transition-colors duration-200
                 "
                 title={item.name}
