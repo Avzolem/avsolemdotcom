@@ -110,18 +110,44 @@ Routes can be password-protected via the RouteGuard component. Authentication us
 
 ## Adding New Projects
 
-To add new projects to the portfolio:
+**IMPORTANT: When creating a new route/feature for the site, ALWAYS automatically create a corresponding portfolio entry.**
 
-1. **Capture screenshots** using the generic script:
+When adding new projects or features to the portfolio:
+
+1. **Create the route/feature** in `/src/app/<project-name>/`
+
+2. **Automatically create portfolio entry** - This is mandatory for any new project:
+   - Create MDX file in `src/app/work/projects/<project-slug>.mdx`
+   - Include frontmatter: title, publishedAt, summary, images, team, category, tags, link
+   - Write project overview, features, and technical details
+   - The project will automatically appear in `/work` and the home page
+
+3. **Capture screenshots** using Playwright or the generic script:
    ```bash
+   # Using Playwright directly:
+   npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<route>" public/images/projects/<project-slug>/01-screenshot.png
+
+   # Or using the generic script:
    node scripts/capture-project-screenshots.cjs <url> <project-slug>
-   # Example: node scripts/capture-project-screenshots.cjs https://example.com my-project
    ```
 
-2. **Create MDX file** in `src/app/work/projects/<project-slug>.mdx` with:
-   - Frontmatter metadata (title, date, summary, images, etc.)
-   - Project description and details
-   - Technologies used
-   - Links to live demo and GitHub
+4. **Images** should be saved to `public/images/projects/<project-slug>/`
 
-3. **Images** will be automatically saved to `public/images/projects/<project-slug>/`
+### MDX Frontmatter Template
+```mdx
+---
+title: "Project Name"
+publishedAt: "YYYY-MM-DD"
+summary: "Brief description of the project"
+images:
+  - "/images/projects/<slug>/01-screenshot.png"
+team:
+  - name: "Andres Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Web App"
+tags: ["nextjs", "react", "typescript"]
+link: "https://avsolem.com/<route>"
+---
+```
