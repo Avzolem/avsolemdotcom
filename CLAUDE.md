@@ -8,21 +8,23 @@ This is a portfolio website built with Next.js 15, React 19, and Tailwind CSS. I
 
 ## Development Commands
 
+**IMPORTANT: This project uses Yarn as the package manager. Do NOT use npm.**
+
 ```bash
 # Install dependencies
-npm install
+yarn install
 
 # Run development server
-npm run dev
+yarn dev
 
 # Build for production
-npm run build
+yarn build
 
 # Start production server
-npm start
+yarn start
 
 # Run linting
-npm run lint
+yarn lint
 ```
 
 ## Architecture
