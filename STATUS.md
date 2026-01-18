@@ -3,7 +3,7 @@
 > Este archivo centraliza el estado de todos los proyectos dentro de avsolem.com.
 > Claude Code debe leer este archivo al inicio de cada sesión para entender el contexto.
 
-**Última actualización global**: 2025-01-09
+**Última actualización global**: 2025-01-17
 
 ---
 
@@ -12,6 +12,7 @@
 | Proyecto | Ruta | Estado | Última Actualización |
 |----------|------|--------|----------------------|
 | Portfolio Principal | `/` | Production | 2025-01-06 |
+| CV / Resume | `/cv` | Production | 2025-01-17 |
 | Cloud Storage | `/cloud` | Production | 2025-01-06 |
 | Yu-Gi-Oh! Manager | `/yugioh` | Production | 2025-12-03 |
 | ROMS Index | `/roms` | Production | 2025-11-24 |
@@ -63,7 +64,45 @@ src/app/cloud/
 
 ---
 
-### 2. Yu-Gi-Oh! Manager (`/yugioh`)
+### 2. CV / Resume (`/cv`)
+
+**Estado**: Production Ready
+**Última sesión**: 2025-01-17
+
+#### Features Implementados
+- [x] Diseño profesional tamaño carta (8.5x11")
+- [x] Soporte bilingüe completo (EN/ES)
+- [x] Toggle de idioma en tiempo real
+- [x] Toggle de tema (light/dark)
+- [x] Estilos de impresión optimizados para Edge/Chrome
+- [x] PDF de 1 sola página
+- [x] Foto de perfil circular con borde cyan
+- [x] Sidebar con contacto, idiomas y skills
+- [x] Sección principal con experiencia y educación
+- [x] Fechas en línea con títulos (diseño compacto)
+- [x] Bullets cyan en listas
+- [x] Controles flotantes estilo liquid glass
+- [x] Botón "Download CV" en página /about
+
+#### Stack Técnico
+- Frontend: Next.js 15, React 19, Tailwind CSS
+- Print: CSS @media print optimizado
+- Iconos: Lucide React
+
+#### Estructura de Archivos
+```
+src/app/cv/
+├── page.tsx - Componente principal con datos bilingües
+└── print.css - Estilos de impresión completos
+```
+
+#### Notas
+- Para imprimir correctamente en Edge: márgenes ninguno, sin encabezados/pie, gráficos de fondo activado
+- Los datos del CV están hardcodeados en page.tsx para ambos idiomas
+
+---
+
+### 3. Yu-Gi-Oh! Manager (`/yugioh`)
 
 **Estado**: Production Ready
 **Última sesión**: 2025-12-03
@@ -130,7 +169,7 @@ RESEND_API_KEY (opcional, para emails)
 
 ---
 
-### 3. ROMS Index (`/roms`)
+### 4. ROMS Index (`/roms`)
 
 **Estado**: Production Ready
 **Última sesión**: 2025-11-24
@@ -167,7 +206,7 @@ public/images/consoles/ - 29 imágenes de consolas
 
 ---
 
-### 4. Diablo Web (`/diablo`)
+### 5. Diablo Web (`/diablo`)
 
 **Estado**: Production Ready
 **Última sesión**: 2025-01-09
@@ -213,6 +252,15 @@ public/images/
 ---
 
 ## Development History
+
+### 2025-01-17
+- **CV Page**: Nueva página `/cv` con diseño profesional tamaño carta
+- **CV Page**: Soporte bilingüe completo (EN/ES) con toggle en tiempo real
+- **CV Page**: Toggle de tema light/dark con controles liquid glass
+- **CV Page**: Estilos de impresión optimizados para Edge/Chrome (1 página)
+- **CV Page**: Fechas en línea con títulos, bullets cyan, foto circular
+- **About Page**: Centrado de nombre y rol en todas las pantallas
+- **About Page**: Botón "Download CV" con enlace a `/cv`
 
 ### 2025-01-09
 - **Diablo Web**: Nuevo proyecto `/diablo` con DiabloWeb iframe
@@ -339,4 +387,4 @@ npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<rou
 
 ---
 
-*Última actualización: 2025-01-09 por Claude Code*
+*Última actualización: 2025-01-17 por Claude Code*

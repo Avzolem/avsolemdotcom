@@ -4,14 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { OptimizedCarousel } from './OptimizedCarousel';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProjectCardProps {
   href: string;
   priority?: boolean;
   images: string[];
   title: string;
+  title_es?: string;
   content: string;
   description: string;
+  description_es?: string;
   avatars: { src: string }[];
   link: string;
 }
@@ -21,28 +24,36 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   priority,
   images = [],
   title,
+  title_es,
   content,
   description,
+  description_es,
   avatars,
   link,
 }) => {
+  const { language, t } = useLanguage();
+
+  // Use translated content based on language
+  const displayTitle = language === 'es' && title_es ? title_es : title;
+  const displayDescription = language === 'es' && description_es ? description_es : description;
+
   return (
     <div className="flex flex-col w-full gap-4">
       <OptimizedCarousel
         images={images}
-        title={title}
+        title={displayTitle}
         priority={priority}
         sizes="(max-width: 960px) 100vw, 960px"
       />
       <div className="flex flex-col w-full px-2 pt-3 pb-6 gap-4">
-        {title && (
+        {displayTitle && (
           <div className="flex-[5]">
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white text-balance">
-              {title}
+              {displayTitle}
             </h2>
           </div>
         )}
-        {(avatars?.length > 0 || description?.trim() || content?.trim()) && (
+        {(avatars?.length > 0 || displayDescription?.trim() || content?.trim()) && (
           <div className="flex-[7] flex flex-col gap-4">
             {/* Avatar Group */}
             {avatars?.length > 0 && (
@@ -54,7 +65,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   >
                     <Image
                       src={avatar.src}
-                      alt={`Team member ${index + 1}`}
+                      alt={`${t('detail.teamMember')} ${index + 1}`}
                       fill
                       className="object-cover"
                     />
@@ -71,9 +82,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             )}
 
             {/* Description */}
-            {description?.trim() && (
+            {displayDescription?.trim() && (
               <p className="text-sm text-gray-500 dark:text-gray-400 text-balance">
-                {description}
+                {displayDescription}
               </p>
             )}
 
@@ -84,7 +95,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   href={href}
                   className="inline-flex items-center gap-1 text-sm text-cyan-600 dark:text-cyan-400 hover:underline"
                 >
-                  More Info
+                  {t('project.moreInfo')}
                   <ArrowRight className="w-3 h-3" />
                 </Link>
               )}
@@ -95,7 +106,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm text-cyan-600 dark:text-cyan-400 hover:underline"
                 >
-                  View project
+                  {t('project.viewProject')}
                   <ExternalLink className="w-3 h-3" />
                 </a>
               )}

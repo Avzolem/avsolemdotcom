@@ -1,0 +1,77 @@
+---
+title: "VoxF9 - Voice to Text Transcription"
+title_es: "VoxF9 - Transcripcion de Voz a Texto"
+publishedAt: "2025-01-17"
+summary: "Windows desktop application for real-time offline voice-to-text transcription with F9 hotkey activation"
+summary_es: "Aplicacion de escritorio Windows para transcripcion de voz a texto en tiempo real sin conexion con activacion por tecla F9"
+images:
+  - "/images/projects/voxf9/01-cover.webp"
+team:
+  - name: "Andres Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Desktop App"
+tags: ["python", "vosk", "speech-recognition", "windows", "offline"]
+link: "https://github.com/Avzolem/voxf9"
+---
+
+## Project Overview
+
+VoxF9 is a Windows desktop application that enables real-time voice-to-text transcription with a single keystroke. Press F9 to start dictating, and your speech is instantly converted to text and inserted wherever your cursor is positioned. The entire process runs offline, ensuring complete privacy.
+
+## Key Features
+
+- **Real-Time Transcription**
+  - Live partial results while speaking
+  - Minimal latency between speech and text
+  - Automatic punctuation support
+
+- **Complete Offline Operation**
+  - No internet connection required
+  - Audio never leaves your computer
+  - No subscriptions or API costs
+
+- **Simple Activation**
+  - F9 hotkey to start/stop recording
+  - System tray integration
+  - Runs silently in background
+
+- **Universal Compatibility**
+  - Works in any application with text input
+  - Browsers, Office, IDEs, chat apps
+  - Seamless cursor position detection
+
+- **Spanish Optimization**
+  - Optimized for Spanish language
+  - Latin American accent support
+  - High accuracy for native speakers
+
+## Technical Stack
+
+- **Language**: Python 3.12+
+- **Speech Engine**: Vosk (offline recognition)
+- **Audio Capture**: sounddevice
+- **Text Simulation**: pyautogui
+- **System Integration**: pystray, keyboard
+- **Platform**: Windows 10/11
+
+## Installation
+
+Two options available:
+1. **Pre-compiled executable** - Downloads ~1.4GB voice model on first run
+2. **From source** - Clone repository and install dependencies via pip
+
+## Use Cases
+
+- Quick note-taking without typing
+- Dictating emails and documents
+- Accessibility for users with mobility limitations
+- Hands-free coding comments
+- Voice journaling and brainstorming
+
+## Open Source
+
+VoxF9 is open source under MIT license. Contributions welcome!
+
+[View on GitHub](https://github.com/Avzolem/voxf9)

@@ -90,22 +90,21 @@ export function OptimizedCarousel({
   };
 
   return (
-    <div data-carousel-id={title} className="relative w-full aspect-video rounded-xl overflow-hidden group">
+    <div data-carousel-id={title} className="relative w-full aspect-video rounded-xl overflow-hidden group bg-gray-100 dark:bg-gray-900">
       {/* Images and Videos */}
       {loadedImages.map((media, index) => {
-        const isMobile = isMobileImage(media);
         return (
           <div
             key={media}
             className={`absolute inset-0 transition-opacity duration-300 ${
               index === currentIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            } ${isMobile ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+            }`}
           >
             {isVideo(media) ? (
               <video
                 ref={(el) => { videoRefs.current[index] = el; }}
                 src={media}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 muted
                 loop
                 playsInline
@@ -117,7 +116,7 @@ export function OptimizedCarousel({
                 alt={`${title} - Image ${index + 1}`}
                 fill
                 sizes={sizes}
-                className={isMobile ? 'object-contain' : 'object-cover'}
+                className="object-contain"
                 priority={priority && index === 0}
               />
             )}

@@ -1,0 +1,80 @@
+---
+title: "SwipeClean - Gallery Cleaner"
+title_es: "SwipeClean - Limpiador de Galeria"
+publishedAt: "2025-01-17"
+summary: "Mobile app to clean your photo gallery with Tinder-style swipe gestures and duplicate detection"
+summary_es: "App movil para limpiar tu galeria de fotos con gestos de deslizamiento estilo Tinder y deteccion de duplicados"
+images:
+  - "/images/projects/swipeclean/01-cover.webp"
+  - "/images/projects/swipeclean/02-screenshot.webp"
+  - "/images/projects/swipeclean/03-screenshot.webp"
+  - "/images/projects/swipeclean/04-screenshot.webp"
+team:
+  - name: "Andres Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Mobile App"
+tags: ["flutter", "dart", "android", "mobile", "photo-management"]
+link: "https://github.com/Avzolem/swipeclean"
+---
+
+## Project Overview
+
+SwipeClean transforms the tedious task of cleaning your photo gallery into an engaging, Tinder-like experience. Swipe left to delete, swipe right to keep. The app features intelligent duplicate detection and non-destructive deletion, making it easy to reclaim storage space on your Android device.
+
+## Key Features
+
+- **Intuitive Swipe Interface**
+  - Left swipe: Send to trash
+  - Right swipe: Keep photo
+  - Tap: View fullscreen with zoom
+  - Visual feedback on each decision
+
+- **Smart Trash Management**
+  - Non-destructive deletion
+  - Review before permanent removal
+  - Restore accidentally deleted photos
+  - Persistent between sessions
+
+- **Album Organization**
+  - Browse photos by album
+  - Filter specific folders
+  - Photo count per album
+  - Quick album switching
+
+- **Duplicate Detection**
+  - Perceptual hashing algorithm
+  - Identifies similar images
+  - Groups duplicates for review
+  - Saves storage space efficiently
+
+- **Real-Time Statistics**
+  - Total photos count
+  - Reviewed progress
+  - Trash quantity
+  - Pending items tracker
+
+## Technical Stack
+
+- **Framework**: Flutter 3.24.5
+- **Language**: Dart 3.0+
+- **State Management**: Provider
+- **Local Database**: Hive
+- **Gallery Access**: photo_manager
+- **Gestures**: flutter_card_swiper
+- **Platform**: Android 5.0+
+
+## Design
+
+Modern dark theme with elegant animations and responsive layout. The card-based interface provides satisfying feedback on every swipe, making gallery cleanup feel like a game.
+
+## Installation
+
+Available on GitHub releases. Download the APK and install on any Android 5.0+ device.
+
+## Open Source
+
+SwipeClean is open source under MIT license. Built with Flutter for cross-platform potential.
+
+[View on GitHub](https://github.com/Avzolem/swipeclean)

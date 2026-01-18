@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save, Cloud } from 'lucide-react';
 import { GiDevilMask } from 'react-icons/gi';
 import { person, social } from '@/resources';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from './Footer.module.scss';
 
 // Custom Dragon icon (Yu-Gi-Oh style)
@@ -37,6 +38,7 @@ const getIcon = (iconName: string) => {
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="w-full p-2 flex flex-col items-center">
@@ -50,7 +52,7 @@ export const Footer = () => {
         <p className="text-sm text-gray-600 dark:text-gray-400">
           <span className="text-gray-400 dark:text-gray-500">© {currentYear} /</span>
           <span className="px-1 text-gray-700 dark:text-gray-300">{person.name}</span>
-          <span className="text-gray-400 dark:text-gray-500">/ Build with ☕ & 🩶</span>
+          <span className="text-gray-400 dark:text-gray-500">/ {t('footer.builtWith')} ☕ & 🩶</span>
         </p>
 
         <div className="flex items-center gap-4">

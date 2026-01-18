@@ -2,6 +2,7 @@
 
 import React, { useState, memo } from "react";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface OptimizedImageProps {
   src: string;
@@ -37,9 +38,10 @@ export const OptimizedImage = memo<OptimizedImageProps>(({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const { t } = useLanguage();
 
   // Generate optimized sizes for different viewports
-  const responsiveSizes = sizes || 
+  const responsiveSizes = sizes ||
     "(max-width: 640px) 100vw, (max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw";
 
   // Container styles for aspect ratio
@@ -62,7 +64,7 @@ export const OptimizedImage = memo<OptimizedImageProps>(({
   // Error fallback component
   if (hasError) {
     return (
-      <div 
+      <div
         className={`${className} image-error-fallback`}
         style={{
           ...containerStyles,
@@ -74,7 +76,7 @@ export const OptimizedImage = memo<OptimizedImageProps>(({
           fontSize: "14px",
         }}
       >
-        Failed to load image
+        {t('image.failedToLoad')}
       </div>
     );
   }

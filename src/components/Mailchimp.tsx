@@ -2,6 +2,7 @@
 
 import { mailchimp } from "@/resources";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T {
   let timeout: ReturnType<typeof setTimeout>;
@@ -21,6 +22,7 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [touched, setTouched] = useState<boolean>(false);
+  const { t } = useLanguage();
 
   const validateEmail = (email: string): boolean => {
     if (email === "") {
@@ -36,7 +38,7 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
     setEmail(value);
 
     if (!validateEmail(value)) {
-      setError("Please enter a valid email address.");
+      setError(t('newsletter.invalidEmail'));
     } else {
       setError("");
     }
@@ -47,7 +49,7 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
   const handleBlur = () => {
     setTouched(true);
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
+      setError(t('newsletter.invalidEmail'));
     }
   };
 
@@ -84,13 +86,13 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
       </div>
 
       <h3 className="relative text-xl font-bold text-gray-900 dark:text-white mb-2">
-        {newsletter.title}
+        {t('newsletter.title')}
       </h3>
       <p
         className="relative text-gray-500 dark:text-gray-400 mb-6 text-balance"
         style={{ maxWidth: '320px' }}
       >
-        {newsletter.description}
+        {t('newsletter.description')}
       </p>
       <form
         className="w-full flex justify-center"
@@ -105,7 +107,7 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
               id="mce-EMAIL"
               name="EMAIL"
               type="email"
-              placeholder="Email"
+              placeholder={t('newsletter.emailPlaceholder')}
               required
               onChange={(e) => {
                 if (error) {
@@ -155,7 +157,7 @@ export const Mailchimp = ({ newsletter }: { newsletter: NewsletterProps }) => {
                 type="submit"
                 className="w-full px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg transition-colors"
               >
-                Subscribe
+                {t('newsletter.subscribe')}
               </button>
             </div>
           </div>

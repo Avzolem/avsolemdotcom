@@ -37,10 +37,7 @@
   color: #111827 !important;
 }
 
-[data-theme="light"] p,
-[data-theme="light"] span:not(.cloud-quota__text):not(.toast__message) {
-  color: inherit;
-}
+/* Let Tailwind classes control text colors - removed inherit override */
 
 /* Ensure body text is dark in light mode */
 [data-theme="light"] body {
@@ -97,6 +94,19 @@
 
 [data-theme="light"] .text-gray-300 {
   color: #9ca3af !important; /* gray-400 */
+}
+
+/* Ensure text-gray-900 stays dark in light mode */
+[data-theme="light"] .text-gray-900 {
+  color: #111827 !important; /* gray-900 - almost black */
+}
+
+[data-theme="light"] .text-gray-800 {
+  color: #1f2937 !important; /* gray-800 */
+}
+
+[data-theme="light"] .text-gray-700 {
+  color: #374151 !important; /* gray-700 */
 }
 
 /* Darker background for hover states */

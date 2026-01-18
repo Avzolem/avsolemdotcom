@@ -11,9 +11,10 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const isRomsRoute = pathname?.startsWith('/roms');
   const isCloudRoute = pathname?.startsWith('/cloud');
   const isDiabloRoute = pathname?.startsWith('/diablo');
+  const isCvRoute = pathname?.startsWith('/cv');
 
-  // Yu-Gi-Oh, ROMs, Cloud, and Diablo have their own layouts - no header/footer
-  if (isYugiohRoute || isRomsRoute || isCloudRoute || isDiabloRoute) {
+  // Yu-Gi-Oh, ROMs, Cloud, Diablo and CV have their own layouts - no header/footer
+  if (isYugiohRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute) {
     return (
       <div className="w-full min-h-screen">
         {children}

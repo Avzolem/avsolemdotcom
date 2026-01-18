@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import MasonryGrid from "@/components/gallery/MasonryGrid";
 import { baseURL, gallery, person } from "@/resources";
 import { SchemaScript, Meta } from '@/lib/seo';
+import { GalleryTitle } from '@/components/PageTitles';
 
 export async function generateMetadata(): Promise<Metadata> {
   return Meta.generate({
@@ -15,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Gallery() {
   return (
-    <div className="flex w-full max-w-5xl">
+    <div className="flex flex-col w-full max-w-5xl">
       <SchemaScript
         as="webPage"
         baseURL={baseURL}
@@ -29,6 +30,7 @@ export default function Gallery() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <GalleryTitle />
       <MasonryGrid />
     </div>
   );

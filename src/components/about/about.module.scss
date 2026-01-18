@@ -12,6 +12,16 @@
     height: fit-content;
 }
 
+// Text alignment - centered by default
+.textAlign {
+    text-align: center;
+}
+
+// Block alignment - centered by default
+.blockAlign {
+    align-self: center;
+}
+
 // Hide table of contents on mobile
 .hideOnMobile {
     display: block;
@@ -37,15 +47,6 @@
 }
 
 @media (max-width: breakpoints.$s) {
-
-    .textAlign {
-        text-align: center;
-    }
-
-    .blockAlign {
-        align-self: center;
-    }
-
     .socialDesktop {
         display: none;
     }

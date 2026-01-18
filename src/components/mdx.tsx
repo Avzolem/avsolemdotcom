@@ -70,6 +70,7 @@ function createImage({ alt, src, ...props }: MediaProps) {
     </div>
   );
 }
+createImage.displayName = 'MDXImage';
 
 function slugify(str: any): string {
   const text = typeof str === 'string' ? str : String(str || '');
@@ -106,6 +107,14 @@ interface TextProps {
 }
 
 function createParagraph({ children }: TextProps) {
+  // Check if children contains only an image (to avoid <div> inside <p> hydration error)
+  if (React.Children.count(children) === 1) {
+    const child = React.Children.toArray(children)[0];
+    if (React.isValidElement(child) && (child.type as any)?.displayName === 'MDXImage') {
+      return <>{children}</>;
+    }
+  }
+
   return (
     <p
       className="text-base text-gray-600 dark:text-gray-300 mt-2 mb-3 leading-relaxed"

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Posts.module.scss';
 import { formatDate } from '@/utils/formatDate';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PostProps {
   post: any;
@@ -12,6 +13,12 @@ interface PostProps {
 }
 
 export default function Post({ post, thumbnail, direction }: PostProps) {
+  const { language, t } = useLanguage();
+
+  // Use translated content based on language
+  const displayTitle = language === 'es' && post.metadata.title_es ? post.metadata.title_es : post.metadata.title;
+  const displaySummary = language === 'es' && post.metadata.summary_es ? post.metadata.summary_es : post.metadata.summary;
+
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -25,7 +32,7 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
           <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
             <Image
               src={post.metadata.image}
-              alt={'Thumbnail of ' + post.metadata.title}
+              alt={`${t('project.thumbnailAlt')} ${displayTitle}`}
               fill
               sizes="(max-width: 768px) 100vw, 640px"
               className={`object-cover ${styles.image}`}
@@ -35,10 +42,10 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
         )}
         <div className="relative w-full flex flex-col gap-1 p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-balance">
-            {post.metadata.title}
+            {displayTitle}
           </h2>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {formatDate(post.metadata.publishedAt, false)}
+            {formatDate(post.metadata.publishedAt, false, language)}
           </span>
           {post.metadata.tag && (
             <span className="mt-3 inline-flex self-start px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">

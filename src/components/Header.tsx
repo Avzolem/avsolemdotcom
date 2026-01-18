@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Home, User, Grid3X3, BookOpen, Images } from 'lucide-react';
 
-import { routes, display, person, about, blog, work, gallery } from '@/resources';
+import { routes, display, person } from '@/resources';
 import { ThemeToggle } from './ThemeToggle';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from './Header.module.scss';
 
 type TimeDisplayProps = {
@@ -66,8 +67,41 @@ const NavButton = ({ href, icon: Icon, label, selected }: NavButtonProps) => (
   </Link>
 );
 
+const LanguageToggle = () => {
+  const { language, setLanguage } = useLanguage();
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'es' : 'en');
+  };
+
+  return (
+    <button
+      onClick={toggleLanguage}
+      className="
+        flex items-center gap-1 px-3 py-1.5 rounded-2xl text-sm font-medium
+        bg-white/70 dark:bg-white/[0.08]
+        backdrop-blur-xl backdrop-saturate-150
+        border border-white/50 dark:border-white/[0.12]
+        shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]
+        dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]
+        transition-all duration-200 hover:scale-105
+      "
+      title={language === 'en' ? 'Cambiar a Espanol' : 'Switch to English'}
+    >
+      <span className={`transition-opacity ${language === 'en' ? 'opacity-100 font-bold' : 'opacity-50'}`}>
+        EN
+      </span>
+      <span className="text-gray-400 dark:text-gray-500">|</span>
+      <span className={`transition-opacity ${language === 'es' ? 'opacity-100 font-bold' : 'opacity-50'}`}>
+        ES
+      </span>
+    </button>
+  );
+};
+
 export const Header = () => {
   const pathname = usePathname() ?? '';
+  const { t } = useLanguage();
 
   return (
     <header
@@ -76,10 +110,10 @@ export const Header = () => {
         z-[9] w-full py-3 px-4 flex items-center justify-center
       `}
     >
-      {/* Left section - Location */}
-      <div className="flex-1 pl-3 flex items-center text-sm text-gray-500 dark:text-gray-400">
+      {/* Left section - Language Toggle */}
+      <div className="flex-1 pl-3 flex items-center">
         <span className={styles.hideOnMobile}>
-          {display.location && person.location}
+          <LanguageToggle />
         </span>
       </div>
 
@@ -106,7 +140,7 @@ export const Header = () => {
             <NavButton
               href="/about"
               icon={User}
-              label={about.label}
+              label={t('nav.about')}
               selected={pathname === '/about'}
             />
           )}
@@ -114,7 +148,7 @@ export const Header = () => {
             <NavButton
               href="/work"
               icon={Grid3X3}
-              label={work.label}
+              label={t('nav.work')}
               selected={pathname.startsWith('/work')}
             />
           )}
@@ -122,7 +156,7 @@ export const Header = () => {
             <NavButton
               href="/blog"
               icon={BookOpen}
-              label={blog.label}
+              label={t('nav.blog')}
               selected={pathname.startsWith('/blog')}
             />
           )}
@@ -130,7 +164,7 @@ export const Header = () => {
             <NavButton
               href="/gallery"
               icon={Images}
-              label={gallery.label}
+              label={t('nav.gallery')}
               selected={pathname.startsWith('/gallery')}
             />
           )}
@@ -144,10 +178,31 @@ export const Header = () => {
         </div>
       </nav>
 
-      {/* Right section - Time */}
-      <div className="flex-1 pr-3 flex justify-end items-center text-sm text-gray-500 dark:text-gray-400">
+      {/* Right section - Location + Time with Liquid Glass */}
+      <div className="flex-1 pr-3 flex justify-end items-center">
         <span className={styles.hideOnMobile}>
-          {display.time && <TimeDisplay timeZone={person.location} />}
+          {(display.location || display.time) && (
+            <div
+              className="
+                flex items-center gap-2 px-3 py-1.5 rounded-2xl text-sm text-gray-600 dark:text-gray-300
+                bg-white/70 dark:bg-white/[0.08]
+                backdrop-blur-xl backdrop-saturate-150
+                border border-white/50 dark:border-white/[0.12]
+                shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]
+                dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]
+              "
+            >
+              {display.location && (
+                <span className="text-gray-500 dark:text-gray-400">
+                  {person.location.split('/')[1] || person.location}
+                </span>
+              )}
+              {display.location && display.time && (
+                <span className="text-gray-400 dark:text-gray-500">|</span>
+              )}
+              {display.time && <TimeDisplay timeZone={person.location} />}
+            </div>
+          )}
         </span>
       </div>
     </header>

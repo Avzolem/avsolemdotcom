@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 import { SchemaScript, Meta } from '@/lib/seo';
+import { WorkTitle } from '@/components/PageTitles';
 
 // Force static generation at build time
 export const dynamic = 'force-static';
@@ -33,6 +34,7 @@ export default function Work() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <WorkTitle />
       <Projects />
     </div>
   );
