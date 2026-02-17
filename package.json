@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
-    "@next/mdx": "^15.5.6",
+    "@next/mdx": "^15.5.10",
     "@tailwindcss/postcss": "^4.1.13",
     "@vercel/analytics": "^1.5.0",
     "bcryptjs": "^3.0.3",
@@ -27,7 +27,7 @@
     "jspdf": "^4.1.0",
     "lucide-react": "^0.544.0",
     "mongodb": "^7.0.0",
-    "next": "^15.5.6",
+    "next": "^15.5.10",
     "next-auth": "^4.24.13",
     "next-mdx-remote": "^5.0.0",
     "react": "19.0.0",
@@ -43,7 +43,9 @@
   },
   "resolutions": {
     "mdast-util-to-hast": ">=13.2.1",
-    "preact": ">=10.27.3"
+    "preact": ">=10.27.3",
+    "tar": ">=7.5.7",
+    "lodash": ">=4.17.23"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -54,7 +56,7 @@
     "autoprefixer": "^10.4.21",
     "baseline-browser-mapping": "^2.8.29",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^15.5.6",
+    "eslint-config-next": "^15.5.10",
     "playwright": "^1.57.0",
     "postcss": "^8.5.6",
     "sharp": "^0.34.3",
