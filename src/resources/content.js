@@ -48,6 +48,21 @@ const social = [
     icon: "email",
     link: `mailto:${person.email}`,
   },
+  {
+    name: "Yu-Gi-Oh! Manager",
+    icon: "dragon",
+    link: "/yugioh",
+  },
+  {
+    name: "ROMs Index",
+    icon: "save",
+    link: "/roms",
+  },
+  {
+    name: "Diablo",
+    icon: "diablo",
+    link: "/diablo",
+  },
 ];
 
 const home = {

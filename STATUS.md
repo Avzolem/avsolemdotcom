@@ -3,7 +3,7 @@
 > Este archivo centraliza el estado de todos los proyectos dentro de avsolem.com.
 > Claude Code debe leer este archivo al inicio de cada sesión para entender el contexto.
 
-**Última actualización global**: 2025-01-17
+**Última actualización global**: 2026-02-17
 
 ---
 
@@ -14,7 +14,7 @@
 | Portfolio Principal | `/` | Production | 2025-01-06 |
 | CV / Resume | `/cv` | Production | 2025-01-17 |
 | Cloud Storage | `/cloud` | Production | 2025-01-06 |
-| Yu-Gi-Oh! Manager | `/yugioh` | Production | 2025-12-03 |
+| Yu-Gi-Oh! Manager | `/yugioh` | Production | 2026-02-17 |
 | ROMS Index | `/roms` | Production | 2025-11-24 |
 | Diablo Web | `/diablo` | Production | 2025-01-09 |
 
@@ -105,7 +105,7 @@ src/app/cv/
 ### 3. Yu-Gi-Oh! Manager (`/yugioh`)
 
 **Estado**: Production Ready
-**Última sesión**: 2025-12-03
+**Última sesión**: 2026-02-17
 **Portfolio entry**: `src/app/work/projects/yugioh-manager.mdx`
 
 #### Features Implementados
@@ -125,6 +125,12 @@ src/app/cv/
 - [x] i18n completo (ES/EN)
 - [x] Colores oficiales Yu-Gi-Oh! por tipo/atributo
 - [x] Multi-language set codes con fallback a EN
+- [x] Deck Builder MVP (Main/Extra/Side zones, límite 3 decks)
+- [x] Búsqueda integrada en deck builder con auto-zone detection
+- [x] Validación en tiempo real (límites de zonas, máx 3 copias)
+- [x] Estadísticas de deck (curva de niveles, distribución tipo/atributo)
+- [x] Export PDF formato torneo KDE oficial (con logos Konami/Yu-Gi-Oh!)
+- [x] Enlace home en copyright del footer
 
 #### Stack Técnico
 - Frontend: Next.js 15, React 19, SCSS Modules
@@ -133,6 +139,7 @@ src/app/cv/
 - Auth: NextAuth.js 4 (Google OAuth + Credentials)
 - OCR: Tesseract.js v5
 - Fuzzy Search: Fuse.js
+- PDF Export: jsPDF (KDE tournament format)
 
 #### Estructura de Archivos
 ```
@@ -143,12 +150,15 @@ src/app/yugioh/
 ├── catalogo/, noticias/ - CMS público
 ├── admin/ - Panel de administración
 ├── shared/[token]/ - Listas compartidas
+├── decks/ - Lista de decks del usuario
+├── decks/[deckId]/ - Editor de deck
 └── perfil/ - Perfil de usuario
 
 src/components/yugioh/
 ├── CardSearch, CardDisplay, CardList
 ├── CardScanner, AdvancedFilters
 ├── ExportButtons, PriceStats, ShareButton
+├── DeckBuilder, DeckList, DeckStats
 ├── YugiohHeader, YugiohFooter, AuthModal
 └── Toast, ToastContainer
 ```
@@ -163,7 +173,6 @@ RESEND_API_KEY (opcional, para emails)
 
 #### Pendiente / Ideas Futuras
 - [ ] Historial de precios (tracking temporal)
-- [ ] Deck builder
 - [ ] Modo offline (PWA)
 - [ ] Import masivo desde CSV
 
@@ -253,6 +262,16 @@ public/images/
 
 ## Development History
 
+### 2026-02-17
+- **Yu-Gi-Oh Deck Builder**: MVP completo con Main/Extra/Side zones (límite 3 decks por usuario)
+- **Yu-Gi-Oh Deck Builder**: Búsqueda integrada con auto-zone detection para Extra Deck
+- **Yu-Gi-Oh Deck Builder**: Validación en tiempo real (límites de zonas, máx 3 copias por carta)
+- **Yu-Gi-Oh Deck Builder**: Estadísticas de deck (curva de niveles, distribución tipo/atributo)
+- **Yu-Gi-Oh Deck Builder**: Export PDF formato torneo KDE oficial con logos Konami y Yu-Gi-Oh!
+- **Yu-Gi-Oh Footer**: Enlace home en copyright ("avsolem" clickeable)
+- **Footer Icons**: Restaurados iconos faltantes de Diablo, ROMs y Yu-Gi-Oh en footer principal
+- **Dependencies**: Añadido jsPDF para generación de PDF de torneos
+
 ### 2025-01-17
 - **CV Page**: Nueva página `/cv` con diseño profesional tamaño carta
 - **CV Page**: Soporte bilingüe completo (EN/ES) con toggle en tiempo real
@@ -324,7 +343,6 @@ public/images/
 - [ ] ROMS: Búsqueda/filtro de consolas
 
 ### Baja Prioridad
-- [ ] Yu-Gi-Oh: Deck builder
 - [ ] Yu-Gi-Oh: PWA offline mode
 - [ ] ROMS: Contador de juegos por consola
 - [ ] Diablo: Self-hosted version (sin iframe)
@@ -387,4 +405,4 @@ npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<rou
 
 ---
 
-*Última actualización: 2025-01-17 por Claude Code*
+*Última actualización: 2026-02-17 por Claude Code*

@@ -91,3 +91,44 @@ export interface ListStats {
   mostExpensiveCard?: CardInList;
   lastUpdated?: Date;
 }
+
+// Deck Builder Types
+export type DeckZone = 'main' | 'extra' | 'side';
+
+export interface CardInDeck {
+  cardId: number;
+  cardName: string;
+  cardImage: string;
+  cardType: string;
+  frameType: string;
+  atk?: number;
+  def?: number;
+  level?: number;
+  attribute?: string;
+  race: string;
+  quantity: number;
+  zone: DeckZone;
+}
+
+export interface YugiohDeck {
+  _id?: string;
+  userId: string;
+  name: string;
+  description?: string;
+  coverImage?: string;
+  cards: CardInDeck[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const DECK_LIMITS = {
+  MAX_DECKS_PER_USER: 3,
+  MAIN_MIN: 40,
+  MAIN_MAX: 60,
+  EXTRA_MAX: 15,
+  SIDE_MAX: 15,
+  MAX_COPIES: 3,
+} as const;
+
+// Extra deck frame types
+export const EXTRA_DECK_FRAME_TYPES = ['fusion', 'synchro', 'xyz', 'link'] as const;

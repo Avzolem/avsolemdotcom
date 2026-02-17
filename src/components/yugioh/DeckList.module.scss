@@ -1,0 +1,346 @@
+$yugioh-gold: #FFD700;
+
+.container {
+  width: 100%;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  color: $yugioh-gold;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.headerRow {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badge {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  &.brand {
+    background: rgba(100, 100, 100, 0.5);
+    color: $yugioh-gold;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 215, 0, 0.3);
+  border-top-color: $yugioh-gold;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  color: $yugioh-gold;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.emptyText {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.btnCreate {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 215, 0, 0.2);
+  color: $yugioh-gold;
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 215, 0, 0.3);
+    border-color: $yugioh-gold;
+    transform: translateY(-1px);
+  }
+}
+
+// Decks Grid
+.decksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.deckCard {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(26, 26, 26, 0.8);
+  border: 2px solid rgba(100, 100, 100, 0.5);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    border-color: $yugioh-gold;
+    transform: translateY(-2px);
+  }
+}
+
+.deckCover {
+  flex-shrink: 0;
+  width: 90px;
+  height: 130px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.coverPlaceholder {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.deckInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.deckName {
+  color: $yugioh-gold;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deckDesc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8125rem;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deckCounts {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.countBadge {
+  padding: 0.25rem 0.5rem;
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(100, 100, 100, 0.4);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.deckDate {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  margin-top: auto;
+}
+
+.btnDelete {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  opacity: 0;
+
+  .deckCard:hover & {
+    opacity: 1;
+  }
+
+  &:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: #EF4444;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// Modal
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: #1a1a1a;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+.modalTitle {
+  color: $yugioh-gold;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(26, 26, 26, 0.9);
+  border: 2px solid rgba(100, 100, 100, 0.6);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $yugioh-gold;
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.btnCancel {
+  padding: 0.75rem 1.5rem;
+  background: rgba(100, 100, 100, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(100, 100, 100, 0.5);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(100, 100, 100, 0.5);
+  }
+}
+
+.btnConfirm {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 215, 0, 0.2);
+  color: $yugioh-gold;
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 215, 0, 0.3);
+    border-color: $yugioh-gold;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

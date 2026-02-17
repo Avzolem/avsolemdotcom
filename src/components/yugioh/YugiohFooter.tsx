@@ -84,7 +84,7 @@ export default function YugiohFooter() {
         {/* Copyright */}
         <div className={styles.copyright}>
           <p>
-            {t('footer.copyright', { year: currentYear })}
+            © {currentYear} <Link href="/" className={styles.homeLink}>avsolem</Link>. {t('footer.copyrightSuffix')}
           </p>
           <p className={styles.disclaimer}>
             {t('footer.disclaimer')}
