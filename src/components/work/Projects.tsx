@@ -9,8 +9,6 @@ export function Projects({ range }: ProjectsProps) {
   // Direct call without caching to avoid production issues
   let allProjects = getPosts(['src', 'app', 'work', 'projects']);
 
-  console.log('[Projects] Loaded projects count:', allProjects.length);
-
   const sortedProjects = allProjects.sort((a, b) => {
     return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
   });
@@ -18,8 +16,6 @@ export function Projects({ range }: ProjectsProps) {
   const displayedProjects = range
     ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)
     : sortedProjects;
-
-  console.log('[Projects] Displaying projects count:', displayedProjects.length);
 
   return (
     <div className="flex flex-col w-full gap-8 mb-10 px-4">

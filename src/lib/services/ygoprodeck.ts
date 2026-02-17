@@ -36,25 +36,6 @@ let rateLimitStats: RateLimitStats = {
   requestsPerMinute: [],
 };
 
-// Log rate limiting stats every minute
-if (typeof window === 'undefined') {
-  setInterval(() => {
-    if (rateLimitStats.totalRequests > 0) {
-      console.log('[YGOProDeck API] Rate Limiting Stats:', {
-        totalRequests: rateLimitStats.totalRequests,
-        queuedRequests: rateLimitStats.queuedRequests,
-        averageRequestsPerMinute:
-          rateLimitStats.requestsPerMinute.length > 0
-            ? (
-                rateLimitStats.requestsPerMinute.reduce((a, b) => a + b, 0) /
-                rateLimitStats.requestsPerMinute.length
-              ).toFixed(2)
-            : 0,
-        queueSize: requestQueue.length,
-      });
-    }
-  }, 60000); // Every minute
-}
 
 // Helper function to check if cache is still valid
 function isCacheValid(entry: CacheEntry): boolean {

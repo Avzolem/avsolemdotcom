@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { cache } from "react";
 
 type Team = {
   name: string;
@@ -26,21 +27,18 @@ import { notFound } from 'next/navigation';
 
 function getMDXFiles(dir: string) {
   if (!fs.existsSync(dir)) {
-    console.error(`Directory not found: ${dir}`);
     return [];
   }
 
   try {
     return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
-  } catch (error) {
-    console.error(`Error reading directory ${dir}:`, error);
+  } catch {
     return [];
   }
 }
 
 function readMDXFile(filePath: string) {
   if (!fs.existsSync(filePath)) {
-    console.error(`File not found: ${filePath}`);
     notFound();
   }
 
@@ -62,8 +60,7 @@ function readMDXFile(filePath: string) {
     };
 
     return { metadata, content };
-  } catch (error) {
-    console.error(`Error reading MDX file ${filePath}:`, error);
+  } catch {
     notFound();
   }
 }
@@ -72,7 +69,6 @@ function getMDXData(dir: string) {
   const mdxFiles = getMDXFiles(dir);
 
   if (mdxFiles.length === 0) {
-    console.warn(`No MDX files found in: ${dir}`);
     return [];
   }
 
@@ -86,29 +82,13 @@ function getMDXData(dir: string) {
         slug,
         content,
       };
-    } catch (error) {
-      console.error(`Error processing MDX file ${file}:`, error);
+    } catch {
       return null;
     }
   }).filter(Boolean) as any[];
 }
 
-export function getPosts(customPath = ["", "", "", ""]) {
+export const getPosts = cache(function getPosts(customPath = ["", "", "", ""]) {
   const postsDir = path.join(process.cwd(), ...customPath);
-  console.log('[getPosts] Looking for MDX files in:', postsDir);
-  console.log('[getPosts] process.cwd():', process.cwd());
-  console.log('[getPosts] __dirname equivalent:', __dirname || 'not available');
-  console.log('[getPosts] Directory exists:', fs.existsSync(postsDir));
-
-  const result = getMDXData(postsDir);
-  console.log('[getPosts] Found', result.length, 'posts');
-
-  if (result.length === 0) {
-    console.error('[getPosts] WARNING: No posts found! This may cause empty carousels in production');
-    console.error('[getPosts] Attempted path:', postsDir);
-    console.error('[getPosts] CWD:', process.cwd());
-    console.error('[getPosts] Files in CWD:', fs.existsSync(process.cwd()) ? fs.readdirSync(process.cwd()).slice(0, 10) : 'CWD not accessible');
-  }
-
-  return result;
-}
+  return getMDXData(postsDir);
+});

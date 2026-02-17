@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf';
 import { YugiohDeck, CardInDeck, DECK_LIMITS } from '@/types/yugioh';
 
 interface ExportOptions {
@@ -50,6 +49,7 @@ function getCardCount(cards: CardInDeck[]): number {
 }
 
 export async function exportDeckToPdf(deck: YugiohDeck, options: ExportOptions): Promise<void> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF('p', 'mm', 'letter'); // 215.9 x 279.4 mm
 
   const pageW = 215.9;

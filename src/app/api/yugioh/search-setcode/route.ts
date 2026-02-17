@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
     }
 
     const cleanSetCode = setCode.trim().toUpperCase();
-    console.log('🔍 API: Searching by set code:', cleanSetCode);
 
     // Detect non-English language codes (SP, FR, IT, PT, DE, etc.)
     const nonEnglishPattern = /^(.+)-(SP|FR|IT|PT|DE|AE|KR|JP)(\d+.*)$/i;
@@ -44,7 +43,6 @@ export async function GET(request: NextRequest) {
     if (ygoprodeckResponse.ok) {
       const data = await ygoprodeckResponse.json();
       if (data && data.name) {
-        console.log('✅ API: Found via YGOPRODeck:', data.name);
         return NextResponse.json({
           success: true,
           cardName: data.name,
@@ -65,8 +63,6 @@ export async function GET(request: NextRequest) {
       const suffix = match[3];
       const fallbackCode = `${prefix}-EN${suffix}`;
 
-      console.log(`🌐 API: Code ${cleanSetCode} not found, trying EN fallback: ${fallbackCode}`);
-
       const fallbackResponse = await fetch(
         `https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode=${fallbackCode}`,
         {
@@ -79,7 +75,6 @@ export async function GET(request: NextRequest) {
       if (fallbackResponse.ok) {
         const fallbackData = await fallbackResponse.json();
         if (fallbackData && fallbackData.name) {
-          console.log('✅ API: Found via EN fallback:', fallbackData.name);
           return NextResponse.json({
             success: true,
             cardName: fallbackData.name,
@@ -97,7 +92,6 @@ export async function GET(request: NextRequest) {
     }
 
     // No card found with original or fallback code
-    console.log('❌ API: No card found with set code:', cleanSetCode);
     return NextResponse.json(
       {
         success: false,

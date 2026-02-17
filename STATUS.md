@@ -262,6 +262,15 @@ public/images/
 
 ## Development History
 
+### 2026-02-17 (optimización)
+- **Performance**: React.cache() para getPosts (deduplicación de ~60+ llamadas SSG)
+- **Performance**: Dynamic import de jsPDF en DeckBuilder (136KB menos en bundle inicial)
+- **Performance**: Cloud page `<img>` reemplazado por `<Image />` con next/image
+- **Cleanup**: Eliminados ~60+ console.logs de producción en 10 archivos
+- **Type Safety**: YugiohDeck.ts tipado con UpdateFilter<Document> (sin `as any`)
+- **Security**: next-mdx-remote v5 → v6 (CVE-2026-0969)
+- **Dependencies**: baseline-browser-mapping actualizado, Cloudinary en remotePatterns
+
 ### 2026-02-17
 - **Yu-Gi-Oh Deck Builder**: MVP completo con Main/Extra/Side zones (límite 3 decks por usuario)
 - **Yu-Gi-Oh Deck Builder**: Búsqueda integrada con auto-zone detection para Extra Deck

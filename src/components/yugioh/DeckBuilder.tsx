@@ -8,7 +8,6 @@ import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import { useToast } from '@/contexts/ToastContext';
 import { YugiohDeck, YugiohCard, CardInDeck, DeckZone, DECK_LIMITS, EXTRA_DECK_FRAME_TYPES } from '@/types/yugioh';
 import { searchCardsByName } from '@/lib/services/ygoprodeck';
-import { exportDeckToPdf } from '@/lib/services/deckPdfExport';
 import DeckStats from './DeckStats';
 import styles from './DeckBuilder.module.scss';
 
@@ -219,6 +218,7 @@ export default function DeckBuilder({ deckId }: DeckBuilderProps) {
     if (!deck || !exportPlayerName.trim()) return;
     setExporting(true);
     try {
+      const { exportDeckToPdf } = await import('@/lib/services/deckPdfExport');
       await exportDeckToPdf(deck, {
         playerName: exportPlayerName.trim(),
         konamiId: exportKonamiId.trim() || undefined,

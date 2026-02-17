@@ -35,18 +35,14 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
   // Open camera stream
   const openCamera = async () => {
-    console.log('🎥 openCamera called');
     try {
       setError('');
 
       // FIRST: Show the video container so videoRef.current exists
       setIsCameraOpen(true);
-      console.log('🎥 Camera container opened, waiting for video element...');
 
       // Wait a bit for React to render the video element
       await new Promise(resolve => setTimeout(resolve, 100));
-
-      console.log('🎥 Requesting camera access...');
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -56,23 +52,17 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         }
       });
 
-      console.log('🎥 Camera access granted, stream obtained:', stream);
-
       if (videoRef.current) {
-        console.log('🎥 Setting srcObject on video element');
         videoRef.current.srcObject = stream;
         streamRef.current = stream;
 
         // Wait for video to be ready and play
         videoRef.current.onloadedmetadata = () => {
-          console.log('🎥 Video metadata loaded');
           if (videoRef.current) {
             videoRef.current.play().then(() => {
-              console.log('✅ Video playing successfully');
               // Wait a moment for video to stabilize, then mark as ready
               setTimeout(() => {
                 setIsVideoReady(true);
-                console.log('✅ Video ready for capture');
               }, 500);
             }).catch((err) => {
               console.error('❌ Error playing video:', err);
@@ -108,8 +98,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
   // Capture photo from camera
   const capturePhoto = () => {
-    console.log('📸 Capturing photo...');
-
     if (!videoRef.current || !canvasRef.current) {
       console.error('❌ Video or canvas ref is null');
       setError(t('scanner.error.capture'));
@@ -133,8 +121,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       return;
     }
 
-    console.log(`📸 Video dimensions: ${video.videoWidth}x${video.videoHeight}`);
-
     // Define crop area based on scan mode
     let cropX = 0, cropY = 0, cropWidth = 0, cropHeight = 0;
 
@@ -144,7 +130,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       cropHeight = Math.floor(video.videoHeight * 0.3);
       cropX = 0;
       cropY = 0;
-      console.log(`📸 Cropping to: ${cropWidth}x${cropHeight} (top portion for card name)`);
     } else {
       // Bottom-right corner for set code (alphanumeric code like "LOB-EN001")
       // Set code is approximately in the bottom 15% and right 50% of the card
@@ -152,7 +137,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       cropHeight = Math.floor(video.videoHeight * 0.15);
       cropX = video.videoWidth - cropWidth; // Start from right side
       cropY = video.videoHeight - cropHeight;
-      console.log(`📸 Cropping to: ${cropWidth}x${cropHeight} (bottom-right for set code)`);
     }
 
     canvas.width = cropWidth;
@@ -172,7 +156,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
     // Get processed image as data URL
     const processedImage = canvas.toDataURL('image/jpeg', 0.95);
-    console.log('📸 Image captured and preprocessed, length:', processedImage.length);
 
     setCapturedImage(processedImage);
 
@@ -202,24 +185,19 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       // Alpha channel (data[i + 3]) stays the same
     }
 
-    console.log('🎨 Image preprocessed: grayscale + contrast enhanced');
   };
 
   // Search card by set code using YugiohPrices API
   const searchBySetCode = async (setCode: string): Promise<void> => {
     try {
-      console.log('🔍 Searching by set code:', setCode);
-
       // Try YugiohPrices API first (has specific rarity pricing)
       const yugiohPricesResponse = await fetch(`https://yugiohprices.com/api/price_for_print_tag/${setCode}`);
 
       if (yugiohPricesResponse.ok) {
         const priceData = await yugiohPricesResponse.json();
-        console.log('✅ Card found in YugiohPrices:', priceData);
 
         if (priceData.status === 'success' && priceData.data) {
           const cardName = priceData.data.name;
-          console.log('✅ Card name from set code:', cardName);
           onScanComplete(cardName);
           closeCamera();
           return;
@@ -227,15 +205,12 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       }
 
       // Fallback: Try YGOPRODeck API with set code search
-      console.log('🔍 Trying YGOPRODeck API as fallback...');
       const ygoprodeckResponse = await fetch(`https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode=${setCode}`);
 
       if (ygoprodeckResponse.ok) {
         const data = await ygoprodeckResponse.json();
-        console.log('✅ Card found in YGOPRODeck:', data);
 
         if (data && data.name) {
-          console.log('✅ Card name from YGOPRODeck:', data.name);
           onScanComplete(data.name);
           closeCamera();
           return;
@@ -251,7 +226,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
   // Process image with OCR
   const processImage = async (imageData: string) => {
-    console.log('🔍 Starting OCR processing...');
     setIsScanning(true);
     setError('');
     setProgress(0);
@@ -262,13 +236,10 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         throw new Error('Invalid image data');
       }
 
-      console.log('🔍 Calling Tesseract.recognize...');
-
       // Configure OCR based on scan mode
       const ocrConfig = scanMode === 'setcode'
         ? {
             logger: (m: any) => {
-              console.log('🔍 Tesseract status:', m.status, m.progress);
               if (m.status === 'recognizing text') {
                 setProgress(Math.round(m.progress * 100));
               }
@@ -278,7 +249,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
           }
         : {
             logger: (m: any) => {
-              console.log('🔍 Tesseract status:', m.status, m.progress);
               if (m.status === 'recognizing text') {
                 setProgress(Math.round(m.progress * 100));
               }
@@ -293,8 +263,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         ocrConfig
       );
 
-      console.log('🔍 OCR completed, raw text:', result.data.text);
-
       const text = result.data.text.trim();
 
       if (!text) {
@@ -306,11 +274,9 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       if (scanMode === 'setcode') {
         // Clean set code: extract alphanumeric and dash
         const setCode = text.replace(/[^A-Z0-9-]/gi, '').toUpperCase();
-        console.log('🔍 Extracted set code:', setCode);
 
         if (setCode.length >= 5) {
           // Set codes are usually at least 5 characters (e.g., "SDK-1" or "LOB-001")
-          console.log('✅ Using set code:', setCode);
           await searchBySetCode(setCode);
         } else {
           setError(t('scanner.error.noText'));
@@ -318,16 +284,12 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       } else {
         // Name mode: use fuzzy matching
         const cleanedText = cleanCardName(text);
-        console.log('🔍 Cleaned text:', cleanedText);
 
         if (cleanedText) {
-          console.log('✅ Searching for matching cards...');
-
           // Find matching cards using fuzzy search
           const matches = await findMatchingCards(cleanedText);
 
           if (matches.length > 0) {
-            console.log('✅ Found card matches, displaying options');
             setCardMatches(matches);
           } else {
             setError(t('scanner.error.noMatch'));
@@ -346,8 +308,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
   // Clean up extracted text to get card name
   const cleanCardName = (text: string): string => {
-    console.log('🧹 Cleaning text:', text);
-
     // Remove common OCR artifacts and clean the text
     let cleaned = text
       .replace(/[^a-zA-Z0-9\s\-']/g, ' ') // Keep only alphanumeric, spaces, hyphens, apostrophes
@@ -364,7 +324,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
     // Require minimum length
     if (cleaned.length < 3) {
-      console.log('🧹 Cleaned text too short, returning empty');
       return '';
     }
 
@@ -373,14 +332,12 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
       cleaned = cleaned.substring(0, 50).trim();
     }
 
-    console.log('🧹 Final cleaned text:', cleaned);
     return cleaned;
   };
 
   // Fetch all card names from the API
   const fetchAllCardNames = async (): Promise<string[]> => {
     try {
-      console.log('📥 Fetching all card names from API...');
       const response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php');
 
       if (!response.ok) {
@@ -389,7 +346,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
       const data = await response.json();
       const cardNames = data.data.map((card: any) => card.name);
-      console.log(`📥 Fetched ${cardNames.length} card names`);
       return cardNames;
     } catch (error) {
       console.error('❌ Error fetching card names:', error);
@@ -400,8 +356,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
   // Find matching cards using fuzzy search
   const findMatchingCards = async (ocrText: string): Promise<CardMatch[]> => {
     try {
-      console.log('🔍 Finding matches for:', ocrText);
-
       // Fetch all card names
       const cardNames = await fetchAllCardNames();
 
@@ -415,7 +369,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
       // Search for matches
       const results = fuse.search(ocrText);
-      console.log(`🔍 Found ${results.length} potential matches`);
 
       // Return top 5 matches with their scores
       const matches = results.slice(0, 5).map(result => ({
@@ -423,7 +376,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         score: 1 - result.score! // Convert to similarity score (higher is better)
       }));
 
-      console.log('🔍 Top matches:', matches);
       return matches;
     } catch (error) {
       console.error('❌ Error finding matches:', error);
@@ -433,7 +385,6 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
 
   // Handle card selection from matches
   const handleCardSelection = (cardName: string) => {
-    console.log('✅ User selected card:', cardName);
     onScanComplete(cardName);
     closeCamera();
     setCardMatches([]);

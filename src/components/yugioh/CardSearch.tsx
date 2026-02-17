@@ -52,7 +52,6 @@ async function searchBySetCode(setCode: string): Promise<{
   fallbackInfo?: { originalCode: string; fallbackCode: string };
 }> {
   const cleanSetCode = setCode.trim().toUpperCase();
-  console.log('🔍 Searching by set code:', cleanSetCode);
 
   try {
     // Call internal API route to search by set code
@@ -61,19 +60,12 @@ async function searchBySetCode(setCode: string): Promise<{
     );
 
     if (!response.ok) {
-      console.log('❌ API returned error:', response.status);
       return { card: null };
     }
 
     const data = await response.json();
 
     if (data.success && data.cardName) {
-      console.log('✅ Found via API:', data.cardName, `(source: ${data.source})`);
-
-      if (data.usedFallback) {
-        console.log(`🌐 Used fallback: ${data.originalCode} → ${data.fallbackCode}`);
-      }
-
       // Get full card details from YGOPRODeck
       const cards = await searchCardsByName(data.cardName);
       if (cards.length > 0) {
@@ -98,7 +90,6 @@ async function searchBySetCode(setCode: string): Promise<{
       }
     }
 
-    console.log('❌ No card found with set code:', cleanSetCode);
     return { card: null };
   } catch (error) {
     console.error('❌ Error searching by set code:', error);
@@ -173,7 +164,6 @@ export default function CardSearch() {
 
       // Check if the query is a Set Code (e.g., LOB-EN001)
       if (hasQuery && isSetCode(query) && !hasFilters) {
-        console.log('🏷️ Detected Set Code format, searching by set code...');
         const { card, fallbackInfo } = await searchBySetCode(query);
         if (card) {
           results = [card];

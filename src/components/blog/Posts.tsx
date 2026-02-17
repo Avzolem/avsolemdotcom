@@ -16,8 +16,6 @@ export function Posts({
 }: PostsProps) {
   let allBlogs = getPosts(['src', 'app', 'blog', 'posts']);
 
-  console.log('[Posts] Loaded blogs count:', allBlogs.length);
-
   const sortedBlogs = allBlogs.sort((a, b) => {
     return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
   });
@@ -28,8 +26,6 @@ export function Posts({
         range.length === 2 ? range[1] : sortedBlogs.length
       )
     : sortedBlogs;
-
-  console.log('[Posts] Displaying blogs count:', displayedBlogs.length);
 
   const gridCols = {
     '1': 'grid-cols-1',

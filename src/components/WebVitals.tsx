@@ -208,7 +208,6 @@ export function WebVitals() {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         // Page is being hidden - metrics are already being tracked by the onXXX functions
-        console.log('Page hidden - web vitals data sent');
       }
     };
 

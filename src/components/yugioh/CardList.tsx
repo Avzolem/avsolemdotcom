@@ -132,7 +132,6 @@ export default function CardList({ type, title }: CardListProps) {
   }, [cards]);
 
   const removeCard = async (setCode: string, cardName: string) => {
-    console.log('removeCard called:', { setCode, type });
     if (!confirm(t('list.confirmDelete'))) return;
 
     setIsRemoving(setCode);
@@ -141,8 +140,6 @@ export default function CardList({ type, title }: CardListProps) {
       const response = await fetch(`/api/yugioh/lists/${type}?setCode=${encodeURIComponent(setCode)}`, {
         method: 'DELETE',
       });
-
-      console.log('removeCard response:', response.status, response.ok);
 
       if (response.ok) {
         const data = await response.json();
@@ -193,8 +190,6 @@ export default function CardList({ type, title }: CardListProps) {
   };
 
   const updateQuantity = async (setCode: string, newQuantity: number) => {
-    console.log('updateQuantity called:', { setCode, newQuantity, type });
-
     // Guardar estado anterior para poder revertir
     const previousCards = cards;
     const previousTotal = totalValue;
@@ -220,8 +215,6 @@ export default function CardList({ type, title }: CardListProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ setCode, quantity: newQuantity }),
       });
-
-      console.log('updateQuantity response:', response.status, response.ok);
 
       if (!response.ok) {
         console.error('Failed to update quantity:', await response.text());

@@ -1,4 +1,4 @@
-import { Collection, ObjectId, Document } from 'mongodb';
+import { Collection, ObjectId, Document, UpdateFilter } from 'mongodb';
 import { getDatabase } from '../connection';
 import { YugiohDeck, CardInDeck, DeckZone, DECK_LIMITS, EXTRA_DECK_FRAME_TYPES } from '@/types/yugioh';
 
@@ -155,17 +155,19 @@ export async function addCardToDeck(
   );
 
   if (existingIndex >= 0) {
+    const update: UpdateFilter<Document> = {
+      $inc: { [`cards.${existingIndex}.quantity`]: quantity },
+      $set: { updatedAt: new Date() },
+    };
     await col.updateOne(
       { ...filter, 'cards.cardId': card.cardId, 'cards.zone': zone },
-      {
-        $inc: { [`cards.${existingIndex}.quantity`]: quantity },
-        $set: { updatedAt: new Date() },
-      } as any);
+      update
+    );
   } else {
     await col.updateOne(filter, {
       $push: { cards: { ...card, quantity, zone } },
       $set: { updatedAt: new Date() },
-    } as any);
+    } as Document);
   }
 
   if (!deck.coverImage && zone === 'main') {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 import { Cloud, Upload, FolderPlus, Play, Trash2, MoreVertical, Pencil, Folder, Home, ChevronRight, Link2 } from 'lucide-react';
 import CloudHeader from '@/components/cloud/CloudHeader';
 import CloudFooter from '@/components/cloud/CloudFooter';
@@ -543,7 +544,7 @@ export default function CloudPage() {
                   >
                     <div className="cloud-file__thumbnail">
                       {file.thumbnailUrl ? (
-                        <img src={file.thumbnailUrl} alt={file.name} />
+                        <Image src={file.thumbnailUrl} alt={file.name} fill sizes="150px" style={{ objectFit: 'cover' }} />
                       ) : (
                         <span className="cloud-file__thumbnail--icon">
                           {file.cloudinaryResourceType === 'video' ? '🎬' : '📄'}
