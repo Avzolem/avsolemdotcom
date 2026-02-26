@@ -33,6 +33,9 @@ const companies: Company[] = [
       { name: "Nintendo 3DS", year: 2011, image: "/images/consoles/Nintendo 3DS.png", url: "https://myrient.erista.me/files/No-Intro/Nintendo%20-%20Nintendo%203DS%20(Decrypted)/" },
       { name: "Wii U", year: 2012, image: "/images/consoles/Nintendo Wii U.png", url: "https://myrient.erista.me/files/Internet%20Archive/teamgt19/nintendo-wii-u-usa-full-set-wua-format-embedded-dlc-updates/" },
       { name: "Nintendo Switch", year: 2017, image: "/images/consoles/Nintendo Switch.png", url: "https://romslab.com/" },
+      { name: "Nintendo Switch Alter 1", year: 2017, image: "/images/consoles/Nintendo Switch.png", url: "https://nswgame.com/" },
+      { name: "Nintendo Switch Alter 2", year: 2017, image: "/images/consoles/Nintendo Switch.png", url: "https://eggnsemulator.com/nintendo-switch-roms/" },
+      { name: "Nintendo Switch Alter 3", year: 2017, image: "/images/consoles/Nintendo Switch.png", url: "https://nxbrew.net/" },
     ],
   },
   {
