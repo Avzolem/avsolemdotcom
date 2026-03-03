@@ -1,0 +1,175 @@
+$pokemon-red: #CC0000;
+$pokemon-red-dark: #990000;
+$pokemon-yellow: #FFCB05;
+$pokemon-blue: #3B4CCA;
+$pokemon-gray-medium: #4A4A4A;
+$pokemon-gray-dark: #3A3A3A;
+
+.container {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.toggleButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  background: rgba(42, 42, 42, 0.8);
+  border: 2px solid rgba(100, 100, 100, 0.6);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(100, 100, 100, 0.5);
+    border-color: $pokemon-yellow;
+  }
+
+  .icon {
+    font-size: 1.25rem;
+  }
+
+  .badge {
+    background: $pokemon-yellow;
+    color: #000;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: auto;
+  }
+
+  .arrow {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+}
+
+.panel {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: rgba(26, 26, 26, 0.8);
+  border: 2px solid rgba(100, 100, 100, 0.5);
+  border-radius: 12px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  select,
+  input {
+    padding: 0.75rem;
+    background: rgba(10, 10, 10, 0.8);
+    border: 2px solid rgba(100, 100, 100, 0.5);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $pokemon-yellow;
+    }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  select {
+    cursor: pointer;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+.btnApply {
+  background: linear-gradient(135deg, $pokemon-yellow 0%, darken($pokemon-yellow, 10%) 100%);
+  color: #000;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btnClear {
+  background: rgba(255, 203, 5, 0.2);
+  color: $pokemon-yellow;
+  border: 2px solid rgba(255, 203, 5, 0.3);
+
+  &:hover {
+    background: rgba(255, 203, 5, 0.3);
+  }
+}

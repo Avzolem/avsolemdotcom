@@ -1,0 +1,36 @@
+---
+title: "Pokemon TCG Manager"
+publishedAt: "2026-03-02"
+summary: "Full-featured Pokemon TCG card collection manager with search, deck builder, and tournament PDF export."
+images:
+  - "/images/projects/pokemon-tcg-manager/01-screenshot.png"
+team:
+  - name: "Andres Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Web App"
+tags: ["nextjs", "react", "typescript", "mongodb", "pokemon", "tcg"]
+link: "https://avsolem.com/pokemon"
+---
+
+## Overview
+
+A comprehensive Pokemon Trading Card Game manager built with Next.js 15 and the pokemontcg.io API. Search any Pokemon card, manage your collection, build tournament-ready decks, and export professional deck lists.
+
+## Features
+
+- **Card Search**: Search the entire Pokemon TCG database with advanced filters (type, supertype, HP range, rarity, set)
+- **Collection Management**: Track your card collection with quantities, prices, and notes
+- **Wishlist & For Sale**: Organize cards you want and cards available for trade
+- **Deck Builder**: Build 60-card decks with Pokemon/Trainer/Energy categorization and copy limit validation
+- **Tournament PDF Export**: Generate professional deck lists with Play! Pokemon ID for official events
+- **OCR Card Scanner**: Scan physical cards using your camera to quickly identify and add them
+- **Price Tracking**: Real-time prices from TCGPlayer and Cardmarket
+- **Sharing**: Generate shareable links for your collections with 7-day expiration
+- **Admin Panel**: Full CMS for managing news articles and product catalog
+- **Bilingual**: Full Spanish and English support
+
+## Technical Details
+
+Built with shared authentication (NextAuth with Google OAuth), MongoDB for data persistence, and the pokemontcg.io v2 API for card data. Features include rate limiting, 24-hour caching, and responsive design optimized for mobile collectors.

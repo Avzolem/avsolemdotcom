@@ -343,7 +343,7 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
 
   return (
     <div className={styles.card}>
-      {/* Image with zoom hover */}
+      {/* Card thumbnail */}
       <div className={styles.imageWrapper}>
         {imageUrl && (
           <div className={styles.imageContainer}>
@@ -355,16 +355,19 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
               className={styles.cardImage}
               unoptimized
             />
-            <div className={styles.imageZoomOverlay}>
-              <Image
-                src={imageUrl}
-                alt={card.name}
-                width={300}
-                height={439}
-                className={styles.largeImage}
-                unoptimized
-              />
-            </div>
+          </div>
+        )}
+        {/* Hover preview */}
+        {imageUrl && (
+          <div className={styles.imageZoomOverlay}>
+            <Image
+              src={imageUrl}
+              alt={card.name}
+              width={300}
+              height={439}
+              className={styles.largeImage}
+              unoptimized
+            />
           </div>
         )}
       </div>

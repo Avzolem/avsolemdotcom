@@ -8,13 +8,15 @@ import { RouteGuard } from './RouteGuard';
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isYugiohRoute = pathname?.startsWith('/yugioh');
+  const isPokemonRoute = pathname?.startsWith('/pokemon');
   const isRomsRoute = pathname?.startsWith('/roms');
   const isCloudRoute = pathname?.startsWith('/cloud');
   const isDiabloRoute = pathname?.startsWith('/diablo');
   const isCvRoute = pathname?.startsWith('/cv');
+  const isTcgRoute = pathname?.startsWith('/tcg');
 
-  // Yu-Gi-Oh, ROMs, Cloud, Diablo and CV have their own layouts - no header/footer
-  if (isYugiohRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute) {
+  // Yu-Gi-Oh, Pokemon, ROMs, Cloud, Diablo, CV and TCG have their own layouts - no header/footer
+  if (isYugiohRoute || isPokemonRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute || isTcgRoute) {
     return (
       <div className="w-full min-h-screen">
         {children}

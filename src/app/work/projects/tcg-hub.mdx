@@ -1,0 +1,36 @@
+---
+title: "TCG Hub"
+title_es: "TCG Hub"
+publishedAt: "2026-03-02"
+summary: "Landing page for Trading Card Game managers with glassmorphism design and per-game brand theming"
+summary_es: "Landing page para gestores de juegos de cartas coleccionables con diseño glassmorphism"
+images:
+  - "/images/projects/tcg-hub/01-main.png"
+team:
+  - name: "Andres Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Web App"
+tags: ["nextjs", "react", "typescript", "scss", "tcg"]
+link: "https://avsolem.com/tcg"
+---
+
+## Overview
+
+A polished hub page serving as the entry point to multiple Trading Card Game management tools. Features glassmorphism cards with per-game brand color theming, subtle hover animations, and responsive layout.
+
+## Features
+
+- **5 TCG Games**: Yu-Gi-Oh!, Pokémon, Magic: The Gathering, Digimon, One Piece
+- **Glassmorphism Design**: Backdrop blur, gradient borders, accent glow effects
+- **Brand Theming**: Each card uses CSS custom properties for its unique accent color
+- **Coming Soon States**: Graceful handling of unreleased game managers
+- **Responsive Grid**: 3 columns → 2 columns → 1 column
+
+## Technical Details
+
+- CSS Custom Properties for per-card color theming without duplicating selectors
+- SCSS Modules for complex pseudo-elements and keyframe animations
+- Next.js Image optimization for all logos
+- Touch-device optimizations (disables hover transforms for mobile)

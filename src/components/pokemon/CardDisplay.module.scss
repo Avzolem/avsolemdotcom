@@ -1,0 +1,818 @@
+$pokemon-red: #EF4444;
+$pokemon-blue: #3B4CCA;
+$pokemon-yellow: #FACC15;
+$pokemon-accent: #3B4CCA;
+$pokemon-green: #22C55E;
+$pokemon-gray: #2a2a2a;
+
+.card {
+  background: rgba(26, 26, 26, 0.8);
+  border: 2px solid rgba(100, 100, 100, 0.5);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+
+  &:hover {
+    border-color: $pokemon-accent;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+  }
+}
+
+.imageWrapper {
+  flex-shrink: 0;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100px;
+  height: 140px;
+  border-radius: 8px;
+  overflow: visible;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+.cardImage {
+  border-radius: 8px;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.2s ease;
+}
+
+.imageZoomOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  border-radius: 10px;
+  background: rgba(10, 10, 10, 0.95);
+  padding: 6px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.imageWrapper:hover .imageZoomOverlay {
+  opacity: 1;
+}
+
+.imageContainer:hover .cardImage {
+  opacity: 0.7;
+}
+
+.largeImage {
+  border-radius: 6px;
+  object-fit: contain;
+  display: block;
+  width: 100%;
+  max-height: 100%;
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: $pokemon-accent;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.hpBadge {
+  flex-shrink: 0;
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: $pokemon-green;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  background: rgba(100, 100, 100, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid rgba(100, 100, 100, 0.7);
+}
+
+.badgeSupertype {
+  @extend .badge;
+
+  &.pokMon,
+  &.pokemon {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #F87171;
+  }
+
+  &.trainer {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.5);
+    color: #60A5FA;
+  }
+
+  &.energy {
+    background: rgba(250, 204, 21, 0.2);
+    border-color: rgba(250, 204, 21, 0.5);
+    color: $pokemon-yellow;
+  }
+}
+
+.badgeSubtype {
+  @extend .badge;
+  background: rgba(100, 100, 100, 0.3);
+  border-color: rgba(100, 100, 100, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.badgeType {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.badgeHP {
+  @extend .badge;
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: $pokemon-green;
+  font-weight: 700;
+}
+
+// Evolution info
+.evolutionInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.evolvesLabel {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+}
+
+.evolvesValue {
+  color: $pokemon-blue;
+  font-weight: 600;
+}
+
+// Abilities Section
+.abilitiesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionLabel {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.abilityItem {
+  padding: 0.5rem 0.75rem;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 6px;
+}
+
+.abilityHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.abilityType {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  background: rgba(168, 85, 247, 0.3);
+  color: #C084FC;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.abilityName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #C084FC;
+}
+
+.abilityText {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+// Attacks Section
+.attacksSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.attacksHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.attackItem {
+  padding: 0.5rem 0.75rem;
+  background: rgba(42, 42, 42, 0.6);
+  border: 1px solid rgba(100, 100, 100, 0.3);
+  border-radius: 6px;
+}
+
+.attackHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.attackCost {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.energyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.attackName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  flex: 1;
+}
+
+.attackDamage {
+  font-size: 1rem;
+  font-weight: 800;
+  color: $pokemon-accent;
+  flex-shrink: 0;
+  font-family: 'Geist Mono', monospace;
+}
+
+.attackText {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+// Combat info (weaknesses, resistances, retreat)
+.combatInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(42, 42, 42, 0.5);
+  border: 1px solid rgba(42, 42, 42, 0.8);
+  border-radius: 6px;
+}
+
+.combatRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.combatLabel {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+.combatValues {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.combatBadge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+// Rules Section
+.rulesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ruleText {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  padding: 0.375rem 0.5rem;
+  background: rgba(59, 76, 202, 0.08);
+  border-left: 2px solid rgba(59, 76, 202, 0.4);
+  border-radius: 0 4px 4px 0;
+}
+
+// Flavor text
+.flavorSection {
+  padding: 0.375rem 0.5rem;
+  background: rgba(42, 42, 42, 0.4);
+  border-radius: 6px;
+}
+
+.flavorText {
+  font-size: 0.8125rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.expandButton {
+  margin-top: 0.25rem;
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(59, 76, 202, 0.3);
+  color: $pokemon-accent;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  align-self: flex-start;
+
+  &:hover {
+    background: rgba(100, 100, 100, 0.5);
+    border-color: $pokemon-accent;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.codesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid rgba(42, 42, 42, 0.8);
+  border-radius: 8px;
+}
+
+.codeItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+
+  strong {
+    color: $pokemon-yellow;
+    font-weight: 600;
+  }
+}
+
+.codeValue {
+  font-family: 'Geist Mono', monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: $pokemon-yellow;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.setName {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.artistValue {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+// Rarity Badge Base Styles
+.rarityIcon {
+  margin-right: 0.25rem;
+  font-size: 0.875em;
+}
+
+.rarityBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+// Common - Gray/Silver
+.rarityCommon {
+  background: rgba(156, 163, 175, 0.2);
+  border: 1px solid rgba(156, 163, 175, 0.4);
+  color: #9CA3AF;
+}
+
+// Uncommon - Green
+.rarityUncommon {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #22C55E;
+}
+
+// Rare - Blue
+.rarityRare {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+// Rare Holo - Cyan
+.rarityRareHolo {
+  background: rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  color: #22D3EE;
+}
+
+// Rare Holo EX - Red/Gold
+.rarityRareHoloEX {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(255, 215, 0, 0.15));
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #F87171;
+}
+
+// Rare Holo V - Blue/Purple
+.rarityRareHoloV {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(168, 85, 247, 0.15));
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+// Rare Holo VMAX - Rainbow gradient
+.rarityRareHoloVMAX {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  color: #C084FC;
+}
+
+// Rare Holo VSTAR - Gold/Shimmer
+.rarityRareHoloVSTAR {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(250, 204, 21, 0.2));
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  color: #FFD700;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+}
+
+// Ultra Rare - Gold
+.rarityUltraRare {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
+  border: 1px solid rgba(255, 165, 0, 0.6);
+  color: #FFA500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+// Secret Rare - Sparkle
+.raritySecretRare {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 215, 0, 0.15), rgba(255, 255, 255, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #FFFBEB;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+}
+
+// Rainbow Rare - Full rainbow
+.rarityRainbowRare {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(250, 204, 21, 0.15), rgba(34, 197, 94, 0.15), rgba(59, 130, 246, 0.15), rgba(168, 85, 247, 0.15));
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  color: #E879F9;
+}
+
+// Shiny
+.rarityShiny {
+  background: rgba(229, 231, 235, 0.15);
+  border: 1px solid rgba(229, 231, 235, 0.4);
+  color: #E5E7EB;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+// Shiny GX
+.rarityShinyGX {
+  background: linear-gradient(135deg, rgba(229, 231, 235, 0.2), rgba(255, 215, 0, 0.15));
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  color: #FAFAFA;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+// Amazing Rare
+.rarityAmazingRare {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(59, 130, 246, 0.2), rgba(250, 204, 21, 0.2));
+  border: 1px solid rgba(236, 72, 153, 0.5);
+  color: #F472B6;
+}
+
+// Illustration Rare
+.rarityIllustrationRare {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 197, 94, 0.15));
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+// Special Illustration Rare
+.raritySpecialIllustrationRare {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(236, 72, 153, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  color: #FFD700;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+}
+
+// Hyper Rare
+.rarityHyperRare {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 255, 255, 0.2));
+  border: 1px solid rgba(255, 215, 0, 0.6);
+  color: #FFD700;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+}
+
+// Double Rare
+.rarityDoubleRare {
+  background: rgba(59, 130, 246, 0.25);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+// Promo
+.rarityPromo {
+  background: rgba(100, 100, 100, 0.3);
+  border: 1px solid rgba(100, 100, 100, 0.6);
+  color: #D1D5DB;
+}
+
+// ACE SPEC
+.rarityACESpec {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(255, 215, 0, 0.2));
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  color: #FFD700;
+}
+
+// Classic Collection
+.rarityClassic {
+  background: rgba(120, 113, 108, 0.3);
+  border: 1px solid rgba(120, 113, 108, 0.6);
+  color: #A8A29E;
+}
+
+// Radiant Rare
+.rarityRadiant {
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(255, 255, 255, 0.15));
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  color: #FACC15;
+  text-shadow: 0 0 4px rgba(250, 204, 21, 0.4);
+}
+
+// Rare Holo Star
+.rarityHoloStar {
+  background: rgba(250, 204, 21, 0.2);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  color: #FACC15;
+}
+
+// LEGEND
+.rarityLegend {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(239, 68, 68, 0.2));
+  border: 1px solid rgba(255, 215, 0, 0.6);
+  color: #FFD700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+// Rare BREAK
+.rarityBreak {
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.3), rgba(255, 165, 0, 0.2));
+  border: 1px solid rgba(250, 204, 21, 0.6);
+  color: #FACC15;
+}
+
+// Rare Prime
+.rarityPrime {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(250, 204, 21, 0.15));
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+.priceSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(59, 76, 202, 0.1);
+}
+
+.priceLabel {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.priceValue {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+.priceUnavailable {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.addButton {
+  flex: 1;
+  background: rgba(59, 76, 202, 0.15);
+  color: $pokemon-yellow;
+  border: 1px solid rgba(59, 76, 202, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+  z-index: 10;
+
+  &:hover:not(:disabled) {
+    background: rgba(59, 76, 202, 0.3);
+    border-color: $pokemon-accent;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+// Compact version
+.cardCompact {
+  background: rgba(42, 42, 42, 0.8);
+  border: 2px solid rgba(100, 100, 100, 0.5);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $pokemon-accent;
+    transform: translateY(-2px);
+  }
+}
+
+.compactImage {
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.compactContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.compactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.compactTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $pokemon-accent;
+  margin: 0;
+}
+
+.price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #22C55E;
+}
