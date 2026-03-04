@@ -48,6 +48,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'cards.scryfall.io',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'res.cloudinary.com',
         pathname: '/**',
       },

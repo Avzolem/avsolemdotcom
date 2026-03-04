@@ -1,0 +1,254 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/options';
+import { ListType } from '@/types/magic';
+import {
+  getOrCreateList,
+  addCardToList,
+  removeCardFromList,
+  updateCardQuantity,
+  updateCardDetails,
+  updateCardField,
+  getListValue,
+} from '@/lib/mongodb/models/MagicList';
+
+async function getUserId(): Promise<string | null> {
+  const session = await getServerSession(authOptions);
+  return session?.user?.id || null;
+}
+
+function validateListType(type: string): type is ListType {
+  return ['collection', 'for-sale', 'wishlist'].includes(type);
+}
+
+// GET: Get all cards from a list
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ type: string }> }
+) {
+  try {
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({
+        list: { cards: [] },
+        totalValue: 0,
+        message: 'Not authenticated - showing empty list'
+      });
+    }
+
+    const { type } = await params;
+
+    if (!validateListType(type)) {
+      return NextResponse.json({ message: 'Invalid list type' }, { status: 400 });
+    }
+
+    const list = await getOrCreateList(type, userId);
+    const totalValue = await getListValue(type, userId);
+
+    return NextResponse.json({
+      list,
+      totalValue,
+    });
+  } catch (error) {
+    console.error('Error fetching list:', error);
+    return NextResponse.json(
+      { message: 'Failed to fetch list' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST: Add a card to a list
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ type: string }> }
+) {
+  try {
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { type } = await params;
+
+    if (!validateListType(type)) {
+      return NextResponse.json({ message: 'Invalid list type' }, { status: 400 });
+    }
+
+    const body = await request.json();
+    const { cardId, cardName, cardImage, localImagePath, setCode, setName, setRarity, quantity, price, notes } = body;
+
+    if (!cardId || !cardName || !cardImage || !setCode || !setName || !setRarity) {
+      return NextResponse.json(
+        { message: 'Missing required fields (cardId, cardName, cardImage, setCode, setName, setRarity required)' },
+        { status: 400 }
+      );
+    }
+
+    // Add to the requested list
+    await addCardToList(type, userId, {
+      cardId,
+      cardName,
+      cardImage,
+      localImagePath,
+      setCode,
+      setName,
+      setRarity,
+      quantity: quantity || 1,
+      price,
+      notes,
+    });
+
+    // If adding to for-sale, also add to collection with isForSale: true
+    if (type === 'for-sale') {
+      const collection = await getOrCreateList('collection', userId);
+      const existingCard = collection.cards.find((c) => c.cardId === cardId);
+
+      if (existingCard) {
+        await updateCardField('collection', userId, cardId, 'isForSale', true);
+      } else {
+        await addCardToList('collection', userId, {
+          cardId,
+          cardName,
+          cardImage,
+          localImagePath,
+          setCode,
+          setName,
+          setRarity,
+          quantity: quantity || 1,
+          price,
+          notes,
+          isForSale: true,
+        });
+      }
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error adding card to list:', error);
+    return NextResponse.json(
+      { message: 'Failed to add card' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE: Remove a card from a list
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ type: string }> }
+) {
+  try {
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { type } = await params;
+
+    if (!validateListType(type)) {
+      return NextResponse.json({ message: 'Invalid list type' }, { status: 400 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const cardId = searchParams.get('cardId');
+
+    if (!cardId) {
+      return NextResponse.json(
+        { message: 'cardId required' },
+        { status: 400 }
+      );
+    }
+
+    const deletedFrom: ListType[] = [type];
+
+    // Get card info before deleting (for the response)
+    const list = await getOrCreateList(type, userId);
+    const card = list.cards.find((c) => c.cardId === cardId);
+
+    // Remove from the requested list
+    await removeCardFromList(type, userId, cardId);
+
+    // Bidirectional sync logic
+    if (type === 'for-sale') {
+      // If deleting from for-sale, update isForSale to false in collection
+      const collection = await getOrCreateList('collection', userId);
+      const cardInCollection = collection.cards.find((c) => c.cardId === cardId);
+
+      if (cardInCollection) {
+        await updateCardField('collection', userId, cardId, 'isForSale', false);
+      }
+    } else if (type === 'collection') {
+      // If deleting from collection, also remove from for-sale if it exists there
+      const forSaleList = await getOrCreateList('for-sale', userId);
+      const cardInForSale = forSaleList.cards.find((c) => c.cardId === cardId);
+
+      if (cardInForSale) {
+        await removeCardFromList('for-sale', userId, cardId);
+        deletedFrom.push('for-sale');
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      deletedFrom,
+      cardName: card?.cardName,
+      cardId,
+    });
+  } catch (error) {
+    console.error('Error removing card from list:', error);
+    return NextResponse.json(
+      { message: 'Failed to remove card' },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH: Update card quantity or details
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ type: string }> }
+) {
+  try {
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { type } = await params;
+
+    if (!validateListType(type)) {
+      return NextResponse.json({ message: 'Invalid list type' }, { status: 400 });
+    }
+
+    const body = await request.json();
+    const { cardId, quantity, price, notes } = body;
+
+    if (!cardId) {
+      return NextResponse.json(
+        { message: 'cardId required' },
+        { status: 400 }
+      );
+    }
+
+    if (quantity !== undefined) {
+      await updateCardQuantity(type, userId, cardId, quantity);
+    }
+
+    if (price !== undefined || notes !== undefined) {
+      await updateCardDetails(type, userId, cardId, { price, notes });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error updating card:', error);
+    return NextResponse.json(
+      { message: 'Failed to update card' },
+      { status: 500 }
+    );
+  }
+}

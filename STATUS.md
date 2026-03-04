@@ -3,7 +3,7 @@
 > Este archivo centraliza el estado de todos los proyectos dentro de avsolem.com.
 > Claude Code debe leer este archivo al inicio de cada sesión para entender el contexto.
 
-**Última actualización global**: 2026-02-17
+**Última actualización global**: 2026-03-03
 
 ---
 
@@ -15,6 +15,8 @@
 | CV / Resume | `/cv` | Production | 2025-01-17 |
 | Cloud Storage | `/cloud` | Production | 2025-01-06 |
 | Yu-Gi-Oh! Manager | `/yugioh` | Production | 2026-02-17 |
+| Pokémon TCG Manager | `/pokemon` | Production | 2026-02-28 |
+| Magic: The Gathering Manager | `/magic` | Production | 2026-03-03 |
 | ROMS Index | `/roms` | Production | 2025-11-24 |
 | Diablo Web | `/diablo` | Production | 2025-01-09 |
 
@@ -178,7 +180,84 @@ RESEND_API_KEY (opcional, para emails)
 
 ---
 
-### 4. ROMS Index (`/roms`)
+### 4. Magic: The Gathering Manager (`/magic`)
+
+**Estado**: Production Ready
+**Última sesión**: 2026-03-03
+**Portfolio entry**: `src/app/work/projects/magic-manager.mdx`
+
+#### Features Implementados
+- [x] Búsqueda de cartas via Scryfall API (fuzzy search, autocomplete)
+- [x] Filtros avanzados (colores WUBRG, tipo, CMC range, rareza, formato)
+- [x] 3 listas: Colección, En Venta, Wishlist
+- [x] Sistema de autenticación (Google OAuth + Email/Password, compartido con Pokemon/Yu-Gi-Oh)
+- [x] Colecciones personales por usuario
+- [x] Toggle "Poner en venta" con sync bidireccional
+- [x] Precios de Scryfall (USD, USD foil, EUR)
+- [x] Export CSV y PDF
+- [x] Compartir listas (enlaces temporales 7 días)
+- [x] Panel de administración con CMS
+- [x] Catálogo de productos (`/magic/catalogo`)
+- [x] Sistema de noticias (`/magic/noticias`)
+- [x] i18n completo (ES/EN)
+- [x] Soporte double-faced cards (flip button)
+- [x] Mana cost symbols con colores WUBRG
+- [x] Oracle text, Power/Toughness, Loyalty display
+- [x] Format legalities display
+- [x] Deck Builder (60+ main, 15 sideboard, max 4 copies, basic lands ilimitados)
+- [x] Deck stats (mana curve, color distribution, type distribution, average CMC)
+- [x] Export PDF formato torneo con branding MTG
+- [x] Scanner OCR de cartas (cámara + upload)
+- [x] Ordenamiento por nombre, precio, CMC, color
+
+#### Stack Técnico
+- Frontend: Next.js 15, React 19, SCSS Modules
+- API: Scryfall API (no API key, 100ms rate limit)
+- Database: MongoDB (`magic_lists`, `magic_decks`, `magic_news`, `magic_products`, `magic_shared_links`)
+- Auth: NextAuth.js 4 (shared session with Pokemon/Yu-Gi-Oh)
+- OCR: Tesseract.js v5
+- PDF Export: jsPDF (tournament format)
+- Color scheme: Orange (#E8611A) accents, Gold (#D4AF37) text, neutral black/gray backgrounds
+
+#### Estructura de Archivos
+```
+src/app/magic/
+├── page.tsx - Búsqueda principal
+├── layout.tsx - Layout con providers
+├── magic-theme.scss - Theme global (orange/gold/mana colors)
+├── coleccion/, venta/, wishlist/ - Listas
+├── catalogo/, noticias/ - CMS público
+├── admin/ - Panel de administración
+├── shared/[token]/ - Listas compartidas
+├── decks/ - Lista de decks del usuario
+├── decks/[deckId]/ - Editor de deck
+└── perfil/ - Perfil de usuario
+
+src/components/magic/
+├── CardSearch, CardDisplay, CardList
+├── CardScanner, AdvancedFilters
+├── ExportButtons, PriceStats, ShareButton
+├── DeckBuilder, DeckList, DeckStats
+├── MagicHeader, MagicFooter, AuthModal
+└── Toast, ToastContainer
+```
+
+#### Variables de Entorno Requeridas
+```
+MONGODB_URI, NEXTAUTH_SECRET, NEXTAUTH_URL
+GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+MAGIC_ADMIN_EMAILS (separados por coma)
+RESEND_API_KEY (opcional, para emails)
+```
+
+#### Pendiente / Ideas Futuras
+- [ ] Historial de precios (tracking temporal)
+- [ ] Modo offline (PWA)
+- [ ] Import masivo desde CSV
+
+---
+
+### 5. ROMS Index (`/roms`)
 
 **Estado**: Production Ready
 **Última sesión**: 2025-11-24
@@ -215,7 +294,7 @@ public/images/consoles/ - 29 imágenes de consolas
 
 ---
 
-### 5. Diablo Web (`/diablo`)
+### 6. Diablo Web (`/diablo`)
 
 **Estado**: Production Ready
 **Última sesión**: 2025-01-09
@@ -261,6 +340,17 @@ public/images/
 ---
 
 ## Development History
+
+### 2026-03-03
+- **Magic: The Gathering Manager**: Proyecto completo `/magic` con ~82 archivos nuevos
+- **Magic**: Búsqueda Scryfall, colección, wishlist, venta, deck builder, admin, catálogo, noticias
+- **Magic**: Double-faced cards, mana symbols WUBRG, oracle text, legalities, precios
+- **Magic**: Deck Builder con main/sideboard (60+/15), max 4 copies, basic lands ilimitados
+- **Magic**: Export PDF torneo, scanner OCR, sharing, i18n ES/EN
+- **Magic**: Color scheme orange (#E8611A) accents, gold (#D4AF37) text, neutral backgrounds
+- **Magic**: Header/Footer con logos oficiales MTG
+- **TCG Hub**: Magic activo en `/tcg` landing page
+- **Portfolio**: Entrada magic-manager.mdx creada
 
 ### 2026-02-17 (optimización)
 - **Performance**: React.cache() para getPosts (deduplicación de ~60+ llamadas SSG)
@@ -374,12 +464,13 @@ CLOUDINARY_API_SECRET=
 CLOUDINARY_FOLDER=cloud_storage
 CLOUD_PASSWORD=
 
-# Yu-Gi-Oh
+# Auth (shared across Yu-Gi-Oh, Pokemon, Magic)
 NEXTAUTH_SECRET=
 NEXTAUTH_URL=https://avsolem.com
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 YUGIOH_ADMIN_EMAILS=admin@email.com
+MAGIC_ADMIN_EMAILS=admin@email.com
 
 # Email (optional)
 RESEND_API_KEY=
@@ -414,4 +505,4 @@ npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<rou
 
 ---
 
-*Última actualización: 2026-02-17 por Claude Code*
+*Última actualización: 2026-03-03 por Claude Code*
