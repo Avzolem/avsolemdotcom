@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
     const cleanSetCode = setCode.trim().toUpperCase();
 
     // Detect non-English language codes (SP, FR, IT, PT, DE, etc.)
-    const nonEnglishPattern = /^(.+)-(SP|FR|IT|PT|DE|AE|KR|JP)(\d+.*)$/i;
+    // Suffix can start with letters (e.g., LDK2-SPK27 → K27)
+    const nonEnglishPattern = /^(.+)-(SP|FR|IT|PT|DE|AE|KR|JP)([A-Z0-9]+.*)$/i;
     const match = cleanSetCode.match(nonEnglishPattern);
 
     // Try original code first

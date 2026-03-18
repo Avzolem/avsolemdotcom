@@ -128,7 +128,7 @@ src/app/cv/
 - [x] Sistema de noticias (`/yugioh/noticias`)
 - [x] i18n completo (ES/EN)
 - [x] Colores oficiales Yu-Gi-Oh! por tipo/atributo
-- [x] Multi-language set codes con fallback a EN
+- [x] Multi-language set codes con fallback a EN (soporta sufijos alfanuméricos como SPK27→ENK27)
 - [x] Deck Builder MVP (Main/Extra/Side zones, límite 3 decks)
 - [x] Búsqueda integrada en deck builder con auto-zone detection
 - [x] Validación en tiempo real (límites de zonas, máx 3 copias)
@@ -348,6 +348,7 @@ public/images/
 - **Yu-Gi-Oh Search**: Input auto-uppercase en barra de búsqueda
 - **Yu-Gi-Oh Search**: Debounce dinámico (300ms para Set Codes, 500ms para nombres)
 - **Yu-Gi-Oh Search**: Manejo silencioso de Set Codes parciales (sin error mientras el usuario escribe)
+- **Yu-Gi-Oh Search**: Fix fallback de idioma para set codes con sufijo alfanumérico (e.g., LDK2-SPK27→LDK2-ENK27)
 
 ### 2026-03-03
 - **Magic: The Gathering Manager**: Proyecto completo `/magic` con ~82 archivos nuevos
