@@ -285,9 +285,12 @@ export default function CardList({ type, title }: CardListProps) {
   // Filtrar cartas localmente
   const filteredCards = useMemo(() => {
     if (!searchTerm) return cards;
+    const term = searchTerm.toLowerCase();
 
     return cards.filter(card =>
-      card.cardName.toLowerCase().includes(searchTerm.toLowerCase())
+      card.cardName.toLowerCase().includes(term) ||
+      card.setCode.toLowerCase().includes(term) ||
+      card.setName.toLowerCase().includes(term)
     );
   }, [cards, searchTerm]);
 
