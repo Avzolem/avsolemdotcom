@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
@@ -108,6 +108,7 @@ export default function CardSearch() {
   const [sortOption, setSortOption] = useState<SortOption>('default');
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const latestSearchRef = useRef(0);
 
   // Sort cards based on selected option
   const sortedCards = useMemo(() => {
@@ -141,7 +142,8 @@ export default function CardSearch() {
     }
   }, [cards, sortOption]);
 
-  const performSearch = useCallback(async (query: string, filters: FilterOptions = {}) => {
+  const performSearch = useCallback(async (query: string, filters: FilterOptions = {}, searchId: number) => {
+    const isStale = () => searchId !== latestSearchRef.current;
     const hasQuery = query && query.trim().length >= 2;
     const hasFilters = Object.keys(filters).length > 0;
 
@@ -163,9 +165,9 @@ export default function CardSearch() {
       // Check if the query is a Set Code (e.g., LOB-EN001)
       if (hasQuery && isSetCode(query) && !hasFilters) {
         const { card, fallbackInfo } = await searchBySetCode(query);
+        if (isStale()) return;
         if (card) {
           results = [card];
-          // Set fallback warning if fallback was used
           if (fallbackInfo) {
             setFallbackWarning(
               t('search.fallbackWarning', {
@@ -178,14 +180,13 @@ export default function CardSearch() {
           setError(t('search.error.notFound', { code: query.trim().toUpperCase() }));
         }
       } else if (hasFilters || hasQuery) {
-        // Use advanced search with filters or name search
         const searchParams = {
           name: hasQuery ? query : undefined,
           ...filters,
         };
         results = await searchCardsAdvanced(searchParams);
+        if (isStale()) return;
 
-        // Client-side filtering for ATK/DEF ranges (API doesn't support ranges)
         if (filters.atkMin !== undefined || filters.atkMax !== undefined) {
           results = results.filter(card => {
             if (card.atk === undefined) return false;
@@ -209,6 +210,7 @@ export default function CardSearch() {
         }
       } else {
         results = await searchCardsByName(query);
+        if (isStale()) return;
         if (results.length === 0) {
           setError(t('search.noResults'));
         }
@@ -216,17 +218,22 @@ export default function CardSearch() {
 
       setCards(results);
     } catch (err) {
+      if (isStale()) return;
       console.error('Search error:', err);
       setError(t('search.error.generic'));
       setCards([]);
     } finally {
-      setIsLoading(false);
+      if (!isStale()) {
+        setIsLoading(false);
+      }
     }
   }, [t]);
 
   useEffect(() => {
-    performSearch(debouncedSearchTerm, activeFilters);
-  }, [debouncedSearchTerm, activeFilters, performSearch]);
+    const searchId = ++latestSearchRef.current;
+    performSearch(debouncedSearchTerm, activeFilters, searchId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm, activeFilters]);
 
   const handleApplyFilters = (filters: FilterOptions) => {
     setActiveFilters(filters);
