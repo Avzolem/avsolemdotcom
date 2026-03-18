@@ -46,6 +46,7 @@ export async function GET(request: NextRequest) {
       if (data && data.name) {
         return NextResponse.json({
           success: true,
+          cardId: data.id,
           cardName: data.name,
           setCode: data.set_code,
           setName: data.set_name,
@@ -78,6 +79,7 @@ export async function GET(request: NextRequest) {
         if (fallbackData && fallbackData.name) {
           return NextResponse.json({
             success: true,
+            cardId: fallbackData.id,
             cardName: fallbackData.name,
             setCode: fallbackData.set_code,
             setName: fallbackData.set_name,

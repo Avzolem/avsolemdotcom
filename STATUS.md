@@ -349,6 +349,7 @@ public/images/
 - **Yu-Gi-Oh Search**: Debounce dinámico (300ms para Set Codes, 500ms para nombres)
 - **Yu-Gi-Oh Search**: Manejo silencioso de Set Codes parciales (sin error mientras el usuario escribe)
 - **Yu-Gi-Oh Search**: Fix fallback de idioma para set codes con sufijo alfanumérico (e.g., LDK2-SPK27→LDK2-ENK27)
+- **Yu-Gi-Oh Search**: Fix búsqueda por set code usa card ID exacto en vez de fuzzy name search (evita resultados incorrectos como SKE-034→Mountain)
 
 ### 2026-03-03
 - **Magic: The Gathering Manager**: Proyecto completo `/magic` con ~82 archivos nuevos

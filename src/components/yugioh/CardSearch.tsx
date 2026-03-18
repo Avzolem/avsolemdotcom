@@ -5,7 +5,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useYugiohLanguage } from '@/contexts/YugiohLanguageContext';
 import { YugiohCard } from '@/types/yugioh';
-import { searchCardsByName, searchCardsAdvanced, getCardPrice } from '@/lib/services/ygoprodeck';
+import { searchCardsByName, searchCardsAdvanced, getCardPrice, getCardById } from '@/lib/services/ygoprodeck';
 import CardDisplay from './CardDisplay';
 import CardSkeleton from './CardSkeleton';
 import AdvancedFilters, { FilterOptions } from './AdvancedFilters';
@@ -79,13 +79,13 @@ async function searchBySetCode(setCode: string): Promise<{
 
     const data = await response.json();
 
-    if (data.success && data.cardName) {
-      // Get full card details from YGOPRODeck
-      const cards = await searchCardsByName(data.cardName);
-      if (cards.length > 0) {
+    if (data.success && data.cardId) {
+      // Get full card details by exact ID (avoids fuzzy name mismatches)
+      const card = await getCardById(data.cardId);
+      if (card) {
         // Attach specific set info from the set code search
         const cardWithSetInfo = {
-          ...cards[0],
+          ...card,
           specificSetInfo: {
             setCode: data.setCode,
             setName: data.setName,
@@ -94,7 +94,6 @@ async function searchBySetCode(setCode: string): Promise<{
           },
         };
 
-        // Return card with fallback info if used
         return {
           card: cardWithSetInfo,
           fallbackInfo: data.usedFallback
