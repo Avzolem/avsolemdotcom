@@ -3,7 +3,7 @@
 > Este archivo centraliza el estado de todos los proyectos dentro de avsolem.com.
 > Claude Code debe leer este archivo al inicio de cada sesión para entender el contexto.
 
-**Última actualización global**: 2026-03-03
+**Última actualización global**: 2026-03-18
 
 ---
 
@@ -14,7 +14,7 @@
 | Portfolio Principal | `/` | Production | 2025-01-06 |
 | CV / Resume | `/cv` | Production | 2025-01-17 |
 | Cloud Storage | `/cloud` | Production | 2025-01-06 |
-| Yu-Gi-Oh! Manager | `/yugioh` | Production | 2026-02-17 |
+| Yu-Gi-Oh! Manager | `/yugioh` | Production | 2026-03-18 |
 | Pokémon TCG Manager | `/pokemon` | Production | 2026-02-28 |
 | Magic: The Gathering Manager | `/magic` | Production | 2026-03-03 |
 | ROMS Index | `/roms` | Production | 2025-11-24 |
@@ -107,11 +107,13 @@ src/app/cv/
 ### 3. Yu-Gi-Oh! Manager (`/yugioh`)
 
 **Estado**: Production Ready
-**Última sesión**: 2026-02-17
+**Última sesión**: 2026-03-18
 **Portfolio entry**: `src/app/work/projects/yugioh-manager.mdx`
 
 #### Features Implementados
-- [x] Búsqueda de cartas por nombre (debounce 500ms)
+- [x] Búsqueda de cartas por nombre (debounce 500ms, 300ms para Set Codes)
+- [x] Detección temprana de Set Code (búsqueda inicia con 4 caracteres)
+- [x] Input de búsqueda auto-uppercase
 - [x] Scanner de cartas con cámara (Dual-mode: Set Code + Nombre)
 - [x] Filtros avanzados (30 tipos, atributos, niveles, ATK/DEF)
 - [x] 3 listas: Colección, En Venta, Wishlist
@@ -341,6 +343,12 @@ public/images/
 
 ## Development History
 
+### 2026-03-18
+- **Yu-Gi-Oh Search**: Detección temprana de Set Code (búsqueda inicia con 4 caracteres en lugar de código completo)
+- **Yu-Gi-Oh Search**: Input auto-uppercase en barra de búsqueda
+- **Yu-Gi-Oh Search**: Debounce dinámico (300ms para Set Codes, 500ms para nombres)
+- **Yu-Gi-Oh Search**: Manejo silencioso de Set Codes parciales (sin error mientras el usuario escribe)
+
 ### 2026-03-03
 - **Magic: The Gathering Manager**: Proyecto completo `/magic` con ~82 archivos nuevos
 - **Magic**: Búsqueda Scryfall, colección, wishlist, venta, deck builder, admin, catálogo, noticias
@@ -505,4 +513,4 @@ npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<rou
 
 ---
 
-*Última actualización: 2026-03-03 por Claude Code*
+*Última actualización: 2026-03-18 por Claude Code*

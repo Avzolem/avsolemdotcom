@@ -37,13 +37,27 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-// Detect if input is a Set Code (e.g., LOB-EN001, SDK-001, CT13-EN008, MVP1-ENSV4)
-function isSetCode(input: string): boolean {
+// Detect if input is a complete Set Code (e.g., LOB-EN001, SDK-001, CT13-EN008, MVP1-ENSV4)
+function isFullSetCode(input: string): boolean {
   const trimmed = input.trim().toUpperCase();
   // Pattern: 2-6 alphanumeric chars, dash, 3-7 alphanumeric chars
-  // Examples: LOB-001, SDK-E001, LOB-EN001, CT13-EN008, MVP1-ENSV4, DP03-EN001
   const setCodePattern = /^[A-Z0-9]{2,6}-[A-Z0-9]{3,7}$/;
   return setCodePattern.test(trimmed);
+}
+
+// Detect if input looks like a partial Set Code (e.g., LOB-, LOB-E, LOB-EN0)
+// Triggers early search after 4+ characters with prefix + dash + at least 1 char
+// Returns true only for INCOMPLETE set codes (not full matches)
+function isPartialSetCode(input: string): boolean {
+  if (isFullSetCode(input)) return false;
+  const trimmed = input.trim().toUpperCase();
+  // At least prefix(2-6) + dash + 1 char, minimum 4 chars total
+  return trimmed.length >= 4 && /^[A-Z0-9]{2,6}-[A-Z0-9]*$/.test(trimmed);
+}
+
+// Combined check: input looks like a set code (partial or complete)
+function looksLikeSetCode(input: string): boolean {
+  return isFullSetCode(input) || isPartialSetCode(input);
 }
 
 // Search by Set Code using internal API route (avoids CORS issues)
@@ -109,7 +123,9 @@ export default function CardSearch() {
   const [fallbackWarning, setFallbackWarning] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>('default');
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  // Shorter debounce for set codes (user is typing a known code), longer for name search
+  const debounceDelay = looksLikeSetCode(searchTerm) ? 300 : 500;
+  const debouncedSearchTerm = useDebounce(searchTerm, debounceDelay);
 
   // Sort cards based on selected option
   const sortedCards = useMemo(() => {
@@ -162,8 +178,8 @@ export default function CardSearch() {
     try {
       let results: YugiohCard[] = [];
 
-      // Check if the query is a Set Code (e.g., LOB-EN001)
-      if (hasQuery && isSetCode(query) && !hasFilters) {
+      // Check if the query looks like a Set Code (partial or complete)
+      if (hasQuery && looksLikeSetCode(query) && !hasFilters) {
         const { card, fallbackInfo } = await searchBySetCode(query);
         if (card) {
           results = [card];
@@ -176,9 +192,11 @@ export default function CardSearch() {
               })
             );
           }
-        } else {
+        } else if (isFullSetCode(query)) {
+          // Only show error for complete set codes — partial codes silently wait
           setError(t('search.error.notFound', { code: query.trim().toUpperCase() }));
         }
+        // For partial set codes with no result, don't show error (user is still typing)
       } else if (hasFilters || hasQuery) {
         // Use advanced search with filters or name search
         const searchParams = {
@@ -266,7 +284,7 @@ export default function CardSearch() {
             id="card-search"
             placeholder={t('search.placeholder')}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value.toUpperCase())}
             className={styles.searchInput}
           />
           {searchTerm && (
