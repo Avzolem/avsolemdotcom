@@ -94,7 +94,80 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // No card found with original or fallback code
+    // Token fallback: tokens are not indexed in cardsetsinfo.php
+    // Detect TKN suffix (e.g., SR02-ENTKN, SR02-SPTKN) and search by set + all tokens
+    const tokenPattern = /^([A-Z0-9]{2,6})-(?:[A-Z]{2})?(TKN\d*)$/i;
+    const tokenMatch = cleanSetCode.match(tokenPattern);
+
+    if (tokenMatch) {
+      const setPrefix = tokenMatch[1];
+
+      // Get set name from cardsets.php
+      const setsResponse = await fetch(
+        'https://db.ygoprodeck.com/api/v7/cardsets.php',
+        { headers: { 'Accept': 'application/json' } }
+      );
+
+      if (setsResponse.ok) {
+        const allSets = await setsResponse.json();
+        const matchingSet = allSets.find(
+          (s: { set_code: string }) => s.set_code === setPrefix
+        );
+
+        if (matchingSet) {
+          // Strategy: find cards in the set whose description mentions a Token name,
+          // then search for that exact token. This is the most reliable approach since
+          // the API doesn't link tokens to sets directly.
+          const setCardsResponse = await fetch(
+            `https://db.ygoprodeck.com/api/v7/cardinfo.php?cardset=${encodeURIComponent(matchingSet.set_name)}`,
+            { headers: { 'Accept': 'application/json' } }
+          );
+
+          if (setCardsResponse.ok) {
+            const setCardsData = await setCardsResponse.json();
+            if (setCardsData.data) {
+              // Find token names mentioned in card descriptions (e.g., "Dragon Lord Token")
+              const tokenNames: string[] = [];
+              for (const card of setCardsData.data) {
+                if (card.desc) {
+                  const matches = card.desc.matchAll(/"([^"]+Token)"/g);
+                  for (const m of matches) {
+                    if (!tokenNames.includes(m[1])) tokenNames.push(m[1]);
+                  }
+                }
+              }
+
+              // Search for the exact token by name
+              for (const tokenName of tokenNames) {
+                const tokenResponse = await fetch(
+                  `https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(tokenName)}`,
+                  { headers: { 'Accept': 'application/json' } }
+                );
+                if (tokenResponse.ok) {
+                  const tokenData = await tokenResponse.json();
+                  if (tokenData.data && tokenData.data.length > 0) {
+                    const tokenCard = tokenData.data[0];
+                    return NextResponse.json({
+                      success: true,
+                      cardId: tokenCard.id,
+                      cardName: tokenCard.name,
+                      setCode: cleanSetCode,
+                      setName: matchingSet.set_name,
+                      setRarity: 'Common',
+                      setPrice: tokenCard.card_prices?.[0]?.tcgplayer_price || '0',
+                      source: 'ygoprodeck-token',
+                      usedFallback: false,
+                    });
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // No card found with original, fallback, or token search
     return NextResponse.json(
       {
         success: false,
