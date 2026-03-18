@@ -331,7 +331,7 @@ export default function CardList({ type, title }: CardListProps) {
               type="text"
               placeholder={t('list.searchPlaceholder')}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value.toUpperCase())}
               className={styles.searchInput}
             />
             {searchTerm && (
