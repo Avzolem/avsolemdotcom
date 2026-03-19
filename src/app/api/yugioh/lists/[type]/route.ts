@@ -102,30 +102,24 @@ export async function POST(
     });
 
     // If adding to for-sale, also add to collection with isForSale: true
+    // Cards in for-sale are always part of the collection too
     if (type === 'for-sale') {
-      // Check if card already exists in collection
-      const collection = await getOrCreateList('collection', userId);
-      const existingCard = collection.cards.find((c) => c.setCode === setCode);
-
-      if (existingCard) {
-        // Update isForSale to true
-        await updateCardField('collection', userId, setCode, 'isForSale', true);
-      } else {
-        // Add to collection with isForSale: true
-        await addCardToList('collection', userId, {
-          cardId,
-          cardName,
-          cardImage,
-          localImagePath,
-          setCode,
-          setName,
-          setRarity,
-          quantity: quantity || 1,
-          price,
-          notes,
-          isForSale: true,
-        });
-      }
+      // addCardToList increments quantity if the card already exists
+      await addCardToList('collection', userId, {
+        cardId,
+        cardName,
+        cardImage,
+        localImagePath,
+        setCode,
+        setName,
+        setRarity,
+        quantity: quantity || 1,
+        price,
+        notes,
+        isForSale: true,
+      });
+      // Ensure isForSale is set (in case card already existed in collection)
+      await updateCardField('collection', userId, setCode, 'isForSale', true);
     }
 
     return NextResponse.json({ success: true });
