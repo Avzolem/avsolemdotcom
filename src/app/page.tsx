@@ -1,12 +1,8 @@
-import React from 'react';
 import { Metadata } from 'next';
 
-import { home, about, person, newsletter, baseURL, routes } from '@/resources';
-import { Mailchimp } from '@/components';
-import { Projects } from '@/components/work/Projects';
-import { Posts } from '@/components/blog/Posts';
+import { home, about, person, baseURL } from '@/resources';
 import { SchemaScript } from '@/lib/seo';
-import { HomeHero, HomeBlogTitle } from '@/components/home/HomeContent';
+import { BentoHome } from '@/components/home/BentoHome';
 
 // Force static generation at build time
 export const dynamic = 'force-static';
@@ -29,9 +25,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Home() {
+export default async function Home() {
   return (
-    <div className="flex flex-col items-center gap-12 max-w-3xl w-full">
+    <>
       <SchemaScript
         as="webPage"
         baseURL={baseURL}
@@ -45,33 +41,7 @@ export default function Home() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-
-      {/* Hero Section - Client Component */}
-      <HomeHero
-        featuredDisplay={home.featured?.display}
-        featuredHref={home.featured?.href}
-      />
-
-      {/* Featured Project - Server Component */}
-      <div className="w-full animate-fade-in" style={{ animationDelay: '0.6s' }}>
-        <Projects range={[1, 1]} />
-      </div>
-
-      {/* Blog Posts */}
-      {routes['/blog'] && (
-        <div className="w-full flex flex-col gap-6">
-          <HomeBlogTitle />
-          <div className="px-5">
-            <Posts range={[1, 2]} columns="2" />
-          </div>
-        </div>
-      )}
-
-      {/* More Projects */}
-      <Projects range={[2]} />
-
-      {/* Newsletter */}
-      {newsletter?.display && <Mailchimp newsletter={newsletter} />}
-    </div>
+      <BentoHome />
+    </>
   );
 }

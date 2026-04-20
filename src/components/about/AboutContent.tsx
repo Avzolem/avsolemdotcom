@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Globe, Calendar, ChevronRight, Grid3X3, Mail, Download } from 'lucide-react';
@@ -51,6 +51,20 @@ const educationItems = [
 
 export function AboutContent() {
   const { t, language } = useLanguage();
+  const [avatar, setAvatar] = useState<string>(person.avatar);
+
+  // Pull avatar override from dashboard settings (falls back to hardcoded).
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/profile');
+        if (res.ok) {
+          const { profile } = await res.json();
+          if (profile?.avatar) setAvatar(profile.avatar);
+        }
+      } catch { /* ignore */ }
+    })();
+  }, []);
 
   // Calculate years worked helper function
   const calculateYears = (timeframe: string) => {
@@ -147,10 +161,11 @@ export function AboutContent() {
           >
             <div className="relative w-32 h-32 rounded-full overflow-hidden">
               <Image
-                src={person.avatar}
+                src={avatar}
                 alt={person.name}
                 fill
                 className="object-cover"
+                unoptimized={avatar.startsWith('http')}
               />
             </div>
             <div className="flex gap-2 items-center text-gray-600 dark:text-gray-400">
@@ -274,7 +289,7 @@ export function AboutContent() {
                 className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-base font-medium border-2 border-cyan-500 text-gray-900 dark:text-white rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
               >
                 <Download className="w-4 h-4" />
-                {language === 'es' ? 'Descargar CV' : 'Download CV'}
+                {t('about.downloadCV')}
               </Link>
             </div>
           </div>

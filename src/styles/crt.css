@@ -1,0 +1,70 @@
+/* CRT mode — activated by Konami code on home and /diablo only.
+ * Toggle with `document.documentElement.classList.toggle('crt-active')`. */
+
+.crt-active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.crt-active::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  animation: crt-flicker 0.18s infinite alternate;
+}
+
+.crt-active body,
+.crt-active main,
+.crt-active .bento-card {
+  text-shadow:
+    0.5px 0 0 rgba(255, 0, 80, 0.35),
+    -0.5px 0 0 rgba(0, 200, 255, 0.35);
+  filter: contrast(1.05) saturate(1.15);
+}
+
+.crt-indicator {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100000;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--font-code), monospace;
+  font-size: 0.72rem;
+  color: #33ff44;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #33ff44;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px rgba(51, 255, 68, 0.4);
+  pointer-events: none;
+  animation: crt-blink 1.2s infinite;
+}
+
+@keyframes crt-flicker {
+  from { opacity: 0.94; }
+  to { opacity: 1; }
+}
+
+@keyframes crt-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}

@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { Maximize2, Volume2, VolumeX, Info, X, Home } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { KonamiCRT } from '@/components/home/KonamiCRT';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function DiabloPage() {
+  const { t } = useLanguage();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
@@ -25,6 +28,7 @@ export default function DiabloPage() {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
+      <KonamiCRT />
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-black to-black pointer-events-none" />
 
@@ -39,35 +43,35 @@ export default function DiabloPage() {
             className="h-10 w-auto"
             priority
           />
-          <p className="text-xs text-white font-bold hidden sm:block" style={{ fontFamily: 'var(--font-diablo), serif' }}>Powered by Avsolem</p>
+          <p className="text-xs text-white font-bold hidden sm:block" style={{ fontFamily: 'var(--font-diablo), serif' }}>{t('diablo.poweredBy')}</p>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowInfo(true)}
             className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-            title="Information"
+            title={t('diablo.info')}
           >
             <Info className="w-5 h-5" />
           </button>
           <button
             onClick={() => setIsMuted(!isMuted)}
             className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-            title={isMuted ? 'Unmute' : 'Mute'}
+            title={isMuted ? t('diablo.unmute') : t('diablo.mute')}
           >
             {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
           </button>
           <button
             onClick={toggleFullscreen}
             className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-            title="Fullscreen"
+            title={t('diablo.fullscreen')}
           >
             <Maximize2 className="w-5 h-5" />
           </button>
           <Link
             href="/"
             className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-            title="Back to avsolem.com"
+            title={t('diablo.backHome')}
           >
             <Home className="w-5 h-5" />
           </Link>
@@ -81,7 +85,7 @@ export default function DiabloPage() {
           src="https://d07riv.github.io/diabloweb/"
           className="w-full h-full border-0"
           allow="fullscreen; autoplay"
-          title="Diablo Web"
+          title={t('diablo.gameTitle')}
         />
       </main>
 
@@ -107,35 +111,32 @@ export default function DiabloPage() {
             </div>
 
             <div className="space-y-4 text-gray-300 text-sm">
-              <p>
-                This is <strong className="text-white">Diablo</strong>, a port of the original Diablo game
-                that runs entirely in your browser using WebAssembly. Powered by <strong className="text-red-500">Avsolem</strong>.
-              </p>
+              <p>{t('diablo.description')}</p>
 
               <div>
-                <h3 className="text-white font-semibold mb-2" style={{ fontFamily: 'var(--font-diablo), serif' }}>How to Play:</h3>
+                <h3 className="text-white font-semibold mb-2" style={{ fontFamily: 'var(--font-diablo), serif' }}>{t('diablo.howToPlay')}</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400">
-                  <li>The <strong className="text-gray-200">Shareware version</strong> is available for free</li>
-                  <li>For the <strong className="text-gray-200">full game</strong>, you need to provide your own DIABDAT.MPQ file</li>
-                  <li>If you own Diablo on GOG or have the original CD, you can extract the MPQ file</li>
+                  <li>{t('diablo.shareware')}</li>
+                  <li>{t('diablo.fullGame')}</li>
+                  <li>{t('diablo.extractMpq')}</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="text-white font-semibold mb-2" style={{ fontFamily: 'var(--font-diablo), serif' }}>Controls:</h3>
+                <h3 className="text-white font-semibold mb-2" style={{ fontFamily: 'var(--font-diablo), serif' }}>{t('diablo.controls')}</h3>
                 <ul className="list-disc list-inside space-y-1 text-gray-400">
-                  <li><strong className="text-gray-200">Left Click</strong> - Move / Attack / Interact</li>
-                  <li><strong className="text-gray-200">Right Click</strong> - Use spell</li>
-                  <li><strong className="text-gray-200">I</strong> - Inventory</li>
-                  <li><strong className="text-gray-200">C</strong> - Character stats</li>
-                  <li><strong className="text-gray-200">S</strong> - Spellbook</li>
-                  <li><strong className="text-gray-200">ESC</strong> - Menu</li>
+                  <li>{t('diablo.controls.leftClick')}</li>
+                  <li>{t('diablo.controls.rightClick')}</li>
+                  <li>{t('diablo.controls.inventory')}</li>
+                  <li>{t('diablo.controls.character')}</li>
+                  <li>{t('diablo.controls.spellbook')}</li>
+                  <li>{t('diablo.controls.menu')}</li>
                 </ul>
               </div>
 
               <p className="text-xs text-gray-500 pt-2 border-t border-gray-800">
-                Based on <a href="https://github.com/AJenbo/devilutionX" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">DevilutionX</a>.
-                Diablo is a trademark of Blizzard Entertainment.
+                {t('diablo.basedOn')} <a href="https://github.com/AJenbo/devilutionX" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">DevilutionX</a>.
+                {' '}{t('diablo.trademark')}
               </p>
             </div>
           </div>
