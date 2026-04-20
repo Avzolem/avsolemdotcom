@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $pokemon-red: #CC0000;
 $pokemon-red-dark: #990000;
 $pokemon-yellow: #FFCB05;
@@ -152,7 +154,7 @@ $pokemon-gray-dark: #3A3A3A;
 }
 
 .btnApply {
-  background: linear-gradient(135deg, $pokemon-yellow 0%, darken($pokemon-yellow, 10%) 100%);
+  background: linear-gradient(135deg, $pokemon-yellow 0%, color.adjust($pokemon-yellow, $lightness: -10%) 100%);
   color: #000;
 
   &:hover {

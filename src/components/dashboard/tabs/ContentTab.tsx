@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Plus, Trash2, Loader2, Check, ExternalLink, FileText, FolderKanban } from 'lucide-react';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ export function ContentTab({ kind }: ContentTabProps) {
   const [body, setBody] = useState('');
   const [saving, setSaving] = useState(false);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/dashboard/content?kind=${kind}`);
@@ -70,9 +70,9 @@ export function ContentTab({ kind }: ContentTabProps) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [kind]);
 
-  useEffect(() => { load(); }, [kind]);
+  useEffect(() => { load(); }, [load]);
 
   function startNew() {
     const blank = kind === 'blog' ? BLANK_FRONTMATTER_BLOG : BLANK_FRONTMATTER_PROJECT;

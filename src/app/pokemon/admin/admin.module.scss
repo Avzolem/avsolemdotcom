@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // Pokemon Theme Colors
 $pokemon-red: #CC0000;
 $pokemon-red-dark: #990000;
@@ -520,7 +522,7 @@ $admin-purple: #7B2CBF;
     text-decoration: underline;
 
     &:hover {
-      color: lighten($pokemon-blue, 10%);
+      color: color.adjust($pokemon-blue, $lightness: 10%);
     }
   }
 }

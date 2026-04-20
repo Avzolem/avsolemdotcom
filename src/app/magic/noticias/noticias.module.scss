@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // Magic Theme Colors
 $magic-orange: #E8611A;
 $magic-orange-dark: #C44D15;
@@ -353,7 +355,7 @@ $magic-blue: #60A5FA;
     text-decoration: underline;
 
     &:hover {
-      color: lighten($magic-blue, 10%);
+      color: color.adjust($magic-blue, $lightness: 10%);
     }
   }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Music, Play, ListMusic } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { BentoCard } from './BentoCard';
@@ -112,10 +113,13 @@ export function SoundtrackCard() {
           className="relative flex-1 min-h-[120px] rounded-lg overflow-hidden group"
           aria-label="Play"
         >
-          <img
+          <Image
             src={`https://img.youtube.com/vi/${active.youtubeId}/mqdefault.jpg`}
             alt={active.title}
-            className="absolute inset-0 w-full h-full object-cover"
+            fill
+            sizes="(max-width: 768px) 50vw, 320px"
+            className="object-cover"
+            unoptimized
           />
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
             <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">

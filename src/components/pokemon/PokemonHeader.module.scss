@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // Pokemon Theme Colors
 $pokemon-red: #E3350D;
 $pokemon-red-dark: #CC0000;
@@ -199,13 +201,13 @@ $pokemon-gray-light: #2a2a2a;
 }
 
 .langButtonActive {
-  background: linear-gradient(135deg, $pokemon-blue 0%, darken($pokemon-blue, 10%) 100%);
+  background: linear-gradient(135deg, $pokemon-blue 0%, color.adjust($pokemon-blue, $lightness: -10%) 100%);
   color: white;
   border-color: $pokemon-blue;
   font-weight: 800;
 
   &:hover {
-    background: linear-gradient(135deg, darken($pokemon-blue, 10%) 0%, $pokemon-blue 100%);
+    background: linear-gradient(135deg, color.adjust($pokemon-blue, $lightness: -10%) 0%, $pokemon-blue 100%);
     color: white;
     transform: translateY(-1px);
   }
@@ -264,7 +266,7 @@ $pokemon-gray-light: #2a2a2a;
 
 .btnLogin,
 .btnLogout {
-  background: linear-gradient(135deg, $pokemon-blue 0%, darken($pokemon-blue, 10%) 100%);
+  background: linear-gradient(135deg, $pokemon-blue 0%, color.adjust($pokemon-blue, $lightness: -10%) 100%);
   color: white;
   border: 2px solid $pokemon-blue;
   padding: 0.75rem 1.5rem;
@@ -278,7 +280,7 @@ $pokemon-gray-light: #2a2a2a;
   letter-spacing: 0.5px;
 
   &:hover {
-    background: linear-gradient(135deg, darken($pokemon-blue, 10%) 0%, $pokemon-blue 100%);
+    background: linear-gradient(135deg, color.adjust($pokemon-blue, $lightness: -10%) 0%, $pokemon-blue 100%);
     transform: translateY(-1px);
   }
 
@@ -357,7 +359,7 @@ $pokemon-gray-light: #2a2a2a;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, $pokemon-blue 0%, darken($pokemon-blue, 10%) 100%);
+  background: linear-gradient(135deg, $pokemon-blue 0%, color.adjust($pokemon-blue, $lightness: -10%) 100%);
   color: white;
   font-weight: 700;
   font-size: 0.75rem;

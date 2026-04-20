@@ -1,4 +1,5 @@
 // Magic: The Gathering Theme Global Styles
+@use 'sass:color';
 
 // Color Palette
 $magic-orange: #E8611A;
@@ -247,33 +248,33 @@ $mana-multicolor: #C8A64E;
   border: 1px solid rgba(0, 0, 0, 0.3);
 
   &.mana-W {
-    background: linear-gradient(135deg, $mana-white 0%, darken($mana-white, 10%) 100%);
+    background: linear-gradient(135deg, $mana-white 0%, color.adjust($mana-white, $lightness: -10%) 100%);
     color: #333;
     text-shadow: none;
   }
 
   &.mana-U {
-    background: linear-gradient(135deg, lighten($mana-blue, 10%) 0%, $mana-blue 100%);
+    background: linear-gradient(135deg, color.adjust($mana-blue, $lightness: 10%) 0%, $mana-blue 100%);
     color: $magic-white;
   }
 
   &.mana-B {
-    background: linear-gradient(135deg, lighten($mana-black, 15%) 0%, $mana-black 100%);
+    background: linear-gradient(135deg, color.adjust($mana-black, $lightness: 15%) 0%, $mana-black 100%);
     color: #AAA;
   }
 
   &.mana-R {
-    background: linear-gradient(135deg, lighten($mana-red, 10%) 0%, $mana-red 100%);
+    background: linear-gradient(135deg, color.adjust($mana-red, $lightness: 10%) 0%, $mana-red 100%);
     color: $magic-white;
   }
 
   &.mana-G {
-    background: linear-gradient(135deg, lighten($mana-green, 10%) 0%, $mana-green 100%);
+    background: linear-gradient(135deg, color.adjust($mana-green, $lightness: 10%) 0%, $mana-green 100%);
     color: $magic-white;
   }
 
   &.mana-C {
-    background: linear-gradient(135deg, lighten($mana-colorless, 5%) 0%, $mana-colorless 100%);
+    background: linear-gradient(135deg, color.adjust($mana-colorless, $lightness: 5%) 0%, $mana-colorless 100%);
     color: #333;
     text-shadow: none;
   }
@@ -522,6 +523,6 @@ $mana-multicolor: #C8A64E;
   border-radius: 5px;
 
   &:hover {
-    background: lighten($magic-gray-medium, 10%);
+    background: color.adjust($magic-gray-medium, $lightness: 10%);
   }
 }
