@@ -33,7 +33,7 @@ export const ThemeToggle: React.FC = () => {
       className="
         inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
         hover:bg-gray-100 dark:hover:bg-gray-800
-        focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900
+        focus:outline-none focus-visible:ring-1 focus-visible:ring-gray-400 dark:focus-visible:ring-gray-600
         text-gray-600 dark:text-gray-400
       "
       aria-label={`Switch to ${nextTheme} mode`}

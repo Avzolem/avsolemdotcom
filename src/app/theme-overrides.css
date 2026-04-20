@@ -1,5 +1,14 @@
 /* Custom theme overrides for beige background in light mode and black in dark mode */
 
+/* Project card link border color — ensures visibility regardless of Tailwind purge */
+:root { --project-link-border: #111827; }
+[data-theme="dark"] { --project-link-border: #ffffff; }
+
+/* Home form inputs background — translucent gray, bypasses Tailwind purge */
+:root { --input-bg: rgba(0, 0, 0, 0.08); }
+[data-theme="dark"] { --input-bg: rgba(255, 255, 255, 0.08); }
+
+
 /* Light theme - Beige background (override slate colors with beige) */
 [data-theme="light"] {
   --neutral-background: #f5f0e8 !important; /* Main beige */

@@ -73,28 +73,16 @@ export default function RootLayout({
               (function() {
                 try {
                   const root = document.documentElement;
-
-                  // Resolve theme
-                  const resolveTheme = (themeValue) => {
-                    if (!themeValue || themeValue === 'system') {
-                      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                    }
-                    return themeValue;
-                  };
-
-                  // Apply saved theme
-                  const savedTheme = localStorage.getItem('theme');
-                  const resolvedTheme = resolveTheme(savedTheme);
-                  root.setAttribute('data-theme', resolvedTheme);
-                  if (resolvedTheme === 'dark') {
-                    root.classList.add('dark');
-                  } else {
-                    root.classList.remove('dark');
-                  }
+                  // Pure toggle: default 'light', saved value in localStorage wins,
+                  // never reads prefers-color-scheme.
+                  const saved = localStorage.getItem('theme');
+                  const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
+                  root.setAttribute('data-theme', theme);
+                  if (theme === 'dark') root.classList.add('dark');
+                  else root.classList.remove('dark');
                 } catch (e) {
-                  console.error('Failed to initialize theme:', e);
-                  document.documentElement.setAttribute('data-theme', 'dark');
-                  document.documentElement.classList.add('dark');
+                  document.documentElement.setAttribute('data-theme', 'light');
+                  document.documentElement.classList.remove('dark');
                 }
               })();
             `,
