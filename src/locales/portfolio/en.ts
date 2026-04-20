@@ -162,11 +162,11 @@ export const en: Record<string, string> = {
   'hero.tagline.1': 'Full-stack developer · Chihuahua, MX',
   'hero.tagline.2': 'React & Next.js specialist',
   'hero.tagline.3': 'MongoDB + Resend + Anthropic AI',
-  'hero.tagline.4': 'Frontend, backend, hardware — all of it',
+  'hero.tagline.4': 'Frontend, backend, hardware — Fullstack Engineer',
   'hero.tagline.5': 'Shipping code since 2014',
   'hero.tagline.6': 'Coffee, code and occasional World of Warcraft',
   'hero.tagline.7': 'Obsessed with bento grids lately',
-  'hero.tagline.8': 'Serious developer, card collector',
+  'hero.tagline.8': 'Developer and card collector, visit avsolem.com/tcg',
   'hero.tagline.9': 'If it is broken, I will fix it',
   'hero.tagline.10': 'Press ↑↑↓↓←→←→BA',
 

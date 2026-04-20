@@ -1,9 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import '@/styles/hero-logo.css';
 
@@ -34,9 +32,9 @@ export function HeroCard() {
   }, []);
 
   return (
-    <div className="relative flex flex-col gap-4 px-6 md:px-8 py-5 md:py-6 col-span-full">
-      {/* Logo + tagline: stacked on mobile, side-by-side on md+ */}
-      <div className="flex flex-col md:flex-row md:items-center md:gap-8 gap-3">
+    <div className="relative flex flex-col gap-4 px-6 md:px-8 pt-2 pb-0 md:pt-2 md:pb-0 col-span-full">
+      {/* Logo + tagline: stacked on mobile, side-by-side on md+ (tagline baseline-aligned with logo base) */}
+      <div className="flex flex-col md:flex-row md:items-end md:gap-6 gap-3">
         <div className="relative h-12 md:h-16 w-auto shrink-0">
           <Image
             src="/images/logo/avsolem-dark.webp"
@@ -56,8 +54,8 @@ export function HeroCard() {
           />
         </div>
 
-        {/* Rotating tagline */}
-        <div className="relative h-7 md:h-10 overflow-hidden flex-1 min-w-0">
+        {/* Rotating tagline — aligned to the logo's baseline */}
+        <div className="relative h-7 md:h-9 overflow-hidden flex-1 min-w-0 md:-mb-2">
           <p
             key={idx}
             className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 font-medium tracking-tight animate-fade-in truncate"
@@ -65,23 +63,6 @@ export function HeroCard() {
             {t(TAGLINE_KEYS[idx])}
           </p>
         </div>
-      </div>
-
-      {/* Compact CTAs — text links */}
-      <div className="flex items-center gap-5 text-sm">
-        <Link
-          href="/work"
-          className="inline-flex items-center gap-1 text-gray-900 dark:text-white font-medium hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
-        >
-          {t('home.cta.work')}
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
-        <Link
-          href="/about"
-          className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          {t('home.cta.about')}
-        </Link>
       </div>
     </div>
   );

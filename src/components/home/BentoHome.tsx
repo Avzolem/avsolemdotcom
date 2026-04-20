@@ -119,15 +119,15 @@ export async function BentoHome() {
   };
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto px-4 py-8 md:py-12">
+    <div className="relative w-full max-w-6xl mx-auto px-4 pt-3 pb-8 md:pt-4 md:pb-12">
       <AmbientOrbs />
       <KonamiCRT />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[minmax(140px,auto)]">
-        <div className="col-span-1 md:col-span-2 lg:col-span-4">
-          <HeroCard />
-        </div>
+      <div className="mb-10 md:mb-12">
+        <HeroCard />
+      </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[minmax(140px,auto)]">
         <StatsCard stats={stats} />
         <FeaturedProjectCard
           slug={featured?.slug}
