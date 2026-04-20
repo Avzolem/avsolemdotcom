@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Download, Mail, MapPin, Globe, Linkedin, Github, ExternalLink, Sun, Moon, Languages, Phone } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import './print.css';
 
 // Inject print styles into head to ensure they load before print - Critical for Edge
@@ -283,6 +284,7 @@ const cvData = {
 };
 
 export default function CVPage() {
+  const { t } = useLanguage();
   const [lang, setLang] = useState<'en' | 'es'>('en');
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const data = cvData[lang];
@@ -336,7 +338,7 @@ export default function CVPage() {
           <button
             onClick={handlePrint}
             className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
-            title={data.buttons.download}
+            title={t('cv.downloadButton')}
           >
             <Download className="w-5 h-5" />
           </button>
@@ -345,7 +347,7 @@ export default function CVPage() {
           <Link
             href="/"
             className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
-            title={data.buttons.portfolio}
+            title={t('cv.portfolioButton')}
           >
             <ExternalLink className="w-5 h-5" />
           </Link>
@@ -405,7 +407,7 @@ export default function CVPage() {
                 <h3 className={`text-sm font-bold mb-3 uppercase tracking-wider border-b border-cyan-500 pb-1 ${
                   theme === 'light' ? 'text-gray-900' : 'text-white'
                 }`}>
-                  {data.sections.contact}
+                  {t('cv.contact')}
                 </h3>
                 <div className="space-y-2 text-sm">
                   <a href={`mailto:${data.email}`} className={`contact-item flex items-start gap-2 hover:text-cyan-600 transition-colors ${
@@ -450,7 +452,7 @@ export default function CVPage() {
                 <h3 className={`text-sm font-bold mb-3 uppercase tracking-wider border-b border-cyan-500 pb-1 ${
                   theme === 'light' ? 'text-gray-900' : 'text-white'
                 }`}>
-                  {data.sections.languages}
+                  {t('cv.languages')}
                 </h3>
                 <div className="space-y-1 text-xs">
                   {data.languages.map((language) => (
@@ -469,7 +471,7 @@ export default function CVPage() {
                 <h3 className={`text-sm font-bold mb-3 uppercase tracking-wider border-b border-cyan-500 pb-1 ${
                   theme === 'light' ? 'text-gray-900' : 'text-white'
                 }`}>
-                  {data.sections.technicalSkills}
+                  {t('cv.technicalSkills')}
                 </h3>
                 <div className="skills-container flex flex-wrap gap-1">
                   {data.skills.technical.map((skill) => (
@@ -492,7 +494,7 @@ export default function CVPage() {
                 <h3 className={`text-sm font-bold mb-3 uppercase tracking-wider border-b border-cyan-500 pb-1 ${
                   theme === 'light' ? 'text-gray-900' : 'text-white'
                 }`}>
-                  {data.sections.professionalSkills}
+                  {t('cv.professionalSkills')}
                 </h3>
                 <div className="skills-container flex flex-wrap gap-1">
                   {data.skills.professional.map((skill) => (
@@ -538,7 +540,7 @@ export default function CVPage() {
                   theme === 'light' ? 'text-gray-900' : 'text-white'
                 }`}>
                   <span className="w-6 h-0.5 bg-cyan-500"></span>
-                  {data.sections.experience}
+                  {t('cv.experience')}
                 </h3>
                 <div className="space-y-3">
                   {data.experience.map((exp, index) => (
@@ -580,7 +582,7 @@ export default function CVPage() {
                   theme === 'light' ? 'text-gray-900' : 'text-white'
                 }`}>
                   <span className="w-6 h-0.5 bg-cyan-500"></span>
-                  {data.sections.education}
+                  {t('cv.education')}
                 </h3>
                 <div className="space-y-2">
                   {data.education.map((edu, index) => (

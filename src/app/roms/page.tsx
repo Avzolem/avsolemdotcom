@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./roms.module.scss";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Console {
   name: string;
@@ -66,13 +67,14 @@ const companies: Company[] = [
 ];
 
 export default function RomsPage() {
+  const { t } = useLanguage();
   return (
     <div className={styles.page}>
       <Link href="/" className={styles.backButton}>
-        Regresar a avsolem.com
+        {t('roms.backButton')}
       </Link>
       <div className={styles.container}>
-        <h1 className={styles.title}>💾 ROMS INDEX</h1>
+        <h1 className={styles.title}>💾 {t('roms.title')}</h1>
 
         {companies.map((company) => (
           <section key={company.name} className={styles.section}>
@@ -144,7 +146,7 @@ export default function RomsPage() {
         ))}
 
         <section className={styles.fanTranslateSection}>
-          <h2 className={styles.fanTranslateTitle}>Fan Translate Roms</h2>
+          <h2 className={styles.fanTranslateTitle}>{t('roms.fanTranslate')}</h2>
           <a
             href="https://tradusquare.es/traducciones/"
             target="_blank"

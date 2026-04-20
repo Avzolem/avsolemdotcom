@@ -152,4 +152,139 @@ export const en: Record<string, string> = {
   // Images and media
   'image.failedToLoad': 'Failed to load image',
   'image.loading': 'Loading...',
+
+  // Home bento — CTAs
+  'home.cta.work': 'See projects',
+  'home.cta.about': 'About me',
+  'home.viewArchive': 'See full archive',
+
+  // Home bento — Stats card
+  'home.stats.label': 'Stats',
+  'home.stats.projects': 'projects',
+  'home.stats.posts': 'posts',
+  'home.stats.stacks': 'stacks',
+  'home.stats.repos': 'GH repos',
+
+  // Home bento — Featured card
+  'home.featured.label': 'Featured',
+
+  // Home bento — Blog card
+  'home.blog.label': 'Last post',
+
+  // Home bento — GitHub card
+  'home.github.label': 'Recent commits',
+  'home.github.empty': 'No recent public activity.',
+  'home.github.now': 'just now',
+
+  // Home bento — Soundtrack card
+  'home.soundtrack.label': 'Soundtrack',
+  'home.soundtrack.comingSoon': 'Coming soon',
+
+  // Home bento — Contact form
+  'home.contact.label': 'Contact',
+  'home.contact.title': 'Want to get in touch? Leave your details.',
+  'home.contact.name': 'Name',
+  'home.contact.company': 'Company (optional)',
+  'home.contact.email': 'Email',
+  'home.contact.phone': 'Phone',
+  'home.contact.submit': 'Send',
+  'home.contact.submitting': 'Sending…',
+  'home.contact.success': 'Thanks! I will reach out soon.',
+  'home.contact.sendAnother': 'Send another',
+
+  // Home bento — AI chat card
+  'home.ai.label': 'Ask Andrés',
+  'home.ai.description': 'Ask me anything — I am an AI trained on my portfolio, blog and experience. Try one of the suggestions below or write your own.',
+  'home.ai.q1': 'What stacks do you know?',
+  'home.ai.q2': 'Available for freelance?',
+  'home.ai.q3': 'Tell me about Fletpaq',
+  'home.ai.placeholder': 'Ask me anything…',
+  'home.ai.send': 'Send',
+  'home.ai.rateLimited': 'Daily limit reached. Come back tomorrow.',
+
+  // Roms page
+  'roms.title': 'ROMS INDEX',
+  'roms.backButton': 'Back to avsolem.com',
+  'roms.fanTranslate': 'Fan Translate Roms',
+
+  // Diablo page
+  'diablo.poweredBy': 'Powered by Avsolem',
+  'diablo.info': 'Information',
+  'diablo.mute': 'Mute',
+  'diablo.unmute': 'Unmute',
+  'diablo.fullscreen': 'Fullscreen',
+  'diablo.backHome': 'Back to avsolem.com',
+  'diablo.gameTitle': 'Diablo Web',
+  'diablo.description': 'This is Diablo, a port of the original Diablo game that runs entirely in your browser using WebAssembly. Powered by Avsolem.',
+  'diablo.howToPlay': 'How to Play:',
+  'diablo.shareware': 'The Shareware version is available for free',
+  'diablo.fullGame': 'For the full game, you need to provide your own DIABDAT.MPQ file',
+  'diablo.extractMpq': 'If you own Diablo on GOG or have the original CD, you can extract the MPQ file',
+  'diablo.controls': 'Controls:',
+  'diablo.controls.leftClick': 'Left Click - Move / Attack / Interact',
+  'diablo.controls.rightClick': 'Right Click - Use spell',
+  'diablo.controls.inventory': 'I - Inventory',
+  'diablo.controls.character': 'C - Character stats',
+  'diablo.controls.spellbook': 'S - Spellbook',
+  'diablo.controls.menu': 'ESC - Menu',
+  'diablo.basedOn': 'Based on',
+  'diablo.trademark': 'Diablo is a trademark of Blizzard Entertainment.',
+
+  // Cloud page
+  'cloud.confirmDeleteFile': 'Are you sure you want to delete this file?',
+  'cloud.confirmDeleteFolder': 'Are you sure you want to delete this folder and all its files?',
+  'cloud.deleteSuccess': 'Deleted successfully',
+  'cloud.deleteError': 'Error deleting file',
+  'cloud.linkCopied': 'Link copied',
+  'cloud.copyError': 'Error copying link',
+  'cloud.folderCreated': 'Folder created',
+  'cloud.folderCreateError': 'Error creating folder',
+  'cloud.renameSuccess': 'Renamed successfully',
+  'cloud.renameError': 'Error renaming',
+  'cloud.title': 'Personal Cloud Storage',
+  'cloud.subtitle': 'Store and play your videos from any device. Sign in to access your cloud space.',
+  'cloud.login': 'Sign In',
+  'cloud.navigation': 'Navigation',
+  'cloud.home': 'Home',
+  'cloud.loading': 'Loading...',
+  'cloud.files': 'files',
+  'cloud.rename': 'Rename',
+  'cloud.delete': 'Delete',
+  'cloud.emptyFolder': 'Empty folder',
+  'cloud.emptyCloud': 'Your cloud is empty',
+  'cloud.emptyFolderDesc': 'This folder has no files. Upload files or create subfolders.',
+  'cloud.emptyCloudDesc': 'Upload your first files to start using your personal storage.',
+  'cloud.play': 'Play',
+  'cloud.copyLink': 'Copy link',
+  'cloud.newFolder': 'New Folder',
+  'cloud.folderName': 'Folder name',
+  'cloud.cancel': 'Cancel',
+  'cloud.create': 'Create',
+
+  // WhatsApp form
+  'whatsapp.phoneNumbers': 'Phone Numbers',
+  'whatsapp.message': 'Message',
+  'whatsapp.phonePlaceholder': 'Enter phone numbers, one per line (e.g., +521234567890)',
+  'whatsapp.phoneHint': 'Include country code (e.g., +52 for Mexico)',
+  'whatsapp.messagePlaceholder': 'Enter your message here...',
+  'whatsapp.sendButton': 'Send Messages',
+  'whatsapp.sending': 'Sending...',
+  'whatsapp.resultsSummary': 'Results Summary',
+  'whatsapp.total': 'Total',
+  'whatsapp.sent': 'Sent',
+  'whatsapp.failed': 'Failed',
+  'whatsapp.detailedResults': 'Detailed Results',
+
+  // CV page
+  'cv.contact': 'Contact',
+  'cv.languages': 'Languages',
+  'cv.technicalSkills': 'Technical Skills',
+  'cv.professionalSkills': 'Professional Skills',
+  'cv.experience': 'Experience',
+  'cv.education': 'Education',
+  'cv.downloadButton': 'Download PDF',
+  'cv.portfolioButton': 'Portfolio',
+
+  // About page
+  'about.downloadCV': 'Download CV',
 };

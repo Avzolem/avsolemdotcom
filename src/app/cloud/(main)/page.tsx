@@ -9,6 +9,7 @@ import AuthModal from '@/components/cloud/AuthModal';
 import FileUploader from '@/components/cloud/FileUploader';
 import { useCloudAuth } from '@/contexts/CloudAuthContext';
 import { useToast } from '@/contexts/ToastContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CloudFile {
   _id: string;
@@ -51,6 +52,7 @@ function formatDuration(seconds: number): string {
 export default function CloudPage() {
   const { isAuthenticated, isLoading } = useCloudAuth();
   const { showToast } = useToast();
+  const { t } = useLanguage();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUploader, setShowUploader] = useState(false);
   const [files, setFiles] = useState<CloudFile[]>([]);
@@ -149,7 +151,7 @@ export default function CloudPage() {
   };
 
   const handleDelete = async (fileId: string, fileName: string) => {
-    if (!confirm('Estas seguro de eliminar este archivo?')) return;
+    if (!confirm(t('cloud.confirmDeleteFile'))) return;
 
     try {
       const response = await fetch(`/api/cloud/files/${fileId}`, {
@@ -157,13 +159,13 @@ export default function CloudPage() {
       });
       if (response.ok) {
         setFiles(prev => prev.filter(f => f._id !== fileId));
-        showToast(`"${fileName}" eliminado correctamente`, 'success');
+        showToast(`"${fileName}" ${t('cloud.deleteSuccess')}`, 'success');
       } else {
-        showToast('Error al eliminar el archivo', 'error');
+        showToast(t('cloud.deleteError'), 'error');
       }
     } catch (error) {
       console.error('Failed to delete file:', error);
-      showToast('Error al eliminar el archivo', 'error');
+      showToast(t('cloud.deleteError'), 'error');
     }
     setActiveMenu(null);
   };
@@ -175,9 +177,9 @@ export default function CloudPage() {
   const handleCopyLink = async (url: string, fileName: string) => {
     try {
       await navigator.clipboard.writeText(url);
-      showToast(`Enlace de "${fileName}" copiado`, 'success');
+      showToast(`"${fileName}" - ${t('cloud.linkCopied')}`, 'success');
     } catch {
-      showToast('Error al copiar enlace', 'error');
+      showToast(t('cloud.copyError'), 'error');
     }
     setActiveMenu(null);
   };
@@ -195,17 +197,17 @@ export default function CloudPage() {
         }),
       });
       if (response.ok) {
-        showToast(`Carpeta "${newFolderName.trim()}" creada`, 'success');
+        showToast(`"${newFolderName.trim()}" - ${t('cloud.folderCreated')}`, 'success');
         setNewFolderName('');
         setShowNewFolder(false);
         fetchFoldersInCurrent();
         fetchAllFolders();
       } else {
-        showToast('Error al crear la carpeta', 'error');
+        showToast(t('cloud.folderCreateError'), 'error');
       }
     } catch (error) {
       console.error('Failed to create folder:', error);
-      showToast('Error al crear la carpeta', 'error');
+      showToast(t('cloud.folderCreateError'), 'error');
     }
   };
 
@@ -228,13 +230,13 @@ export default function CloudPage() {
         setFiles(prev => prev.map(f =>
           f._id === fileId ? { ...f, name: editName.trim() } : f
         ));
-        showToast('Archivo renombrado', 'success');
+        showToast(t('cloud.renameSuccess'), 'success');
       } else {
-        showToast('Error al renombrar', 'error');
+        showToast(t('cloud.renameError'), 'error');
       }
     } catch (error) {
       console.error('Failed to rename file:', error);
-      showToast('Error al renombrar', 'error');
+      showToast(t('cloud.renameError'), 'error');
     }
     setEditingFile(null);
     setEditName('');
@@ -245,7 +247,7 @@ export default function CloudPage() {
   };
 
   const handleDeleteFolder = async (folderId: string, folderName: string) => {
-    if (!confirm('Estas seguro de eliminar esta carpeta y todos sus archivos?')) return;
+    if (!confirm(t('cloud.confirmDeleteFolder'))) return;
 
     try {
       const response = await fetch(`/api/cloud/folders/${folderId}`, {
@@ -255,13 +257,13 @@ export default function CloudPage() {
         setFolders(prev => prev.filter(f => f._id !== folderId));
         setAllFolders(prev => prev.filter(f => f._id !== folderId));
         fetchFiles(); // Refresh files as some may have been deleted
-        showToast(`Carpeta "${folderName}" eliminada`, 'success');
+        showToast(`"${folderName}" - ${t('cloud.deleteSuccess')}`, 'success');
       } else {
-        showToast('Error al eliminar la carpeta', 'error');
+        showToast(t('cloud.deleteError'), 'error');
       }
     } catch (error) {
       console.error('Failed to delete folder:', error);
-      showToast('Error al eliminar la carpeta', 'error');
+      showToast(t('cloud.deleteError'), 'error');
     }
     setActiveFolderMenu(null);
   };
@@ -289,13 +291,13 @@ export default function CloudPage() {
         setAllFolders(prev => prev.map(f =>
           f._id === folderId ? { ...f, name: newName } : f
         ));
-        showToast('Carpeta renombrada', 'success');
+        showToast(t('cloud.renameSuccess'), 'success');
       } else {
-        showToast('Error al renombrar', 'error');
+        showToast(t('cloud.renameError'), 'error');
       }
     } catch (error) {
       console.error('Failed to rename folder:', error);
-      showToast('Error al renombrar', 'error');
+      showToast(t('cloud.renameError'), 'error');
     }
     setEditingFolder(null);
     setEditFolderName('');
@@ -326,7 +328,7 @@ export default function CloudPage() {
         <main className="cloud-main">
           <div className="cloud-empty">
             <span className="cloud-spinner" style={{ width: 48, height: 48 }} />
-            <p className="cloud-empty__text" style={{ marginTop: '1rem' }}>Cargando...</p>
+            <p className="cloud-empty__text" style={{ marginTop: '1rem' }}>{t('cloud.loading')}</p>
           </div>
         </main>
         <CloudFooter />
@@ -344,17 +346,16 @@ export default function CloudPage() {
             <div className="cloud-empty__icon">
               <Cloud size={80} />
             </div>
-            <h1 className="cloud-empty__title">Cloud Storage Personal</h1>
+            <h1 className="cloud-empty__title">{t('cloud.title')}</h1>
             <p className="cloud-empty__text">
-              Almacena y reproduce tus videos desde cualquier dispositivo.
-              Inicia sesion para acceder a tu espacio en la nube.
+              {t('cloud.subtitle')}
             </p>
             <button
               className="cloud-btn cloud-btn--primary"
               onClick={() => setShowAuthModal(true)}
               style={{ fontSize: '1rem', padding: '0.875rem 2rem' }}
             >
-              Iniciar Sesion
+              {t('cloud.login')}
             </button>
           </div>
         </main>
@@ -375,7 +376,7 @@ export default function CloudPage() {
         <div className="cloud-content">
           {/* Sidebar */}
           <aside className="cloud-sidebar">
-            <div className="cloud-sidebar__title">Navegacion</div>
+            <div className="cloud-sidebar__title">{t('cloud.navigation')}</div>
             <ul className="cloud-tree">
               <li className="cloud-tree__item">
                 <button
@@ -383,7 +384,7 @@ export default function CloudPage() {
                   onClick={() => navigateToFolder(null)}
                 >
                   <Home size={18} />
-                  <span className="cloud-tree__label">Inicio</span>
+                  <span className="cloud-tree__label">{t('cloud.home')}</span>
                   <span className="cloud-tree__count">{files.filter(f => !f.folderId).length}</span>
                 </button>
               </li>
@@ -424,7 +425,7 @@ export default function CloudPage() {
               <nav className="cloud-breadcrumb">
                 <span className="cloud-breadcrumb__item">
                   <span className="cloud-breadcrumb__link" onClick={() => navigateToFolder(null)}>
-                    Inicio
+                    {t('cloud.home')}
                   </span>
                 </span>
                 {folderPath.map((folder, index) => (
@@ -446,7 +447,7 @@ export default function CloudPage() {
             {isLoadingFiles && (
               <div className="cloud-empty">
                 <span className="cloud-spinner" style={{ width: 40, height: 40 }} />
-                <p className="cloud-empty__text" style={{ marginTop: '1rem' }}>Cargando archivos...</p>
+                <p className="cloud-empty__text" style={{ marginTop: '1rem' }}>{t('cloud.loading')}</p>
               </div>
             )}
 
@@ -482,7 +483,7 @@ export default function CloudPage() {
                         <>
                           <p className="cloud-folder__name">{folder.name}</p>
                           <p className="cloud-folder__meta">
-                            {files.filter(f => f.folderId === folder._id).length} archivos
+                            {files.filter(f => f.folderId === folder._id).length} {t('cloud.files')}
                           </p>
                         </>
                       )}
@@ -503,10 +504,10 @@ export default function CloudPage() {
                       {activeFolderMenu === folder._id && (
                         <div className="cloud-dropdown">
                           <button className="cloud-dropdown__item" onClick={() => startRenameFolder(folder)}>
-                            <Pencil size={16} /> Renombrar
+                            <Pencil size={16} /> {t('cloud.rename')}
                           </button>
                           <button className="cloud-dropdown__item cloud-dropdown__item--danger" onClick={() => handleDeleteFolder(folder._id, folder.name)}>
-                            <Trash2 size={16} /> Eliminar
+                            <Trash2 size={16} /> {t('cloud.delete')}
                           </button>
                         </div>
                       )}
@@ -523,12 +524,12 @@ export default function CloudPage() {
                   <Cloud size={80} />
                 </div>
                 <h2 className="cloud-empty__title">
-                  {currentFolderId ? 'Carpeta vacia' : 'Tu nube esta vacia'}
+                  {currentFolderId ? t('cloud.emptyFolder') : t('cloud.emptyCloud')}
                 </h2>
                 <p className="cloud-empty__text">
                   {currentFolderId
-                    ? 'Esta carpeta no tiene archivos. Sube archivos o crea subcarpetas.'
-                    : 'Sube tus primeros archivos para comenzar a usar tu almacenamiento personal.'}
+                    ? t('cloud.emptyFolderDesc')
+                    : t('cloud.emptyCloudDesc')}
                 </p>
               </div>
             )}
@@ -598,17 +599,17 @@ export default function CloudPage() {
                             <div className="cloud-dropdown" onClick={(e) => e.stopPropagation()}>
                               {file.cloudinaryResourceType === 'video' && (
                                 <button className="cloud-dropdown__item" onClick={() => handlePlay(file._id)}>
-                                  <Play size={16} /> Reproducir
+                                  <Play size={16} /> {t('cloud.play')}
                                 </button>
                               )}
                               <button className="cloud-dropdown__item" onClick={() => handleCopyLink(file.cloudinarySecureUrl, file.name)}>
-                                <Link2 size={16} /> Copiar enlace
+                                <Link2 size={16} /> {t('cloud.copyLink')}
                               </button>
                               <button className="cloud-dropdown__item" onClick={() => startRename(file)}>
-                                <Pencil size={16} /> Renombrar
+                                <Pencil size={16} /> {t('cloud.rename')}
                               </button>
                               <button className="cloud-dropdown__item cloud-dropdown__item--danger" onClick={() => handleDelete(file._id, file.name)}>
-                                <Trash2 size={16} /> Eliminar
+                                <Trash2 size={16} /> {t('cloud.delete')}
                               </button>
                             </div>
                           )}
@@ -641,13 +642,13 @@ export default function CloudPage() {
             style={{ maxWidth: 400 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="cloud-auth-modal__title">Nueva Carpeta</h2>
+            <h2 className="cloud-auth-modal__title">{t('cloud.newFolder')}</h2>
             <form onSubmit={(e) => { e.preventDefault(); handleCreateFolder(); }}>
               <input
                 type="text"
                 value={newFolderName}
                 onChange={(e) => setNewFolderName(e.target.value)}
-                placeholder="Nombre de la carpeta"
+                placeholder={t('cloud.folderName')}
                 className="cloud-input"
                 style={{ width: '100%', marginBottom: '1rem' }}
                 autoFocus
@@ -658,14 +659,14 @@ export default function CloudPage() {
                   className="cloud-btn cloud-btn--secondary"
                   onClick={() => setShowNewFolder(false)}
                 >
-                  Cancelar
+                  {t('cloud.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="cloud-btn cloud-btn--primary"
                   disabled={!newFolderName.trim()}
                 >
-                  Crear
+                  {t('cloud.create')}
                 </button>
               </div>
             </form>
