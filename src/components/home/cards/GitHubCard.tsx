@@ -1,18 +1,44 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Github } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { BentoCard } from './BentoCard';
-import type { Commit } from '../BentoHome';
+
+interface Commit {
+  message: string;
+  repo: string;
+  sha: string;
+  date: string;
+  url: string;
+}
 
 interface GitHubCardProps {
   user: string;
-  commits: Commit[];
+  commits?: Commit[]; // initial SSR value (may be empty)
 }
 
-export function GitHubCard({ user, commits }: GitHubCardProps) {
+export function GitHubCard({ user, commits: initialCommits = [] }: GitHubCardProps) {
   const { t } = useLanguage();
+  const [commits, setCommits] = useState<Commit[]>(initialCommits);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/github/commits');
+        if (!res.ok) return;
+        const body = await res.json();
+        if (!cancelled && Array.isArray(body.commits)) {
+          setCommits(body.commits);
+        }
+      } catch {
+        /* silent */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   function timeAgo(iso: string): string {
     const diff = Date.now() - new Date(iso).getTime();

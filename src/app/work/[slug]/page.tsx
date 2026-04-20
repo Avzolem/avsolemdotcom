@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getPosts } from "@/utils/utils";
 import { baseURL, about, person, work } from "@/resources";
 import { ScrollToHash, CustomMDX } from "@/components";
-import { MediaCarousel } from "@/components/MediaCarousel";
+import { OptimizedCarousel } from "@/components/OptimizedCarousel";
 import { Metadata } from "next";
 import { Meta, SchemaScript } from '@/lib/seo';
 import { BackToProjects, FormattedDate, AvatarGroup, TranslatedTitle } from '@/components/DetailPageElements';
@@ -77,8 +77,13 @@ export default async function Project({
         />
       </div>
       {post.metadata.images.length > 0 && (
-        <div className="w-full aspect-video relative">
-          <MediaCarousel media={post.metadata.images} />
+        <div className="w-full">
+          <OptimizedCarousel
+            images={post.metadata.images}
+            title={post.metadata.title}
+            priority
+            sizes="(max-width: 960px) 100vw, 960px"
+          />
         </div>
       )}
       <article className="flex flex-col max-w-md w-full mx-auto">

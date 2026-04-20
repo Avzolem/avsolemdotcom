@@ -1,4 +1,6 @@
 import { getPosts } from '@/utils/utils';
+import '@/styles/ambient-orbs.css';
+import { AmbientOrbs } from './AmbientOrbs';
 import { HeroCard } from './cards/HeroCard';
 import { StatsCard } from './cards/StatsCard';
 import { FeaturedProjectCard } from './cards/FeaturedProjectCard';
@@ -10,7 +12,7 @@ import { AIChatCard } from './cards/AIChatCard';
 import { KonamiCRT } from './KonamiCRT';
 import { HomeFooter } from './HomeFooter';
 
-const GH_USER = 'Avsolem';
+const GH_USER = 'Avzolem';
 
 interface GitHubUser {
   public_repos?: number;
@@ -51,8 +53,10 @@ async function fetchRecentCommits(): Promise<Commit[]> {
       headers: { Accept: 'application/vnd.github+json' },
       next: { revalidate: 600 },
     });
+    console.log('[GH] fetch status:', res.status);
     if (!res.ok) return [];
     const events: PushEvent[] = await res.json();
+    console.log('[GH] events count:', Array.isArray(events) ? events.length : 'NOT_ARRAY');
     const commits: Commit[] = [];
     for (const ev of events) {
       if (ev.type !== 'PushEvent' || !ev.payload?.commits) continue;
@@ -67,8 +71,10 @@ async function fetchRecentCommits(): Promise<Commit[]> {
         if (commits.length >= 3) return commits;
       }
     }
+    console.log('[GH] final commits:', commits.length);
     return commits;
-  } catch {
+  } catch (err) {
+    console.error('[GH] fetchRecentCommits error:', err);
     return [];
   }
 }
@@ -113,7 +119,8 @@ export async function BentoHome() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12">
+    <div className="relative w-full max-w-6xl mx-auto px-4 py-8 md:py-12">
+      <AmbientOrbs />
       <KonamiCRT />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[minmax(140px,auto)]">

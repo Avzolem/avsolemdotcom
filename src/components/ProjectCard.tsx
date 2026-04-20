@@ -53,34 +53,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </h2>
           </div>
         )}
-        {(avatars?.length > 0 || displayDescription?.trim() || content?.trim()) && (
+        {(displayDescription?.trim() || content?.trim()) && (
           <div className="flex-[7] flex flex-col gap-4">
-            {/* Avatar Group */}
-            {avatars?.length > 0 && (
-              <div className="flex -space-x-2">
-                {avatars.slice(0, 4).map((avatar, index) => (
-                  <div
-                    key={index}
-                    className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white dark:border-gray-900"
-                  >
-                    <Image
-                      src={avatar.src}
-                      alt={`${t('detail.teamMember')} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-                {avatars.length > 4 && (
-                  <div className="relative w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 border-2 border-white dark:border-gray-900 flex items-center justify-center">
-                    <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                      +{avatars.length - 4}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Description */}
             {displayDescription?.trim() && (
               <p className="text-sm text-gray-500 dark:text-gray-400 text-balance">
@@ -89,11 +63,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             )}
 
             {/* Links */}
-            <div className="flex gap-6 flex-wrap">
+            <div className="flex gap-3 flex-wrap">
               {content?.trim() && (
                 <Link
                   href={href}
-                  className="inline-flex items-center gap-1 text-sm text-cyan-600 dark:text-cyan-400 hover:underline"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-900 dark:text-white rounded-lg"
+                  style={{
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    borderColor: 'var(--project-link-border, #111827)',
+                  }}
                 >
                   {t('project.moreInfo')}
                   <ArrowRight className="w-3 h-3" />
@@ -104,7 +83,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-cyan-600 dark:text-cyan-400 hover:underline"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-900 dark:text-white rounded-lg"
+                  style={{
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    borderColor: 'var(--project-link-border, #111827)',
+                  }}
                 >
                   {t('project.viewProject')}
                   <ExternalLink className="w-3 h-3" />

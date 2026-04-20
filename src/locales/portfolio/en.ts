@@ -2,7 +2,7 @@ export const en: Record<string, string> = {
   // Navigation
   'nav.home': 'Home',
   'nav.about': 'About',
-  'nav.work': 'Work',
+  'nav.work': 'Projects',
   'nav.blog': 'Blog',
   'nav.gallery': 'Gallery',
 
@@ -157,6 +157,18 @@ export const en: Record<string, string> = {
   'home.cta.work': 'See projects',
   'home.cta.about': 'About me',
   'home.viewArchive': 'See full archive',
+
+  // Home bento — Hero rotating taglines
+  'hero.tagline.1': 'Full-stack developer · Chihuahua, MX',
+  'hero.tagline.2': 'React & Next.js specialist',
+  'hero.tagline.3': 'MongoDB + Resend + Anthropic AI',
+  'hero.tagline.4': 'Frontend, backend, hardware — all of it',
+  'hero.tagline.5': 'Shipping code since 2014',
+  'hero.tagline.6': 'Coffee, code and occasional World of Warcraft',
+  'hero.tagline.7': 'Obsessed with bento grids lately',
+  'hero.tagline.8': 'Serious developer, card collector',
+  'hero.tagline.9': 'If it is broken, I will fix it',
+  'hero.tagline.10': 'Press ↑↑↓↓←→←→BA',
 
   // Home bento — Stats card
   'home.stats.label': 'Stats',

@@ -1,0 +1,8 @@
+/* Theme-swapping logo using [data-theme] attribute directly (not Tailwind dark:
+ * variant) so it's robust even if Tailwind's purge/class strategy misses it. */
+
+.hero-logo--dark { display: block; }
+.hero-logo--light { display: none; }
+
+[data-theme="dark"] .hero-logo--dark { display: none; }
+[data-theme="dark"] .hero-logo--light { display: block; }

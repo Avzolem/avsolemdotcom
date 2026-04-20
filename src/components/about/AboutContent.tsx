@@ -252,7 +252,9 @@ export function AboutContent() {
             {social.length > 0 && (
               <div className={`flex pt-5 pb-2 gap-2 flex-wrap justify-center ${styles.blockAlign}`}>
                 <div className={`flex gap-2 flex-wrap ${styles.socialDesktop}`}>
-                  {social.map(
+                  {social
+                    .filter((item) => !['/yugioh', '/roms', '/diablo'].includes(item.link))
+                    .map(
                     (item) =>
                       item.link && (
                         <Link
@@ -267,7 +269,9 @@ export function AboutContent() {
                   )}
                 </div>
                 <div className={`flex gap-2 flex-wrap ${styles.socialMobile}`}>
-                  {social.map(
+                  {social
+                    .filter((item) => !['/yugioh', '/roms', '/diablo'].includes(item.link))
+                    .map(
                     (item) =>
                       item.link && (
                         <Link
@@ -396,11 +400,9 @@ export function AboutContent() {
                 {about.technical.skills.map((skill, index) => (
                   <div
                     key={`${skill.title}-${index}`}
-                    className={`flex gap-3 items-center p-3 border border-gray-200/50 dark:border-gray-700/50 rounded-lg bg-gray-100/50 dark:bg-gray-800/50 ${styles.skillCard}`}
+                    className={`flex gap-3 items-center p-3 rounded-lg border border-gray-300 dark:border-gray-700 hover:border-cyan-500 dark:hover:border-cyan-400 transition-colors ${styles.skillCard}`}
                   >
-                    <span className="text-3xl">
-                      {skill.icon}
-                    </span>
+                    <span className="text-3xl">{skill.icon}</span>
                     <span
                       id={skill.title}
                       className="font-medium text-gray-900 dark:text-white"

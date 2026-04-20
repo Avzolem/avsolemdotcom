@@ -74,26 +74,30 @@ export function ContactFormCard() {
             type="text"
             required
             placeholder={t('home.contact.name')}
-            className="w-full px-3 py-2 text-sm rounded-lg bg-white/80 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            className="w-full px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
           />
           <input
             name="company"
             type="text"
             placeholder={t('home.contact.company')}
-            className="w-full px-3 py-2 text-sm rounded-lg bg-white/80 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            className="w-full px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
           />
           <input
             name="email"
             type="email"
             required
             placeholder={t('home.contact.email')}
-            className="w-full px-3 py-2 text-sm rounded-lg bg-white/80 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            className="w-full px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
           />
           <input
             name="phone"
             type="tel"
             placeholder={t('home.contact.phone')}
-            className="w-full px-3 py-2 text-sm rounded-lg bg-white/80 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            className="w-full px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
           />
           <button
             type="submit"

@@ -218,7 +218,8 @@ export function AIChatCard({ projectSlugs, postSlugs }: AIChatCardProps) {
           disabled={streaming || rateLimited}
           placeholder={rateLimited ? t('home.ai.rateLimited') : t('home.ai.placeholder')}
           maxLength={1000}
-          className="flex-1 px-3 py-2 text-sm rounded-lg bg-white/80 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/40 text-gray-900 dark:text-white placeholder:text-gray-400 disabled:opacity-50"
+          className="flex-1 px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-amber-500/40 text-gray-900 dark:text-white placeholder:text-gray-400 disabled:opacity-50"
+          style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
         />
         <button
           type="submit"

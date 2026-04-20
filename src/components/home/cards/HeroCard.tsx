@@ -1,56 +1,84 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Briefcase } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import '@/styles/hero-logo.css';
+
+const TAGLINE_KEYS = [
+  'hero.tagline.1',
+  'hero.tagline.2',
+  'hero.tagline.3',
+  'hero.tagline.4',
+  'hero.tagline.5',
+  'hero.tagline.6',
+  'hero.tagline.7',
+  'hero.tagline.8',
+  'hero.tagline.9',
+  'hero.tagline.10',
+];
+
+const ROTATION_MS = 3500;
 
 export function HeroCard() {
   const { t } = useLanguage();
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIdx((i) => (i + 1) % TAGLINE_KEYS.length);
+    }, ROTATION_MS);
+    return () => clearInterval(id);
+  }, []);
 
   return (
-    <div className="relative flex flex-col items-start gap-5 p-6 md:p-8 col-span-full">
-      {/* Logo — dark variant on light bg, light variant on dark bg */}
-      <div className="relative h-10 md:h-12 w-auto">
-        <Image
-          src="/images/logo/avsolem-dark.webp"
-          alt="avsolem."
-          width={385}
-          height={68}
-          className="h-10 md:h-12 w-auto dark:hidden"
-          priority
-        />
-        <Image
-          src="/images/logo/avsolem-light.webp"
-          alt="avsolem."
-          width={385}
-          height={68}
-          className="h-10 md:h-12 w-auto hidden dark:block"
-          priority
-        />
+    <div className="relative flex flex-col gap-4 px-6 md:px-8 py-5 md:py-6 col-span-full">
+      {/* Logo + tagline: stacked on mobile, side-by-side on md+ */}
+      <div className="flex flex-col md:flex-row md:items-center md:gap-8 gap-3">
+        <div className="relative h-12 md:h-16 w-auto shrink-0">
+          <Image
+            src="/images/logo/avsolem-dark.webp"
+            alt="avsolem."
+            width={385}
+            height={68}
+            className="hero-logo--dark h-12 md:h-16 w-auto"
+            priority
+          />
+          <Image
+            src="/images/logo/avsolem-light.webp"
+            alt="avsolem."
+            width={385}
+            height={68}
+            className="hero-logo--light h-12 md:h-16 w-auto"
+            priority
+          />
+        </div>
+
+        {/* Rotating tagline */}
+        <div className="relative h-7 md:h-10 overflow-hidden flex-1 min-w-0">
+          <p
+            key={idx}
+            className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 font-medium tracking-tight animate-fade-in truncate"
+          >
+            {t(TAGLINE_KEYS[idx])}
+          </p>
+        </div>
       </div>
 
-      <div className="max-w-2xl">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white text-balance leading-tight">
-          {t('home.headline')}
-        </h1>
-        <p className="mt-3 text-base md:text-lg text-gray-500 dark:text-gray-400 text-balance">
-          {t('home.subline')}
-        </p>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
+      {/* Compact CTAs — text links */}
+      <div className="flex items-center gap-5 text-sm">
         <Link
           href="/work"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-1 text-gray-900 dark:text-white font-medium hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
         >
-          <Briefcase className="w-4 h-4" />
           {t('home.cta.work')}
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
         <Link
           href="/about"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white text-sm font-medium transition-colors"
+          className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           {t('home.cta.about')}
         </Link>

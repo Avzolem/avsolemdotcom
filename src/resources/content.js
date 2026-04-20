@@ -296,6 +296,22 @@ const about = {
         icon: "🌐",
         title: "CISCO Networks",
       },
+      {
+        icon: "🤖",
+        title: "Claude Code",
+      },
+      {
+        icon: "☁️",
+        title: "Cloudflare",
+      },
+      {
+        icon: "📝",
+        title: "Notion",
+      },
+      {
+        icon: "📱",
+        title: "Android & iOS",
+      },
     ],
   },
 };
