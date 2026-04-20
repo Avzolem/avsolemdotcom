@@ -1,0 +1,14 @@
+/* Dashboard is always dark — defeat global [data-theme="light"] h1..h6 override. */
+.dashboard-layout h1,
+.dashboard-layout h2,
+.dashboard-layout h3,
+.dashboard-layout h4,
+.dashboard-layout h5,
+.dashboard-layout h6 {
+  color: inherit !important;
+}
+
+/* Ensure the login screen also escapes the light background */
+.dashboard-layout {
+  color-scheme: dark;
+}

@@ -15,9 +15,10 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const isCvRoute = pathname?.startsWith('/cv');
   const isTcgRoute = pathname?.startsWith('/tcg');
   const isMagicRoute = pathname?.startsWith('/magic');
+  const isDashboardRoute = pathname?.startsWith('/dashboard');
 
-  // Yu-Gi-Oh, Pokemon, Magic, ROMs, Cloud, Diablo, CV and TCG have their own layouts - no header/footer
-  if (isYugiohRoute || isPokemonRoute || isMagicRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute || isTcgRoute) {
+  // Yu-Gi-Oh, Pokemon, Magic, ROMs, Cloud, Diablo, CV, TCG and Dashboard have their own layouts - no header/footer
+  if (isYugiohRoute || isPokemonRoute || isMagicRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute || isTcgRoute || isDashboardRoute) {
     return (
       <div className="w-full min-h-screen">
         {children}
