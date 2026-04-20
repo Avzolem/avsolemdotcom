@@ -105,30 +105,43 @@ export default function CardList({ type, title }: CardListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
-  // Load general prices for cards with price = 0
+  // Load general prices for cards with price = 0.
+  // Batches concurrent requests to avoid serial latency on large collections
+  // while still bounding load on YGOPRODeck. Cancels pending work on unmount
+  // or when `cards` changes so we don't setState after unmount.
   useEffect(() => {
+    let cancelled = false;
+    const BATCH_SIZE = 10;
+
     const fetchGeneralPrices = async () => {
       const cardsWithoutPrice = cards.filter(card => !card.price || card.price === 0);
-
       if (cardsWithoutPrice.length === 0) return;
 
       const prices: Record<number, number> = {};
 
-      for (const card of cardsWithoutPrice) {
-        try {
-          const fullCard = await getCardById(card.cardId);
-          if (fullCard) {
-            prices[card.cardId] = getCardPrice(fullCard);
-          }
-        } catch (error) {
-          console.error(`Error fetching price for card ${card.cardId}:`, error);
+      for (let i = 0; i < cardsWithoutPrice.length; i += BATCH_SIZE) {
+        if (cancelled) return;
+        const batch = cardsWithoutPrice.slice(i, i + BATCH_SIZE);
+        const results = await Promise.all(
+          batch.map(async (card) => {
+            try {
+              const fullCard = await getCardById(card.cardId);
+              return fullCard ? [card.cardId, getCardPrice(fullCard)] as const : null;
+            } catch {
+              return null;
+            }
+          })
+        );
+        for (const entry of results) {
+          if (entry) prices[entry[0]] = entry[1];
         }
       }
 
-      setGeneralPrices(prices);
+      if (!cancelled) setGeneralPrices(prices);
     };
 
     fetchGeneralPrices();
+    return () => { cancelled = true; };
   }, [cards]);
 
   const removeCard = async (setCode: string, cardName: string) => {

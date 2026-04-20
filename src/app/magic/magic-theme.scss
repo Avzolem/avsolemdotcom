@@ -42,6 +42,8 @@ $mana-multicolor: #C8A64E;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
+  background: $magic-black;
+  color: $magic-white;
 
   &::before,
   &::after {
@@ -71,6 +73,16 @@ $mana-multicolor: #C8A64E;
 
   h1, h2, h3, h4, h5, h6 {
     color: $magic-gold;
+  }
+
+  // Defeat global [data-theme="light"] h1..h6 override (theme-overrides.css)
+  [data-theme="light"] & h1,
+  [data-theme="light"] & h2,
+  [data-theme="light"] & h3,
+  [data-theme="light"] & h4,
+  [data-theme="light"] & h5,
+  [data-theme="light"] & h6 {
+    color: $magic-gold !important;
   }
 }
 

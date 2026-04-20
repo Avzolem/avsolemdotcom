@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf';
 import { MagicDeck, CardInDeck, getPrimaryType, DECK_LIMITS } from '@/types/magic';
 
 interface DeckExportOptions {
@@ -56,7 +55,8 @@ function groupCardsByType(cards: CardInDeck[]): Record<string, CardInDeck[]> {
   );
 }
 
-export function exportDeckToPdf(deck: MagicDeck, options: DeckExportOptions = {}): void {
+export async function exportDeckToPdf(deck: MagicDeck, options: DeckExportOptions = {}): Promise<void> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 15;

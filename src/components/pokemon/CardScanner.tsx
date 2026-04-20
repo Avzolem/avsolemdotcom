@@ -395,9 +395,9 @@ export default function CardScanner({ onScanComplete }: CardScannerProps) {
         <div className={styles.matchesSection}>
           <h4 className={styles.matchesTitle}>{t('scanner.matches.title')}</h4>
           <div className={styles.matchesList}>
-            {cardMatches.map((match, index) => (
+            {cardMatches.map((match) => (
               <button
-                key={`${match.id}-${index}`}
+                key={match.id}
                 onClick={() => handleCardSelection(match.name)}
                 className={styles.matchButton}
               >

@@ -90,11 +90,13 @@ export default function DeckBuilder({ deckId }: DeckBuilderProps) {
       return;
     }
 
+    const controller = new AbortController();
     setSearching(true);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `/api/magic/search?q=${encodeURIComponent(searchTerm.trim())}&limit=20`
+          `/api/magic/search?q=${encodeURIComponent(searchTerm.trim())}&limit=20`,
+          { signal: controller.signal }
         );
         if (res.ok) {
           const data = await res.json();
@@ -102,10 +104,14 @@ export default function DeckBuilder({ deckId }: DeckBuilderProps) {
         } else {
           setSearchResults([]);
         }
-      } catch {
-        setSearchResults([]);
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          setSearchResults([]);
+        }
       } finally {
-        setSearching(false);
+        if (!controller.signal.aborted) {
+          setSearching(false);
+        }
       }
     }, 500);
 
@@ -113,6 +119,7 @@ export default function DeckBuilder({ deckId }: DeckBuilderProps) {
       if (searchTimeoutRef.current) {
         clearTimeout(searchTimeoutRef.current);
       }
+      controller.abort();
     };
   }, [searchTerm]);
 

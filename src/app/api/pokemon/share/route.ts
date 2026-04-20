@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate unique token
-    const token = randomBytes(16).toString('hex');
+    const token = randomBytes(32).toString('hex');
 
     // Create shared link in MongoDB
     const sharedLink = await createSharedLink(token, listType, userId, expiresInDays);

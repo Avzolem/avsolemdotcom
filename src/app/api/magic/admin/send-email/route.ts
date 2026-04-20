@@ -6,7 +6,7 @@ import { Resend } from 'resend';
 
 // Get admin emails from environment variable (comma-separated)
 function getAdminEmails(): string[] {
-  const adminEmails = process.env.YUGIOH_ADMIN_EMAILS || '';
+  const adminEmails = process.env.MAGIC_ADMIN_EMAILS || process.env.YUGIOH_ADMIN_EMAILS || '';
   return adminEmails.split(',').map(email => email.trim().toLowerCase()).filter(Boolean);
 }
 
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get from address (use verified domain or default)
-    const fromAddress = process.env.RESEND_FROM || 'MTG Manager <onboarding@resend.dev>';
+    const fromAddress = process.env.RESEND_FROM || 'MTG Manager <magic@avsolem.com>';
 
     // Send emails
     let sentCount = 0;

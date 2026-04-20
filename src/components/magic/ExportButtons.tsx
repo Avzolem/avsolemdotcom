@@ -38,7 +38,7 @@ export default function ExportButtons({ cards, listType }: ExportButtonsProps) {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          exportToPDF(cards, listType);
+          void exportToPDF(cards, listType);
         }}
         title={t('export.pdf.title')}
       >

@@ -10,6 +10,9 @@ async function getCollection(): Promise<Collection<Document>> {
 }
 
 function toFilter(deckId: string, userId: string) {
+  if (!ObjectId.isValid(deckId)) {
+    throw new Error('Invalid deck id');
+  }
   return { _id: new ObjectId(deckId), userId };
 }
 

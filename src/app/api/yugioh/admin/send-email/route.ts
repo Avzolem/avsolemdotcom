@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get from address (use verified domain or default)
-    const fromAddress = process.env.RESEND_FROM || 'Yu-Gi-Oh! Manager <onboarding@resend.dev>';
+    const fromAddress = process.env.RESEND_FROM || 'Yu-Gi-Oh! Manager <yugioh@avsolem.com>';
 
     // Send emails
     let sentCount = 0;

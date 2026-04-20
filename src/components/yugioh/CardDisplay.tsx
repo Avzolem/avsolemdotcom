@@ -144,7 +144,7 @@ function AllSetsDropdown({
           {sets.map((set, index) => {
             const rarityConfig = getRarityConfig(set.set_rarity);
             return (
-            <div key={index} className={styles.setItem}>
+            <div key={`${set.set_code}-${set.set_rarity}-${index}`} className={styles.setItem}>
               <div className={styles.setItemContent}>
                 <div className={styles.setCode}>{set.set_code}</div>
                 <div className={styles.setDetails}>

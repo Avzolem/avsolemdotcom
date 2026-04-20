@@ -1,5 +1,4 @@
 import { CardInList, ListType } from '@/types/magic';
-import jsPDF from 'jspdf';
 
 const LIST_LABELS: Record<ListType, string> = {
   collection: 'Colección',
@@ -41,7 +40,8 @@ export function exportToCSV(cards: CardInList[], listType: ListType): void {
   URL.revokeObjectURL(url);
 }
 
-export function exportToPDF(cards: CardInList[], listType: ListType): void {
+export async function exportToPDF(cards: CardInList[], listType: ListType): Promise<void> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 15;

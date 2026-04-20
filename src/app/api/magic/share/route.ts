@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate unique token
-    const token = randomBytes(16).toString('hex');
+    const token = randomBytes(32).toString('hex');
 
     // Get list cards to snapshot into the shared link
     const list = await getOrCreateList(listType, userId);

@@ -17,18 +17,16 @@ function isCacheValid(entry: CacheEntry): boolean {
   return Date.now() - entry.timestamp < CACHE_DURATION;
 }
 
-// Rate limiter: ensure 100ms between requests
+// Rate limiter: ensure RATE_LIMIT_MS between requests.
+// Reserves the next slot BEFORE awaiting so concurrent callers serialize
+// correctly instead of all reading the same stale lastRequestTime.
 async function rateLimitedFetch(url: string): Promise<Response> {
-  const now = Date.now();
-  const timeSinceLastRequest = now - lastRequestTime;
-
-  if (timeSinceLastRequest < RATE_LIMIT_MS) {
-    await new Promise((resolve) =>
-      setTimeout(resolve, RATE_LIMIT_MS - timeSinceLastRequest)
-    );
+  const nextSlot = Math.max(Date.now(), lastRequestTime + RATE_LIMIT_MS);
+  lastRequestTime = nextSlot;
+  const delay = nextSlot - Date.now();
+  if (delay > 0) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
   }
-
-  lastRequestTime = Date.now();
 
   return fetch(url, {
     headers: {

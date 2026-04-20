@@ -45,6 +45,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
 
 // Get news by ID
 export async function getNewsById(id: string): Promise<NewsArticle | null> {
+  if (!ObjectId.isValid(id)) return null;
   const collection = await getNewsCollection();
   return collection.findOne({ _id: new ObjectId(id) });
 }
@@ -64,6 +65,7 @@ export async function createNews(news: Omit<NewsArticle, '_id' | 'createdAt' | '
 
 // Update news
 export async function updateNews(id: string, updates: Partial<NewsArticle>): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const collection = await getNewsCollection();
   const result = await collection.updateOne(
     { _id: new ObjectId(id) },
@@ -74,6 +76,7 @@ export async function updateNews(id: string, updates: Partial<NewsArticle>): Pro
 
 // Delete news
 export async function deleteNews(id: string): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const collection = await getNewsCollection();
   const result = await collection.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount > 0;

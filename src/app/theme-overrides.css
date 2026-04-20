@@ -19,9 +19,11 @@
   --neutral-on-background: #1a1a1a !important;
 }
 
-/* Apply beige background to body and main containers */
-[data-theme="light"] body,
-[data-theme="light"] main,
+/* Apply beige background to body and main containers.
+ * TCG manager pages own their own theme (magic-main, pokemon-main, yugioh-main)
+ * and the dashboard is always dark — exclude them. */
+[data-theme="light"] body:not(:has(.dashboard-layout)),
+[data-theme="light"] main:not(.magic-main):not(.pokemon-main):not(.yugioh-main):not(.dashboard-main),
 [data-theme="light"] .main-container {
   background-color: #f5f0e8 !important;
   background-image: none !important;

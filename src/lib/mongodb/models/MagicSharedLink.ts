@@ -75,6 +75,7 @@ export async function getUserSharedLinks(userId: string): Promise<MagicSharedLin
 }
 
 export async function deleteSharedLink(id: string, userId: string): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const col = await getCollection();
   const result = await col.deleteOne({ _id: new ObjectId(id), userId });
   return result.deletedCount > 0;

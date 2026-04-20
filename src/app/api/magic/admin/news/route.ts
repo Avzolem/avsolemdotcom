@@ -10,7 +10,7 @@ import {
 
 // Get admin emails from environment variable
 function getAdminEmails(): string[] {
-  const adminEmails = process.env.YUGIOH_ADMIN_EMAILS || '';
+  const adminEmails = process.env.MAGIC_ADMIN_EMAILS || process.env.YUGIOH_ADMIN_EMAILS || '';
   return adminEmails.split(',').map(email => email.trim().toLowerCase()).filter(Boolean);
 }
 

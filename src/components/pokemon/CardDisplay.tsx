@@ -400,8 +400,8 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
         {hasAbilities && (
           <div className={styles.abilitiesSection}>
             <p className={styles.sectionLabel}>{t('card.abilities')}:</p>
-            {card.abilities!.map((ability, index) => (
-              <div key={index} className={styles.abilityItem}>
+            {card.abilities!.map((ability) => (
+              <div key={`${ability.type}:${ability.name}`} className={styles.abilityItem}>
                 <div className={styles.abilityHeader}>
                   <span className={styles.abilityType}>{ability.type}</span>
                   <span className={styles.abilityName}>{ability.name}</span>
@@ -427,8 +427,8 @@ function CardDisplay({ card, compact = false }: CardDisplayProps) {
                 </button>
               )}
             </div>
-            {(isAttacksExpanded ? card.attacks! : card.attacks!.slice(0, 2)).map((attack, index) => (
-              <div key={index} className={styles.attackItem}>
+            {(isAttacksExpanded ? card.attacks! : card.attacks!.slice(0, 2)).map((attack) => (
+              <div key={attack.name} className={styles.attackItem}>
                 <div className={styles.attackHeader}>
                   <div className={styles.attackCost}>
                     {attack.cost && attack.cost.map((energy, eIndex) => (

@@ -30,6 +30,8 @@ $pokemon-white: #FFFFFF;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
+  background: $pokemon-black;
+  color: $pokemon-white;
 
   &::before,
   &::after {
@@ -59,6 +61,16 @@ $pokemon-white: #FFFFFF;
 
   h1, h2, h3, h4, h5, h6 {
     color: $pokemon-yellow;
+  }
+
+  // Defeat global [data-theme="light"] h1..h6 override (theme-overrides.css)
+  [data-theme="light"] & h1,
+  [data-theme="light"] & h2,
+  [data-theme="light"] & h3,
+  [data-theme="light"] & h4,
+  [data-theme="light"] & h5,
+  [data-theme="light"] & h6 {
+    color: $pokemon-yellow !important;
   }
 }
 

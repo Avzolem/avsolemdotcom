@@ -46,6 +46,7 @@ export async function createNews(article: Omit<MagicNewsArticle, '_id' | 'create
 }
 
 export async function updateNews(id: string, updates: Partial<MagicNewsArticle>): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const col = await getCollection();
   const result = await col.updateOne(
     { _id: new ObjectId(id) },
@@ -55,6 +56,7 @@ export async function updateNews(id: string, updates: Partial<MagicNewsArticle>)
 }
 
 export async function deleteNews(id: string): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const col = await getCollection();
   const result = await col.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount > 0;

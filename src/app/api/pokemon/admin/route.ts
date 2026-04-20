@@ -6,7 +6,7 @@ import { getUsersCollection, YugiohUser } from '@/lib/mongodb/models/User';
 // Get admin emails from environment variable (comma-separated)
 // Reuse same admin list as Yu-Gi-Oh since same users manage both
 function getAdminEmails(): string[] {
-  const adminEmails = process.env.YUGIOH_ADMIN_EMAILS || '';
+  const adminEmails = process.env.POKEMON_ADMIN_EMAILS || process.env.YUGIOH_ADMIN_EMAILS || '';
   return adminEmails.split(',').map(email => email.trim().toLowerCase()).filter(Boolean);
 }
 

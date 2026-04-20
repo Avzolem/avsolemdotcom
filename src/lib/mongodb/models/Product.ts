@@ -40,6 +40,7 @@ export async function getAllProducts(): Promise<Product[]> {
 
 // Get product by ID
 export async function getProductById(id: string): Promise<Product | null> {
+  if (!ObjectId.isValid(id)) return null;
   const collection = await getProductsCollection();
   return collection.findOne({ _id: new ObjectId(id) });
 }
@@ -59,6 +60,7 @@ export async function createProduct(product: Omit<Product, '_id' | 'createdAt' |
 
 // Update product
 export async function updateProduct(id: string, updates: Partial<Product>): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const collection = await getProductsCollection();
   const result = await collection.updateOne(
     { _id: new ObjectId(id) },
@@ -69,6 +71,7 @@ export async function updateProduct(id: string, updates: Partial<Product>): Prom
 
 // Delete product
 export async function deleteProduct(id: string): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const collection = await getProductsCollection();
   const result = await collection.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount > 0;

@@ -43,6 +43,7 @@ export async function createProduct(product: Omit<MagicProduct, '_id' | 'created
 }
 
 export async function updateProduct(id: string, updates: Partial<MagicProduct>): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const col = await getCollection();
   const result = await col.updateOne(
     { _id: new ObjectId(id) },
@@ -52,6 +53,7 @@ export async function updateProduct(id: string, updates: Partial<MagicProduct>):
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
   const col = await getCollection();
   const result = await col.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount > 0;
