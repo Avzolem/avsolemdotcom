@@ -1,0 +1,75 @@
+---
+title: "OpenMouse — Wireless PC Remote Control"
+title_es: "OpenMouse — Control Remoto de PC por WiFi"
+publishedAt: "2026-04-18"
+summary: "Turn your Android phone into a mouse, keyboard and media remote for your PC over WiFi. Auto-discovery via mDNS, low-latency UDP protocol."
+summary_es: "Convierte tu celular Android en mouse, teclado y control multimedia para tu PC por WiFi. Auto-descubrimiento mDNS, protocolo UDP de baja latencia."
+images:
+  - "/images/projects/openmouse/01-logo.png"
+team:
+  - name: "Andrés Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Desktop + Mobile App"
+tags: ["python", "flutter", "udp", "mdns", "pynput", "asyncio"]
+link: "https://github.com/Avzolem/OpenMouse"
+---
+
+## Project Overview
+
+OpenMouse turns your Android phone into a fully-featured input device for your PC over your local WiFi network. No cables, no drivers — install the Windows executable, launch the app, and you get a trackpad, keyboard and media controller in your pocket.
+
+Built because, sometimes, your mouse dies mid-presentation.
+
+## Features
+
+### Trackpad
+- Wide touch zone for cursor movement
+- Tap = left click
+- Double tap = double click
+- Long press = right click
+- Dedicated side scroll bar + two-finger scroll
+
+### Full Keyboard
+- Real-time key capture
+- Text field to send whole phrases
+- Uses Android's native keyboard
+
+### Media Control
+- Play / pause
+- Next / previous
+- Volume up / down / mute
+- Large, easy-to-hit buttons
+
+### Automatic Discovery
+- Finds your PC automatically on the LAN (mDNS)
+- Manual IP fallback
+- Auto-reconnect on signal loss
+
+### One-Click PC Install
+- Run the `.exe` and you're done — self-installs and auto-starts
+- System tray icon shows IP and status
+- Auto-start on Windows boot
+- Uninstall from the tray menu
+
+## Protocol
+
+A lightweight binary protocol optimized for low latency:
+
+| Channel | Port | Use | Latency |
+|---|---|---|---|
+| UDP | 19780 | Mouse movement, scroll | ~1-5ms |
+| TCP | 19781 | Keyboard, clicks, multimedia | Reliable |
+
+Mouse packets are sent 60-100 times per second at only 5 bytes each, producing a fluid, near-instant experience.
+
+## Tech Stack
+
+- **PC Server**: Python 3.11+ with asyncio (UDP + TCP listeners), pynput (input simulation), pystray (tray icon), zeroconf (mDNS), PyInstaller (packaging)
+- **Android App**: Flutter with dart:io (UDP/TCP) and bonsoir (mDNS discovery)
+- **Platforms**: Windows 10+, Linux, Android 5.0+
+
+## Repository
+
+Source code, releases and binaries: [github.com/Avzolem/OpenMouse](https://github.com/Avzolem/OpenMouse)

@@ -1,0 +1,69 @@
+---
+title: "FletPaq — Intelligent Fleet Logistics with AI"
+title_es: "FletPaq — Logística Inteligente con IA"
+publishedAt: "2026-04-18"
+summary: "Fleet management platform with predictive maintenance powered by XGBoost for the cement industry. Flota, deliveries, operators and workshop in one system."
+summary_es: "Plataforma de gestión de flota con mantenimiento predictivo por XGBoost para la industria cementera. Flota, entregas, operadores y taller en un solo sistema."
+images:
+  - "/images/projects/fletpaq/01-landing.png"
+  - "/images/projects/fletpaq/02-dashboard.png"
+  - "/images/projects/fletpaq/03-predictive.png"
+  - "/images/projects/fletpaq/04-machinery.png"
+  - "/images/projects/fletpaq/06-map.png"
+team:
+  - name: "Andrés Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "SaaS / Industrial"
+tags: ["nextjs", "react", "mongodb", "xgboost", "ai", "tailwindcss", "recharts"]
+link: "https://fletpaq.vercel.app"
+---
+
+## Project Overview
+
+FletPaq is an end-to-end logistics platform built for the cement industry — designed specifically for Grupo GCC and Cementos de Chihuahua. It manages 60+ fleet units (tractor-trailers, concrete mixers, cement pumps, flatbeds) and predicts equipment failures **before they happen** using AI models trained on real industrial datasets.
+
+## Predictive Maintenance with AI
+
+The heart of the platform. XGBoost models trained on Microsoft Azure PM and Scania Trucks datasets analyze **9 components per unit** and output a 0-100 risk score with a color-coded traffic light:
+
+| Component | What it predicts |
+|---|---|
+| Brakes | Accelerated wear from Sierra de Chihuahua mountain routes |
+| Tires | Degradation from desert heat + heavy loads |
+| Suspension | Stress from bulk cement on rough terrain |
+| Engine | Progressive wear by mileage and age |
+| Transmission | Fatigue from constant load + mountain driving |
+| Electrical | Probabilistic age-based failures |
+| Hydraulics ★ | Mixer drum system |
+| Drum Blades ★ | Internal wear from intensive concrete use |
+| Discharge Chute ★ | Degradation of emptying system |
+
+★ Components exclusive to concrete mixers — the model auto-detects them by unit type.
+
+An embedded AI assistant answers questions about fleet status in natural language ("which units need urgent service?", "what's the state of the mixers?", "recommend a weekly maintenance plan").
+
+## Features
+
+- **Fleet management** — 60+ tractor-trailers, mixers, pumps, flatbeds, trailers
+- **Load logistics** — 90+ real routes across Chihuahua (Cd. Juárez, Delicias, Cuauhtémoc, Parral, Creel)
+- **GPS tracking** — Real-time unit location with active fault codes
+- **Maintenance** — Full history + AI-driven failure prediction
+- **Billing & collections** — Invoice and payment tracking
+- **Operator PWA** — Mobile app for drivers in the field
+- **Client portal** — Clients track their deliveries live
+- **Role-based access** — Admin, operator, client views with different permissions
+
+## Tech Stack
+
+- **Frontend**: Next.js 16, React 19, Tailwind CSS, Framer Motion, Recharts
+- **Backend**: Next.js API routes + Mongoose
+- **Database**: MongoDB Atlas
+- **AI**: Python XGBoost models + Anthropic SDK for the natural-language assistant
+- **Auth**: JWT + bcrypt
+- **Deployment**: Vercel
+
+## Demo
+
+Try it live: `test / 8896` at [fletpaq.vercel.app](https://fletpaq.vercel.app)
