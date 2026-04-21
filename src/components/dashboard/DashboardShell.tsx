@@ -10,6 +10,7 @@ import {
   FileText,
   FolderKanban,
   Music,
+  Video,
   User,
   LogOut,
   ExternalLink,
@@ -21,6 +22,7 @@ import { CampaignsTab } from './tabs/CampaignsTab';
 import { ContentTab } from './tabs/ContentTab';
 import { SoundtrackTab } from './tabs/SoundtrackTab';
 import { ProfileTab } from './tabs/ProfileTab';
+import { VideosTab } from './tabs/VideosTab';
 
 type TabKey =
   | 'overview'
@@ -29,6 +31,7 @@ type TabKey =
   | 'blog'
   | 'projects'
   | 'soundtrack'
+  | 'videos'
   | 'profile';
 
 const TABS: Array<{ key: TabKey; label: string; icon: React.ComponentType<{ className?: string }>; status?: string }> = [
@@ -38,6 +41,7 @@ const TABS: Array<{ key: TabKey; label: string; icon: React.ComponentType<{ clas
   { key: 'blog', label: 'Blog', icon: FileText },
   { key: 'projects', label: 'Proyectos', icon: FolderKanban },
   { key: 'soundtrack', label: 'Soundtrack', icon: Music },
+  { key: 'videos', label: 'Videos', icon: Video },
   { key: 'profile', label: 'Perfil', icon: User },
 ];
 
@@ -127,6 +131,7 @@ export function DashboardShell() {
           {active === 'blog' && <ContentTab kind="blog" />}
           {active === 'projects' && <ContentTab kind="project" />}
           {active === 'soundtrack' && <SoundtrackTab />}
+          {active === 'videos' && <VideosTab />}
           {active === 'profile' && <ProfileTab />}
         </div>
       </main>

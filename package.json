@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
+    "@aws-sdk/client-s3": "^3.1033.0",
+    "@aws-sdk/s3-request-presigner": "^3.1033.0",
     "@mdx-js/loader": "^3.1.0",
     "@next/mdx": "^15.5.10",
     "@tailwindcss/postcss": "^4.1.13",
