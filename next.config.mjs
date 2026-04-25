@@ -10,6 +10,24 @@ const nextConfig = {
   // Basic config
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
+
+  // Ensure MDX content is bundled into serverless lambdas — defensive against
+  // any route that becomes ISR/dynamic and reads MDX at request time.
+  outputFileTracingIncludes: {
+    '/': [
+      './src/app/work/projects/*.mdx',
+      './src/app/blog/posts/*.mdx',
+    ],
+    '/work': ['./src/app/work/projects/*.mdx'],
+    '/work/(.*)': ['./src/app/work/projects/*.mdx'],
+    '/blog': ['./src/app/blog/posts/*.mdx'],
+    '/blog/(.*)': ['./src/app/blog/posts/*.mdx'],
+    '/sitemap.xml': [
+      './src/app/work/projects/*.mdx',
+      './src/app/blog/posts/*.mdx',
+    ],
+    '/api/rss': ['./src/app/blog/posts/*.mdx'],
+  },
   
   // SASS optimization
   sassOptions: {

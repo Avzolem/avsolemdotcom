@@ -174,7 +174,7 @@ export const es: Record<string, string> = {
   'home.stats.label': 'Stats',
   'home.stats.projects': 'proyectos',
   'home.stats.posts': 'posts',
-  'home.stats.stacks': 'stacks',
+  'home.stats.commits': 'commits',
   'home.stats.repos': 'repos GH',
 
   // Home bento — Featured card

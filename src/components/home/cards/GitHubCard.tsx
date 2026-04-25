@@ -16,12 +16,11 @@ interface Commit {
 
 interface GitHubCardProps {
   user: string;
-  commits?: Commit[]; // initial SSR value (may be empty)
 }
 
-export function GitHubCard({ user, commits: initialCommits = [] }: GitHubCardProps) {
+export function GitHubCard({ user }: GitHubCardProps) {
   const { t } = useLanguage();
-  const [commits, setCommits] = useState<Commit[]>(initialCommits);
+  const [commits, setCommits] = useState<Commit[]>([]);
 
   useEffect(() => {
     let cancelled = false;

@@ -1,25 +1,44 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { BarChart3 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { BentoCard } from './BentoCard';
 
 interface StatsCardProps {
-  stats: {
-    projects: number;
-    posts: number;
-    stacks: number;
-    repos: number;
-  };
+  projects: number;
+  posts: number;
 }
 
-export function StatsCard({ stats }: StatsCardProps) {
+export function StatsCard({ projects, posts }: StatsCardProps) {
   const { t } = useLanguage();
+  const [repos, setRepos] = useState<number | null>(null);
+  const [commits, setCommits] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/github/stats');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        if (typeof data.repos === 'number') setRepos(data.repos);
+        if (typeof data.commits === 'number') setCommits(data.commits);
+      } catch {
+        /* silent */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const items = [
-    { value: stats.projects, label: t('home.stats.projects') },
-    { value: stats.posts, label: t('home.stats.posts') },
-    { value: stats.stacks, label: t('home.stats.stacks') },
-    { value: stats.repos, label: t('home.stats.repos') },
+    { value: projects, label: t('home.stats.projects') },
+    { value: posts, label: t('home.stats.posts') },
+    { value: commits, label: t('home.stats.commits') },
+    { value: repos, label: t('home.stats.repos') },
   ];
 
   return (
@@ -32,7 +51,7 @@ export function StatsCard({ stats }: StatsCardProps) {
         {items.map((s) => (
           <div key={s.label} className="flex flex-col">
             <span className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white leading-none">
-              {s.value}
+              {s.value === null ? '—' : s.value}
             </span>
             <span className="text-[0.7rem] text-gray-500 dark:text-gray-400 mt-1">
               {s.label}
