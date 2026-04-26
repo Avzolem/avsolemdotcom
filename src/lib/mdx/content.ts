@@ -19,7 +19,7 @@ function dirFor(kind: ContentKind): string[] {
 }
 
 function slugPath(kind: ContentKind, slug: string): string {
-  return path.join(process.cwd(), ...dirFor(kind), `${slug}.mdx`);
+  return path.join(/*turbopackIgnore: true*/ process.cwd(), ...dirFor(kind), `${slug}.mdx`);
 }
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/;
@@ -29,7 +29,7 @@ export function isValidSlug(slug: string): boolean {
 }
 
 export function listContent(kind: ContentKind): ContentItem[] {
-  const dir = path.join(process.cwd(), ...dirFor(kind));
+  const dir = path.join(/*turbopackIgnore: true*/ process.cwd(), ...dirFor(kind));
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)

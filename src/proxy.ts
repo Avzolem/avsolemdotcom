@@ -12,7 +12,7 @@ const LEGACY_BROWSERS = [
   'PLAYSTATION 3',
 ];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const userAgent = request.headers.get('user-agent') || '';
 
