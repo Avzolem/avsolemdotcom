@@ -12,6 +12,7 @@ const routes = {
   "/whatsapp": true,
   "/yugioh": true,
   "/roms": true,
+  "/ascii": true,
 };
 
 const display = {

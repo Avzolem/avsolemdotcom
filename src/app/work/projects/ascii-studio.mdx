@@ -1,0 +1,75 @@
+---
+title: "ASCII Studio - Image to Animated ASCII Editor"
+title_es: "ASCII Studio - Editor de Imagen a ASCII Animado"
+publishedAt: "2026-05-01"
+summary: "In-browser ASCII art editor: drop an image, animate it with FX, dress it in editorial templates, then export PNG, animated GIF, or embeddable HTML."
+summary_es: "Editor ASCII en el navegador: subes una imagen, la animas con FX, la vistes con plantillas editoriales y exportas PNG, GIF animado o HTML embebible."
+images:
+  - "/images/projects/ascii-studio/01-avsolem-template.png"
+  - "/images/projects/ascii-studio/02-random-fx.png"
+  - "/images/projects/ascii-studio/03-templates-drawer.png"
+  - "/images/projects/ascii-studio/04-clean-canvas.png"
+team:
+  - name: "Andres Aguilar"
+    role: "Full Stack Developer"
+    avatar: "/images/andres.jpeg"
+    linkedIn: "https://www.linkedin.com/in/avsolem/"
+category: "Creative Tool"
+tags: ["nextjs", "react", "typescript", "canvas", "creative-coding"]
+link: "https://avsolem.com/ascii"
+---
+
+## Project Overview
+
+ASCII Studio is a fully client-side ASCII art studio built into the portfolio. Drop an image (or paste / drag), and it samples the source into a luminance grid, dithers it, maps each cell to a character, then renders the result on a `<canvas>` with optional animation FX. Templates layer editorial typography over the ASCII for a poster-style composition. Everything runs in the browser, persisted in IndexedDB.
+
+## Key Features
+
+- **Image → ASCII pipeline**
+  - Drop, paste, or upload images
+  - Floyd–Steinberg, Bayer 4×4 / 8×8, threshold dithering
+  - 4 character sets (standard, dense, sparse, halftone)
+  - Brightness, contrast, dither strength, opacity sliders
+
+- **Animation FX**
+  - 9 modes: Noise Field, Waves, Cycle, Intervals, Beam, Glitch, CRT, Matrix Rain
+  - Speed, scale, direction controls
+  - Live FPS counter (color-coded green / amber / red)
+
+- **Editorial templates**
+  - 9 starting templates (avsolem, Aurelia, Solar, Console, Hyperflux, Daily Press, Verdura, Stellar, Persimmon)
+  - All overlay text editable inline
+  - Aspect ratios 16:9 / 4:3 / 1:1 / 3:4 / 9:16
+
+- **Color modes**
+  - Grayscale, Full Color, Matrix Green, Amber Monitor, Custom hex picker
+  - Duotone palette mapping per template
+
+- **Local library**
+  - IndexedDB storage with thumbnails
+  - Save, load, delete creations
+  - Source image preserved with each creation
+
+- **Three export formats**
+  - PNG (canvas + overlay composited via SVG `foreignObject`)
+  - Animated GIF (gifenc, 3s @ 18fps, palette quantized)
+  - HTML `<pre>` embed snippet, copyable to clipboard
+
+## Technical Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **Rendering**: HTML5 Canvas 2D, `requestAnimationFrame` loop
+- **GIF encoder**: gifenc (palette quantization in main thread)
+- **Storage**: IndexedDB (native API, no wrapper)
+- **Fonts**: Helvetica Neue, Playfair Display, Cormorant Garamond
+- **Effects**: value-noise field generator, sin-wave cell wobble, Floyd–Steinberg error diffusion
+
+## Architecture Notes
+
+The render pipeline runs every frame: `sample → applyFx → applyDither → buildGrid → renderGrid`. The sample stage is cached per-source; only the FX and dither stages run per-frame. The character grid is exposed via an imperative API ref so the export layer can capture the current frame without coupling to the render loop.
+
+Templates are pure data — a JSON-like description of ASCII config plus an array of absolutely-positioned text layers. Adding a new template is just adding a new object.
+
+## Live Demo
+
+Open the studio: [avsolem.com/ascii](https://avsolem.com/ascii)

@@ -3,7 +3,7 @@
 > Este archivo centraliza el estado de todos los proyectos dentro de avsolem.com.
 > Claude Code debe leer este archivo al inicio de cada sesión para entender el contexto.
 
-**Última actualización global**: 2026-03-18
+**Última actualización global**: 2026-05-01
 
 ---
 
@@ -19,6 +19,7 @@
 | Magic: The Gathering Manager | `/magic` | Production | 2026-03-03 |
 | ROMS Index | `/roms` | Production | 2025-11-24 |
 | Diablo Web | `/diablo` | Production | 2025-01-09 |
+| ASCII Studio | `/ascii` | Production | 2026-05-01 |
 
 ---
 
@@ -341,7 +342,92 @@ public/images/
 
 ---
 
+### 7. ASCII Studio (`/ascii`)
+
+**Estado**: Production Ready
+**Última sesión**: 2026-05-01
+**Portfolio entry**: `src/app/work/projects/ascii-studio.mdx`
+
+#### Features Implementados
+- [x] Pipeline imagen → ASCII (drop, paste, upload)
+- [x] Dithering: Floyd–Steinberg, Bayer 4×4, Bayer 8×8, threshold
+- [x] 4 charsets (standard, dense, sparse, halftone)
+- [x] 11 art styles (Classic, Halftone, Dither, Braille, Dot Screen, Dot Cross, Line, Particles, Alphabet, Retro, Terminal)
+- [x] 9 templates editoriales (avsolem, Aurelia, Solar, Console, Hyperflux, Daily Press, Verdura, Stellar, Persimmon)
+- [x] 9 modos FX animados (Noise Field, Waves, Cycle, Intervals, Beam, Glitch, CRT, Matrix Rain, none)
+- [x] Sliders: brightness, contrast, dither strength, opacity, FX strength/speed/scale
+- [x] Direction picker para FX (↑↓←→)
+- [x] 6 color modes: Template, Grayscale, Full Color, Matrix, Amber, Custom (hex picker)
+- [x] FPS counter en vivo (verde/ámbar/rojo)
+- [x] Aspect ratios: 16:9, 4:3, 1:1, 3:4, 9:16
+- [x] Library con IndexedDB (save/load/delete con thumbnails)
+- [x] Templates drawer + Library drawer laterales
+- [x] Customize panel con edge handle siempre visible
+- [x] Random button (genera combinaciones aleatorias)
+- [x] Reset button (restaura defaults)
+- [x] Texto de templates editable inline
+- [x] Export PNG (canvas + overlay vía SVG foreignObject)
+- [x] Export GIF animado (gifenc, 3s @ 18fps, palette quantization)
+- [x] Export HTML embed (`<pre>` autocontenido + Copy snippet)
+- [x] Publish dropdown menu con las 3 opciones
+- [x] Portfolio entry con 4 screenshots
+
+#### Stack Técnico
+- Frontend: Next.js 16, React 19, TypeScript
+- Render: HTML5 Canvas 2D, requestAnimationFrame loop
+- GIF encoder: gifenc 1.0.3
+- Storage: IndexedDB (native API, sin wrapper)
+- Fonts: Helvetica Neue, Playfair Display, Cormorant Garamond
+- Pipeline: sample → applyFx → applyDither → buildGrid → renderGrid
+- Sin auth ni almacenamiento remoto (todo client-side)
+
+#### Estructura de Archivos
+```
+src/app/ascii/
+├── page.tsx - Editor principal (estado + dropdown export)
+├── AsciiCanvas.tsx - Render loop con apiRef imperativo
+├── ControlPanel.tsx - Panel lateral derecho
+├── TemplatesDrawer.tsx, LibraryDrawer.tsx
+├── TemplateOverlay.tsx - Capa de texto editable
+├── EmbedModal.tsx - Modal de snippet copiable
+└── ascii.css - Estilos completos del editor
+
+src/lib/ascii/
+├── types.ts, fx.ts, artStyles.ts
+├── core/ - sample, charsets, dither, render
+├── templates/ - 9 templates como datos puros
+├── storage/db.ts - IndexedDB wrapper
+└── exporters/ - index.ts (PNG, embed) + gif.ts
+
+src/types/gifenc.d.ts - shim de tipos para gifenc
+```
+
+#### Pendiente / Ideas Futuras
+- [ ] Webcam como source en vivo
+- [ ] Video MP4 como source con scrubbing
+- [ ] Más templates (estilo japonés, brutalista, vaporwave)
+- [ ] Compartir creaciones vía URL (encode en base64)
+
+---
+
 ## Development History
+
+### 2026-05-01
+- **ASCII Studio**: Nuevo proyecto `/ascii` — editor de imagen→ASCII en navegador, inspirado en asc11.com
+- **ASCII Studio**: Pipeline completo con sample/dither/grid/render + 4 charsets, 4 modos de dithering
+- **ASCII Studio**: 9 templates editoriales (avsolem default + Aurelia/Solar/Console/Hyperflux/Daily Press/Verdura/Stellar/Persimmon)
+- **ASCII Studio**: 11 art styles, 9 modos FX animados con speed/scale/direction
+- **ASCII Studio**: Color modes (Grayscale, Full Color, Matrix, Amber duotone, Custom hex)
+- **ASCII Studio**: Customize panel con sliders (brightness, contrast, dither strength, opacity)
+- **ASCII Studio**: FPS counter en vivo color-coded (verde ≥50, ámbar ≥24, rojo)
+- **ASCII Studio**: IndexedDB local library con save/load/delete y thumbnails
+- **ASCII Studio**: 3 exports — PNG, GIF animado (gifenc), HTML embed snippet
+- **ASCII Studio**: Publish dropdown con las 3 opciones, modal de embed con Copy
+- **ASCII Studio**: Edge handle persistente, Reset y Random buttons en panel
+- **ASCII Studio**: Sin auth ni storage remoto — todo client-side
+- **Portfolio**: Entrada ascii-studio.mdx con 4 screenshots
+- **Fix UI**: Header gana padding-right cuando el panel está abierto (botones ya no quedan tapados)
+- **Dependencies**: Añadido gifenc@1.0.3 + shim de tipos en src/types/gifenc.d.ts
 
 ### 2026-03-18
 - **Yu-Gi-Oh Search**: Detección temprana de Set Code (búsqueda inicia con 4 caracteres en lugar de código completo)
@@ -516,4 +602,4 @@ npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<rou
 
 ---
 
-*Última actualización: 2026-03-18 por Claude Code*
+*Última actualización: 2026-05-01 por Claude Code*

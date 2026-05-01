@@ -1,0 +1,150 @@
+import type { AsciiTemplate } from './types';
+
+const black = '#000000';
+const white = '#FFFFFF';
+const dim = 'rgba(255, 255, 255, 0.55)';
+const faint = 'rgba(255, 255, 255, 0.35)';
+
+const labelStyle = {
+  fontSize: '10px',
+  letterSpacing: '0.3em',
+  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+  fontWeight: 500,
+  color: dim,
+};
+
+export const avsolemTemplate: AsciiTemplate = {
+  id: 'avsolem',
+  name: 'avsolem.',
+  category: 'monochrome',
+  ascii: {
+    charset: 'standard',
+    cols: 200,
+    dither: 'floydSteinberg',
+    ditherSteps: 8,
+    invertMapping: false,
+    brightness: 0,
+    contrast: 0.2,
+    colorMode: 'palette',
+    bgColor: black,
+    fgColor: white,
+    duotone: { low: '#1a1a1a', high: '#f0f0f0' },
+    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    fontSizeRatio: 1.4,
+    lineHeight: 1,
+    letterSpacing: 0,
+    cellOpacity: 1,
+  },
+  layout: {
+    ratio: '16:9',
+    bg: black,
+    layers: [
+      {
+        id: 'top-left',
+        text: 'a slow, careful internet',
+        editable: true,
+        className: '',
+        style: { ...labelStyle, position: 'absolute', top: '24px', left: '32px' },
+      },
+      {
+        id: 'top-center',
+        text: '— personal archive —',
+        editable: true,
+        className: '',
+        style: {
+          ...labelStyle,
+          position: 'absolute',
+          top: '24px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: faint,
+        },
+      },
+      {
+        id: 'top-right',
+        text: 'MMXXVI',
+        editable: true,
+        className: '',
+        style: { ...labelStyle, position: 'absolute', top: '24px', right: '32px' },
+      },
+      {
+        id: 'numeral',
+        text: '01',
+        editable: true,
+        className: '',
+        style: {
+          ...labelStyle,
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, calc(-50% - 7.5rem))',
+          color: dim,
+        },
+      },
+      {
+        id: 'title',
+        text: 'avsolem.',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontWeight: 700,
+          fontSize: 'clamp(72px, 14vw, 240px)',
+          color: white,
+          letterSpacing: '-0.04em',
+          lineHeight: 1,
+          whiteSpace: 'nowrap',
+        },
+      },
+      {
+        id: 'subtitle',
+        text: 'engineering with intent',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, calc(-50% + 6rem))',
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontWeight: 500,
+          fontSize: '20px',
+          letterSpacing: '0.02em',
+          color: white,
+        },
+      },
+      {
+        id: 'tagline',
+        text: 'building the web since 2014',
+        editable: true,
+        className: '',
+        style: {
+          ...labelStyle,
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, calc(-50% + 8rem))',
+          color: faint,
+        },
+      },
+      {
+        id: 'bottom-left',
+        text: 'quiet software',
+        editable: true,
+        className: '',
+        style: { ...labelStyle, position: 'absolute', bottom: '24px', left: '32px', color: white },
+      },
+      {
+        id: 'bottom-right',
+        text: 'code · design · noise',
+        editable: true,
+        className: '',
+        style: { ...labelStyle, position: 'absolute', bottom: '24px', right: '32px', color: white },
+      },
+    ],
+  },
+};
