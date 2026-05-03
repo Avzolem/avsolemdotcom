@@ -7,7 +7,8 @@ export type FxMode =
   | 'beam'
   | 'glitch'
   | 'crt'
-  | 'matrix';
+  | 'matrix'
+  | 'ember';
 
 export type FxDirection = 'up' | 'down' | 'left' | 'right';
 
@@ -29,6 +30,7 @@ export const FX_PRESETS: { id: FxMode; name: string }[] = [
   { id: 'glitch', name: 'Glitch' },
   { id: 'crt', name: 'CRT Monitor' },
   { id: 'matrix', name: 'Matrix Rain' },
+  { id: 'ember', name: 'Ember' },
 ];
 
 function dirVec(d: FxDirection): { x: number; y: number } {
@@ -185,6 +187,28 @@ export function applyFx(
           const i = y * cols + x;
           out[i] = clamp(base[i] * scanline + roll);
         }
+      }
+      return;
+    }
+
+    case 'ember': {
+      // Per-cell irregular flicker (sum of two desynced sines), with sparse
+      // bright "embers" that flare and decay over ~1.4s windows.
+      const flickerSpeed = Math.max(0.4, cfg.speed);
+      const tFlicker = t * flickerSpeed;
+      const window = 1.4;
+      const emberRate = 0.08 + 0.12 * s; // 8–20% of cells become embers per window
+      for (let i = 0; i < base.length; i++) {
+        const phase1 = tFlicker * 1.7 + seed[i] * Math.PI * 2;
+        const phase2 = tFlicker * 3.3 + seed[i] * 11;
+        const flicker = (Math.sin(phase1) * 0.5 + 0.5) * (Math.sin(phase2) * 0.3 + 0.7);
+        const epoch = Math.floor((t + seed[i] * window) / window);
+        const roll = hash2(i, epoch);
+        const isEmber = roll > 1 - emberRate;
+        const age = ((t + seed[i] * window) / window) - epoch;
+        const decay = Math.max(0, 1 - age);
+        const ember = isEmber ? decay * decay * 0.85 : 0;
+        out[i] = clamp(base[i] + (flicker - 0.5) * 0.32 * s + ember * s);
       }
       return;
     }

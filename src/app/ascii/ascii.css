@@ -838,3 +838,14 @@
   font-family: inherit;
 }
 .ascii-embed-copy:hover { filter: brightness(1.1); }
+.ascii-embed-warning {
+  margin: 14px 20px 0;
+  padding: 10px 12px;
+  background: rgba(201, 90, 39, 0.12);
+  border: 1px solid rgba(201, 90, 39, 0.35);
+  color: #ffb38a;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}

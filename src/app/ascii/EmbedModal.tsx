@@ -1,14 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 interface Props {
   snippet: string | null;
   onClose: () => void;
   onCopy: () => Promise<void>;
+  title?: string;
+  description?: string;
+  banner?: ReactNode;
+  meta?: ReactNode;
 }
 
-export default function EmbedModal({ snippet, onClose, onCopy }: Props) {
+export default function EmbedModal({
+  snippet,
+  onClose,
+  onCopy,
+  title = 'Embed code',
+  description = 'Self-contained <pre> — paste anywhere HTML renders.',
+  banner,
+  meta,
+}: Props) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -37,13 +49,14 @@ export default function EmbedModal({ snippet, onClose, onCopy }: Props) {
       <div className="ascii-embed-modal" onClick={(e) => e.stopPropagation()}>
         <header className="ascii-embed-head">
           <div>
-            <h3>Embed code</h3>
-            <p>Self-contained &lt;pre&gt; — paste anywhere HTML renders.</p>
+            <h3>{title}</h3>
+            <p>{description}</p>
           </div>
           <button type="button" className="ascii-embed-close" onClick={onClose} aria-label="Close">
             ×
           </button>
         </header>
+        {banner}
         <textarea
           className="ascii-embed-text"
           value={snippet}
@@ -52,7 +65,7 @@ export default function EmbedModal({ snippet, onClose, onCopy }: Props) {
           onFocus={(e) => e.currentTarget.select()}
         />
         <footer className="ascii-embed-foot">
-          <span>{snippet.length.toLocaleString()} chars</span>
+          <span>{meta ?? `${snippet.length.toLocaleString()} chars`}</span>
           <button type="button" className="ascii-embed-copy" onClick={handleCopy}>
             {copied ? 'Copied ✓' : 'Copy snippet'}
           </button>

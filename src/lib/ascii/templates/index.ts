@@ -6,12 +6,18 @@ import { dailyPressTemplate } from './dailyPress';
 import { verduraTemplate } from './verdura';
 import { stellarTemplate } from './stellar';
 import { persimmonTemplate } from './persimmon';
+import { antimonyTemplate } from './antimony';
+import { ultraviolentaTemplate } from './ultraviolenta';
+import { yellowstoneTemplate } from './yellowstone';
 import { avsolemTemplate } from './avsolem';
 import type { AsciiTemplate } from './types';
 
 export const templates: AsciiTemplate[] = [
   avsolemTemplate,
   aureliaTemplate,
+  antimonyTemplate,
+  ultraviolentaTemplate,
+  yellowstoneTemplate,
   solarTemplate,
   consoleTemplate,
   hyperfluxTemplate,

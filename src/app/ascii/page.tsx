@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import { templates, type AsciiTemplate } from '@/lib/ascii/templates';
 import { exportPng, buildHtmlEmbed, copyToClipboard } from '@/lib/ascii/exporters';
 import { exportGif } from '@/lib/ascii/exporters/gif';
+import { exportWebm } from '@/lib/ascii/exporters/webm';
+import { encodeEmbedConfig, recompressImageDataUrl, type EmbedConfigV1 } from '@/lib/ascii/embed/config';
 import { saveCreation, makeId, type SavedCreation } from '@/lib/ascii/storage/db';
 import { artStyles, getArtStyle } from '@/lib/ascii/artStyles';
 import { DEFAULT_FX, FX_PRESETS, type FxConfig, type FxDirection, type FxMode } from '@/lib/ascii/fx';
@@ -77,10 +79,12 @@ export default function AsciiStudioPage() {
   const [playing, setPlaying] = useState(true);
   const [texts, setTexts] = useState<Record<string, string>>({});
   const [dragging, setDragging] = useState(false);
-  const [exporting, setExporting] = useState<null | 'png' | 'gif' | 'embed'>(null);
+  const [exporting, setExporting] = useState<null | 'png' | 'gif' | 'webm' | 'embed' | 'iframe'>(null);
   const [exportProgress, setExportProgress] = useState(0);
   const [exportMenu, setExportMenu] = useState(false);
   const [embedSnippet, setEmbedSnippet] = useState<string | null>(null);
+  const [embedKind, setEmbedKind] = useState<'static' | 'iframe'>('static');
+  const [embedMeta, setEmbedMeta] = useState<{ chars: number; sizeKb: number; warn: boolean } | null>(null);
   const [saving, setSaving] = useState(false);
   const [drawer, setDrawer] = useState<'library' | 'templates' | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
@@ -148,7 +152,8 @@ export default function AsciiStudioPage() {
   const handlePickTemplate = useCallback((t: AsciiTemplate) => {
     setTemplateId(t.id);
     setTexts({});
-    setArtStyleId(null);
+    setArtStyleId(t.defaultArtStyleId ?? null);
+    setFx(t.defaultFx ?? DEFAULT_FX);
   }, []);
 
   const handleLoadCreation = useCallback(async (item: SavedCreation) => {
@@ -232,7 +237,79 @@ export default function AsciiStudioPage() {
     const colors = apiRef.current?.getResolvedColors() ?? { fg: '#fff', bg: '#000' };
     if (!grid) return;
     const snippet = buildHtmlEmbed(grid, colors.fg, colors.bg);
+    setEmbedKind('static');
+    setEmbedMeta(null);
     setEmbedSnippet(snippet);
+  };
+
+  const handleExportWebm = async () => {
+    if (!canvasRef.current) return;
+    setExportMenu(false);
+    setExporting('webm');
+    setExportProgress(0);
+    try {
+      await exportWebm(canvasRef.current, overlayRef.current, {
+        filename: `ascii-${template.id}-${Date.now()}`,
+        durationMs: 6000,
+        fps: 30,
+        bitsPerSecond: 5_000_000,
+        onProgress: (p) => setExportProgress(p),
+      });
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : 'WEBM export failed');
+    } finally {
+      setExporting(null);
+      setExportProgress(0);
+    }
+  };
+
+  const handleExportIframe = async () => {
+    setExportMenu(false);
+    setExporting('iframe');
+    try {
+      let embeddedImage: string | undefined;
+      if (sourceDataUrl) {
+        embeddedImage = await recompressImageDataUrl(sourceDataUrl, {
+          maxWidth: 1024,
+          quality: 0.82,
+          mimeType: 'image/jpeg',
+        });
+      }
+      const config: EmbedConfigV1 = {
+        v: 1,
+        templateId: template.id,
+        artStyleId: artStyleId,
+        ratio,
+        texts,
+        adjust,
+        fx,
+        sourceDataUrl: embeddedImage,
+      };
+      const encoded = await encodeEmbedConfig(config);
+      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://avsolem.com';
+      const url = `${origin}/embed/ascii#config=${encoded}`;
+      const aspect = ratio.split(':').map(Number);
+      const paddingTop = aspect.length === 2 ? `${(aspect[1] / aspect[0]) * 100}%` : '56.25%';
+      const snippet = `<div style="position:relative;width:100%;padding-top:${paddingTop};">
+  <iframe
+    src="${url}"
+    style="position:absolute;inset:0;width:100%;height:100%;border:0;"
+    allow="autoplay"
+    loading="lazy"
+    title="ASCII Studio embed"
+  ></iframe>
+</div>`;
+      const sizeKb = Math.round(snippet.length / 1024);
+      setEmbedKind('iframe');
+      setEmbedMeta({ chars: snippet.length, sizeKb, warn: sizeKb > 500 });
+      setEmbedSnippet(snippet);
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : 'Live embed failed');
+    } finally {
+      setExporting(null);
+    }
   };
 
   const handleCopyEmbed = async () => {
@@ -279,9 +356,13 @@ export default function AsciiStudioPage() {
             >
               {exporting === 'gif'
                 ? `GIF ${Math.round(exportProgress * 100)}%`
-                : exporting === 'png'
-                  ? 'PNG…'
-                  : 'Publish ▾'}
+                : exporting === 'webm'
+                  ? `WEBM ${Math.round(exportProgress * 100)}%`
+                  : exporting === 'png'
+                    ? 'PNG…'
+                    : exporting === 'iframe'
+                      ? 'Embed…'
+                      : 'Publish ▾'}
             </button>
             {exportMenu && (
               <div className="ascii-export-menu" role="menu">
@@ -293,9 +374,17 @@ export default function AsciiStudioPage() {
                   <strong>GIF</strong>
                   <span>animated · 3s · 18fps</span>
                 </button>
+                <button type="button" onClick={handleExportWebm}>
+                  <strong>WEBM</strong>
+                  <span>video · 6s · 30fps</span>
+                </button>
+                <button type="button" onClick={handleExportIframe}>
+                  <strong>Live embed</strong>
+                  <span>iframe · animated · drop-in</span>
+                </button>
                 <button type="button" onClick={handleExportEmbed}>
                   <strong>Embed code</strong>
-                  <span>copy as &lt;pre&gt; HTML</span>
+                  <span>static &lt;pre&gt; HTML</span>
                 </button>
               </div>
             )}
@@ -402,8 +491,30 @@ export default function AsciiStudioPage() {
       />
       <EmbedModal
         snippet={embedSnippet}
-        onClose={() => setEmbedSnippet(null)}
+        onClose={() => {
+          setEmbedSnippet(null);
+          setEmbedMeta(null);
+        }}
         onCopy={handleCopyEmbed}
+        title={embedKind === 'iframe' ? 'Live embed' : 'Embed code'}
+        description={
+          embedKind === 'iframe'
+            ? 'Animated iframe — paste into any site (WordPress, Notion, React, plain HTML). Self-contained: no images stored on our servers.'
+            : 'Self-contained <pre> — paste anywhere HTML renders.'
+        }
+        banner={
+          embedKind === 'iframe' && embedMeta?.warn ? (
+            <div className="ascii-embed-warning">
+              ⚠ Snippet is {embedMeta.sizeKb} KB — the source image is encoded inside the URL. For lighter
+              embeds, host the image on a CDN and reduce its resolution.
+            </div>
+          ) : null
+        }
+        meta={
+          embedKind === 'iframe' && embedMeta
+            ? `${embedMeta.chars.toLocaleString()} chars · ${embedMeta.sizeKb} KB`
+            : undefined
+        }
       />
       <ControlPanel
         open={panelOpen}

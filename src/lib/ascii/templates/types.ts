@@ -1,4 +1,5 @@
 import type { CharsetName, ColorMode, DitherMode } from '../types';
+import type { FxConfig } from '../fx';
 
 export interface TemplateAsciiPreset {
   charset: CharsetName;
@@ -41,4 +42,6 @@ export interface AsciiTemplate {
   category: string;
   ascii: TemplateAsciiPreset;
   layout: TemplateLayout;
+  defaultFx?: FxConfig;
+  defaultArtStyleId?: string;
 }

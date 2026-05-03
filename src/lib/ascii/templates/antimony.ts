@@ -1,0 +1,168 @@
+import type { AsciiTemplate } from './types';
+
+const guinda = '#5c1a18';
+const cream = '#f5e7d8';
+const asciiGray = '#d4cfc6';
+
+export const antimonyTemplate: AsciiTemplate = {
+  id: 'antimony-poster',
+  name: 'Antimony',
+  category: 'poster',
+  defaultFx: {
+    mode: 'ember',
+    strength: 0.7,
+    speed: 1.4,
+    scale: 1,
+    direction: 'right',
+  },
+  defaultArtStyleId: 'dot-screen',
+  ascii: {
+    charset: 'dense',
+    cols: 150,
+    dither: 'floydSteinberg',
+    ditherSteps: 6,
+    invertMapping: false,
+    brightness: -0.05,
+    contrast: 0.35,
+    colorMode: 'mono',
+    bgColor: guinda,
+    fgColor: asciiGray,
+    fontFamily: 'var(--font-code), monospace',
+    fontSizeRatio: 1.45,
+    lineHeight: 1,
+    letterSpacing: 0,
+    cellOpacity: 0.78,
+  },
+  layout: {
+    ratio: '3:4',
+    bg: guinda,
+    layers: [
+      {
+        id: 'cat',
+        text: 'CATALOGVE · Nº LI',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute', top: '24px', left: '32px',
+          fontSize: '10px', letterSpacing: '0.42em',
+          color: cream, opacity: 0.85,
+          fontFamily: 'var(--font-code), monospace',
+          fontWeight: 600,
+        },
+      },
+      {
+        id: 'mass',
+        text: 'Sb · 121.76',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute', top: '24px', right: '32px',
+          fontSize: '10px', letterSpacing: '0.42em',
+          color: cream, opacity: 0.85,
+          fontFamily: 'var(--font-code), monospace',
+          fontWeight: 600,
+        },
+      },
+      {
+        id: 'ruleTop',
+        text: '',
+        editable: false,
+        className: '',
+        style: {
+          position: 'absolute', top: '64px', left: '32px', right: '32px',
+          height: '1px', background: cream, opacity: 0.3,
+        },
+      },
+      {
+        id: 'kicker',
+        text: 'AN ELEMENTAL POSTER · MMXXVI',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute', top: '88px', left: '50%', transform: 'translateX(-50%)',
+          fontSize: '10px', letterSpacing: '0.5em',
+          color: cream, opacity: 0.7,
+          fontFamily: 'var(--font-code), monospace',
+          whiteSpace: 'nowrap',
+        },
+      },
+      {
+        id: 'title',
+        text: 'Antimony',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute', top: '46%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          fontFamily: 'var(--font-antimony-display), cursive',
+          fontWeight: 400,
+          fontSize: 'clamp(72px, 14vw, 200px)',
+          color: cream,
+          letterSpacing: '0',
+          whiteSpace: 'nowrap',
+          lineHeight: 1,
+          textShadow: '0 2px 0 rgba(0,0,0,0.25)',
+        },
+      },
+      {
+        id: 'subtitle',
+        text: '— the metal of mirrors —',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute', top: '46%', left: '50%',
+          transform: 'translate(-50%, calc(-50% + 5.5rem))',
+          fontFamily: 'var(--font-aurelia-display), serif',
+          fontStyle: 'italic',
+          fontSize: '17px',
+          color: cream, opacity: 0.92,
+          letterSpacing: '0.04em',
+        },
+      },
+      {
+        id: 'meta',
+        text: 'PYROTECHNIE  ·  PIGMENT  ·  ALCHYMIE',
+        editable: true,
+        className: '',
+        style: {
+          position: 'absolute', bottom: '108px', left: '50%', transform: 'translateX(-50%)',
+          fontSize: '10px', letterSpacing: '0.55em',
+          color: cream, opacity: 0.78,
+          fontFamily: 'var(--font-code), monospace',
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+        },
+      },
+      {
+        id: 'ruleBottom',
+        text: '',
+        editable: false,
+        className: '',
+        style: {
+          position: 'absolute', bottom: '78px', left: '32px', right: '32px',
+          height: '1px', background: cream, opacity: 0.3,
+        },
+      },
+      {
+        id: 'sigil',
+        text: '♁',
+        editable: false,
+        className: '',
+        style: {
+          position: 'absolute', bottom: '38px', left: '32px',
+          fontSize: '20px', color: cream, opacity: 0.85,
+        },
+      },
+      {
+        id: 'sigilRight',
+        text: '♁',
+        editable: false,
+        className: '',
+        style: {
+          position: 'absolute', bottom: '38px', right: '32px',
+          fontSize: '20px', color: cream, opacity: 0.85,
+        },
+      },
+    ],
+  },
+};

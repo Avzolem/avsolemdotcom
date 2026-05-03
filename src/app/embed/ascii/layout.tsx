@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Pinyon_Script, Zen_Dots, Alfa_Slab_One } from 'next/font/google';
-import './ascii.css';
+import './embed.css';
 
 const aureliaDisplay = Playfair_Display({
   variable: '--font-aurelia-display',
@@ -32,14 +32,14 @@ const yellowstoneDisplay = Alfa_Slab_One({
 });
 
 export const metadata: Metadata = {
-  title: 'ASCII Studio · avsolem',
-  description: 'Convert images into ASCII typography compositions. Apply editorial templates, animate, export to GIF, PNG, SVG and HTML.',
+  title: 'ASCII embed',
+  robots: { index: false, follow: false },
 };
 
-export default function AsciiLayout({ children }: { children: React.ReactNode }) {
+export default function AsciiEmbedLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`${aureliaDisplay.variable} ${antimonyDisplay.variable} ${ultraviolentaDisplay.variable} ${yellowstoneDisplay.variable} ascii-shell`}
+      className={`${aureliaDisplay.variable} ${antimonyDisplay.variable} ${ultraviolentaDisplay.variable} ${yellowstoneDisplay.variable} ascii-embed-root`}
     >
       {children}
     </div>
