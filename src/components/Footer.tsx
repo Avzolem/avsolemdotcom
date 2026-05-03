@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save, Cloud } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save, Cloud, Type } from 'lucide-react';
 import { GiDevilMask } from 'react-icons/gi';
 import { person, social } from '@/resources';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -138,6 +138,24 @@ export const Footer = () => {
             title="Cloudsolem"
           >
             <Cloud className="w-4 h-4" />
+          </a>
+
+          {/* ASCII Studio Link */}
+          <a
+            href="/ascii"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/ascii';
+            }}
+            className="
+              p-1.5 rounded-lg text-gray-500 dark:text-gray-400
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              hover:text-cyan-600 dark:hover:text-cyan-400
+              transition-colors duration-200
+            "
+            title="ASCII Studio"
+          >
+            <Type className="w-4 h-4" />
           </a>
         </div>
       </div>
