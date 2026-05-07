@@ -15,9 +15,18 @@ function buildAdminEmail(data: {
   email: string;
   phone?: string;
   company?: string;
+  message?: string;
   ip?: string;
   userAgent?: string;
 }): string {
+  const messageBlock = data.message
+    ? `
+          <tr>
+            <td style="padding:0 32px 24px;">
+              <div style="margin-top:8px;padding:16px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:#e5e7eb;font-size:13px;line-height:1.6;white-space:pre-wrap;">${esc(data.message)}</div>
+            </td>
+          </tr>`
+    : '';
   return `
 <!DOCTYPE html>
 <html>
@@ -43,6 +52,8 @@ function buildAdminEmail(data: {
               </table>
             </td>
           </tr>
+          ${data.message ? `<tr><td style="padding:0 32px 8px;color:#888;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Mensaje</td></tr>` : ''}
+          ${messageBlock}
           <tr>
             <td style="padding:16px 32px 24px;border-top:1px solid #333;color:#555;font-size:11px;line-height:1.5;">
               ${data.ip ? `IP: ${esc(data.ip)}<br>` : ''}${data.userAgent ? `UA: ${esc(data.userAgent.slice(0, 120))}` : ''}
@@ -67,6 +78,7 @@ export async function POST(request: NextRequest) {
     const email = typeof body.email === 'string' ? body.email.trim() : '';
     const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
     const company = typeof body.company === 'string' ? body.company.trim() : '';
+    const message = typeof body.message === 'string' ? body.message.trim() : '';
 
     if (!name || name.length < 2 || name.length > 120) {
       return NextResponse.json({ error: 'Nombre inválido' }, { status: 400 });
@@ -79,6 +91,9 @@ export async function POST(request: NextRequest) {
     }
     if (company && company.length > 200) {
       return NextResponse.json({ error: 'Empresa inválida' }, { status: 400 });
+    }
+    if (message && message.length > 2000) {
+      return NextResponse.json({ error: 'Mensaje demasiado largo' }, { status: 400 });
     }
 
     // Per-email rate limit: max 3 submissions per 24h
@@ -110,7 +125,7 @@ export async function POST(request: NextRequest) {
           to: adminEmail,
           subject: `[avsolem.com] Nuevo contacto: ${name}`,
           replyTo: email,
-          html: buildAdminEmail({ name, email, phone, company, ip, userAgent }),
+          html: buildAdminEmail({ name, email, phone, company, message, ip, userAgent }),
         });
       } catch (err) {
         // Don't fail the submission if email delivery fails — we already saved it.

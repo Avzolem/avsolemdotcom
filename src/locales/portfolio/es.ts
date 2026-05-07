@@ -199,6 +199,7 @@ export const es: Record<string, string> = {
   'home.contact.company': 'Empresa (opcional)',
   'home.contact.email': 'Correo',
   'home.contact.phone': 'Celular',
+  'home.contact.message': 'Mensaje (opcional)',
   'home.contact.submit': 'Enviar',
   'home.contact.submitting': 'Enviando…',
   'home.contact.success': '¡Gracias! Te contacto pronto.',

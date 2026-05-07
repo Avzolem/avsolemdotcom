@@ -22,6 +22,7 @@ export function ContactFormCard() {
       company: (form.elements.namedItem('company') as HTMLInputElement).value.trim(),
       email: (form.elements.namedItem('email') as HTMLInputElement).value.trim(),
       phone: (form.elements.namedItem('phone') as HTMLInputElement).value.trim(),
+      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value.trim(),
     };
     try {
       const res = await fetch('/api/contacts', {
@@ -97,6 +98,14 @@ export function ContactFormCard() {
             type="tel"
             placeholder={t('home.contact.phone')}
             className="w-full px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400"
+            style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
+          />
+          <textarea
+            name="message"
+            rows={3}
+            maxLength={2000}
+            placeholder={t('home.contact.message')}
+            className="w-full px-3 py-2 text-sm rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-gray-900 dark:text-white placeholder:text-gray-400 resize-none"
             style={{ backgroundColor: 'var(--input-bg, rgba(0,0,0,0.08))' }}
           />
           <button
