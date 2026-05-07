@@ -1,40 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, Linkedin, Twitter, Mail, Gamepad2, Layers, Save, Cloud, Type } from 'lucide-react';
-import { GiDevilMask } from 'react-icons/gi';
+import { Cloud, Type } from 'lucide-react';
 import { person, social } from '@/resources';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { getIcon } from '@/lib/icons';
 import styles from './Footer.module.scss';
-
-// Custom Dragon icon (Yu-Gi-Oh style)
-const DragonIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2c-2 0-4 1-5 3-1-1-3-1-4 0s-1 3 0 4c-2 1-3 3-3 5 0 3 2 5 5 6l2 2c1 1 2 2 5 2s4-1 5-2l2-2c3-1 5-3 5-6 0-2-1-4-3-5 1-1 1-3 0-4s-3-1-4 0c-1-2-3-3-5-3z"/>
-    <circle cx="9" cy="10" r="1"/>
-    <circle cx="15" cy="10" r="1"/>
-    <path d="M9 14c.5.5 1.5 1 3 1s2.5-.5 3-1"/>
-  </svg>
-);
-
-// Icon mapping for social links
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  github: Github,
-  linkedin: Linkedin,
-  twitter: Twitter,
-  x: Twitter,
-  email: Mail,
-  mail: Mail,
-  gamepad: Gamepad2,
-  cards: Layers,
-  dragon: DragonIcon,
-  save: Save,
-  diablo: GiDevilMask,
-};
-
-const getIcon = (iconName: string) => {
-  return iconMap[iconName.toLowerCase()] || Mail;
-};
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();

@@ -21,6 +21,20 @@ const printStyles = `
   .cv-main { all: unset !important; display: block !important; flex: 1 !important; width: 6in !important; height: 11in !important; padding: 0.18in 0.22in !important; background: #fff !important; background-color: #fff !important; box-sizing: border-box !important; overflow: hidden !important; }
   [class*="bg-gray-800"], [class*="bg-gray-900"], [class*="bg-gray-950"], [class*="bg-gradient"], [class*="from-gray"], [class*="via-gray"], [class*="to-gray"] { background: #fff !important; background-color: #fff !important; background-image: none !important; }
 }
+
+/* Beat global theme-overrides.css that forces dark headings under [data-theme="light"].
+   The CV has its own local theme toggle; when it's dark, headings must stay white. */
+.cv-container.cv-theme-dark h1,
+.cv-container.cv-theme-dark h2,
+.cv-container.cv-theme-dark h3,
+.cv-container.cv-theme-dark h4,
+.cv-container.cv-theme-dark h5,
+.cv-container.cv-theme-dark h6 {
+  color: #ffffff !important;
+}
+.cv-container.cv-theme-dark .cv-sidebar h3 {
+  color: #ffffff !important;
+}
 `;
 
 // CV Data in both languages
@@ -376,7 +390,7 @@ export default function CVPage() {
           className={`cv-container max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden transition-colors duration-300 print:shadow-none print:rounded-none print:max-w-full print:w-full print:m-0 print:bg-white ${
             theme === 'light'
               ? 'bg-white'
-              : 'bg-gray-900'
+              : 'bg-gray-900 cv-theme-dark'
           }`}
         >
           {/* Two Column Layout */}

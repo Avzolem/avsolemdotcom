@@ -1,4 +1,5 @@
 import { getPosts } from '@/utils/utils';
+import { listEnabledToolboxItems } from '@/lib/mongodb/models/ToolboxItem';
 import '@/styles/ambient-orbs.css';
 import { AmbientOrbs } from './AmbientOrbs';
 import { HeroCard } from './cards/HeroCard';
@@ -10,13 +11,23 @@ import { SoundtrackCard } from './cards/SoundtrackCard';
 import { ContactFormCard } from './cards/ContactFormCard';
 import { AIChatCard } from './cards/AIChatCard';
 import { KonamiCRT } from './KonamiCRT';
+import { ToolboxSection } from './ToolboxSection';
 import { HomeFooter } from './HomeFooter';
 
 const GH_USER = 'Avzolem';
 
-export function BentoHome() {
+async function safeListToolbox() {
+  try {
+    return await listEnabledToolboxItems();
+  } catch {
+    return [];
+  }
+}
+
+export async function BentoHome() {
   const projects = getPosts(['src', 'app', 'work', 'projects']);
   const posts = getPosts(['src', 'app', 'blog', 'posts']);
+  const toolboxItems = await safeListToolbox();
 
   const sortedProjects = projects.sort(
     (a, b) =>
@@ -67,6 +78,8 @@ export function BentoHome() {
           postSlugs={posts.map((p) => p.slug)}
         />
       </div>
+
+      <ToolboxSection items={toolboxItems} />
 
       <HomeFooter />
     </div>
