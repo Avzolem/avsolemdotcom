@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Cinzel_Decorative } from 'next/font/google';
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 
 const cinzelDecorative = Cinzel_Decorative({
   weight: ['400', '700', '900'],
@@ -24,6 +25,7 @@ export default function DiabloLayout({
 }) {
   return (
     <div className={cinzelDecorative.variable}>
+      <ForceDarkTheme />
       {children}
     </div>
   );

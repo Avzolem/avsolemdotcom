@@ -1,4 +1,5 @@
 import './cloud-theme.scss';
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 
 // Root layout for /cloud - just imports styles
 // CloudAuthProvider is in (main)/layout.tsx for pages that need it
@@ -8,5 +9,10 @@ export default function CloudLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <ForceDarkTheme />
+      {children}
+    </>
+  );
 }

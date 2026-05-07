@@ -8,6 +8,7 @@ import YugiohHeader from '@/components/yugioh/YugiohHeader';
 import YugiohFooter from '@/components/yugioh/YugiohFooter';
 import ToastContainer from '@/components/yugioh/ToastContainer';
 import { Crimson_Text } from 'next/font/google';
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 import './yugioh-theme.scss';
 
 const yugiohFont = Crimson_Text({
@@ -27,6 +28,7 @@ export default function YugiohLayout({
       <YugiohLanguageProvider>
         <YugiohAuthProvider>
           <ToastProvider>
+            <ForceDarkTheme />
             <ToastContainer />
             <div className={`yugioh-layout ${yugiohFont.variable}`} suppressHydrationWarning>
               <YugiohHeader />

@@ -7,6 +7,7 @@ import { ToastProvider } from '@/contexts/ToastContext';
 import PokemonHeader from '@/components/pokemon/PokemonHeader';
 import PokemonFooter from '@/components/pokemon/PokemonFooter';
 import ToastContainer from '@/components/pokemon/ToastContainer';
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 import './pokemon-theme.scss';
 
 export default function PokemonLayout({
@@ -19,6 +20,7 @@ export default function PokemonLayout({
       <PokemonLanguageProvider>
         <PokemonAuthProvider>
           <ToastProvider>
+            <ForceDarkTheme />
             <ToastContainer />
             <div className="pokemon-layout" suppressHydrationWarning>
               <PokemonHeader />

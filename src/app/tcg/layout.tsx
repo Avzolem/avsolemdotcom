@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 
 export const metadata: Metadata = {
   title: 'TCG Hub | Trading Card Games',
@@ -13,5 +14,10 @@ export const metadata: Metadata = {
 };
 
 export default function TcgLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <ForceDarkTheme />
+      {children}
+    </>
+  );
 }

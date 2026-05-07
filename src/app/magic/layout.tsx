@@ -7,6 +7,7 @@ import { ToastProvider } from '@/contexts/ToastContext';
 import MagicHeader from '@/components/magic/MagicHeader';
 import MagicFooter from '@/components/magic/MagicFooter';
 import ToastContainer from '@/components/magic/ToastContainer';
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 import './magic-theme.scss';
 
 export default function MagicLayout({
@@ -19,6 +20,7 @@ export default function MagicLayout({
       <MagicLanguageProvider>
         <MagicAuthProvider>
           <ToastProvider>
+            <ForceDarkTheme />
             <ToastContainer />
             <div className="magic-layout" suppressHydrationWarning>
               <MagicHeader />
