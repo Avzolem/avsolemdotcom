@@ -6,6 +6,7 @@ import {
   findNotePageBySlug,
   updateNotePageBySlug,
 } from '@/lib/mongodb/models/NotePage';
+import { hashNotePassword } from '@/lib/crypto/notePassword';
 
 export async function GET(
   request: NextRequest,
@@ -54,6 +55,12 @@ export async function PATCH(
   if (Array.isArray(body.blocks)) patch.blocks = body.blocks;
   if (typeof body.enabled === 'boolean') patch.enabled = body.enabled;
   if (typeof body.order === 'number') patch.order = body.order;
+
+  if (typeof body.password === 'string' && body.password.length > 0) {
+    patch.passwordHash = hashNotePassword(body.password);
+  } else if (body.clearPassword === true) {
+    patch.passwordHash = null;
+  }
 
   const updated = await updateNotePageBySlug(slug, patch);
   if (!updated) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });

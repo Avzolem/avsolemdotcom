@@ -1,7 +1,11 @@
 import { cookies } from 'next/headers';
-import { NOTE_COOKIE, NOTE_COOKIE_VALUE } from './note';
+import { noteAuthCookieName } from './note';
 
-export async function isNoteAuthedServer(): Promise<boolean> {
+/**
+ * Returns the auth cookie value for a specific note slug, or undefined.
+ * Caller compares this against the note's stored passwordHash.
+ */
+export async function readNoteAuthCookieValue(slug: string): Promise<string | undefined> {
   const cookieStore = await cookies();
-  return cookieStore.get(NOTE_COOKIE)?.value === NOTE_COOKIE_VALUE;
+  return cookieStore.get(noteAuthCookieName(slug))?.value;
 }

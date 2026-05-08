@@ -7,6 +7,7 @@ import { multiColumnDropCursor } from '@blocknote/xl-multi-column';
 import { noteSchema } from '@/components/note/noteSchema';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
+import '@/components/note/notePaletteNotion.css';
 
 // Suppress known BlockNote multi-column drag errors in dev (BlockNote 0.50 bug — surfaces only as
 // overlay noise; the editor keeps working after the throw).

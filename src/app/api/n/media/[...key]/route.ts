@@ -1,14 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isNoteAuthenticated } from '@/lib/auth/note';
+import { findAllNoteAuthCookies } from '@/lib/auth/note';
 import { isDashboardAuthenticated } from '@/lib/auth/dashboard';
 import { isR2Configured } from '@/lib/r2';
 import { isNoteKey, signNoteDownloadUrl, NOTE_PREFIX } from '@/lib/r2/note';
+import { findNotePageBySlug } from '@/lib/mongodb/models/NotePage';
+
+async function isMediaAuthorized(request: NextRequest): Promise<boolean> {
+  if (isDashboardAuthenticated(request)) return true;
+  const cookies = findAllNoteAuthCookies(request.headers.get('cookie'));
+  for (const { slug, value } of cookies) {
+    const note = await findNotePageBySlug(slug);
+    // Cookie value matches the note's stored passwordHash → that user authed for this note
+    if (note?.passwordHash && note.passwordHash === value) return true;
+    // Public note (no password) — any reader is allowed
+    if (note && !note.passwordHash) return true;
+  }
+  return false;
+}
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ key: string[] }> }
 ) {
-  if (!isNoteAuthenticated(request) && !isDashboardAuthenticated(request)) {
+  if (!(await isMediaAuthorized(request))) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
   if (!isR2Configured()) {

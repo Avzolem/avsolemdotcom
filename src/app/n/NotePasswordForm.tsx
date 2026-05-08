@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 
-export function NotePasswordForm() {
+export function NotePasswordForm({ slug }: { slug: string }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -16,7 +16,7 @@ export function NotePasswordForm() {
       const res = await fetch('/api/n/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ slug, password }),
       });
       if (res.ok) {
         window.location.reload();

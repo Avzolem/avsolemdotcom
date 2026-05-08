@@ -1,0 +1,52 @@
+/*
+ * Notion dark-mode color palette overrides for BlockNote.
+ *
+ * Two parts:
+ * 1. Override the CSS variables → applies to actual block / inline color
+ * 2. Add explicit rules for `.bn-color-icon` swatches in the toolbar dropdown,
+ *    because BlockNote does not style them based on their data attributes.
+ */
+
+.bn-root,
+.bn-root[data-color-scheme="dark"] {
+  --bn-colors-highlights-gray-text: #9b9b9b !important;
+  --bn-colors-highlights-brown-text: #ba856f !important;
+  --bn-colors-highlights-red-text: #ff7369 !important;
+  --bn-colors-highlights-orange-text: #ffa344 !important;
+  --bn-colors-highlights-yellow-text: #ffdc49 !important;
+  --bn-colors-highlights-green-text: #4dab9a !important;
+  --bn-colors-highlights-blue-text: #529cca !important;
+  --bn-colors-highlights-purple-text: #9a6dd7 !important;
+  --bn-colors-highlights-pink-text: #e255a1 !important;
+
+  --bn-colors-highlights-gray-background: #2f2f2f !important;
+  --bn-colors-highlights-brown-background: #4a3228 !important;
+  --bn-colors-highlights-red-background: #522e2a !important;
+  --bn-colors-highlights-orange-background: #5c3b23 !important;
+  --bn-colors-highlights-yellow-background: #564328 !important;
+  --bn-colors-highlights-green-background: #243d30 !important;
+  --bn-colors-highlights-blue-background: #143a4e !important;
+  --bn-colors-highlights-purple-background: #3c2d49 !important;
+  --bn-colors-highlights-pink-background: #4e2c3c !important;
+}
+
+/* Color picker swatches in the formatting toolbar dropdown ("A" icons) */
+.bn-color-icon[data-text-color="gray"]    { color: var(--bn-colors-highlights-gray-text); }
+.bn-color-icon[data-text-color="brown"]   { color: var(--bn-colors-highlights-brown-text); }
+.bn-color-icon[data-text-color="red"]     { color: var(--bn-colors-highlights-red-text); }
+.bn-color-icon[data-text-color="orange"]  { color: var(--bn-colors-highlights-orange-text); }
+.bn-color-icon[data-text-color="yellow"]  { color: var(--bn-colors-highlights-yellow-text); }
+.bn-color-icon[data-text-color="green"]   { color: var(--bn-colors-highlights-green-text); }
+.bn-color-icon[data-text-color="blue"]    { color: var(--bn-colors-highlights-blue-text); }
+.bn-color-icon[data-text-color="purple"]  { color: var(--bn-colors-highlights-purple-text); }
+.bn-color-icon[data-text-color="pink"]    { color: var(--bn-colors-highlights-pink-text); }
+
+.bn-color-icon[data-background-color="gray"]    { background-color: var(--bn-colors-highlights-gray-background); }
+.bn-color-icon[data-background-color="brown"]   { background-color: var(--bn-colors-highlights-brown-background); }
+.bn-color-icon[data-background-color="red"]     { background-color: var(--bn-colors-highlights-red-background); }
+.bn-color-icon[data-background-color="orange"]  { background-color: var(--bn-colors-highlights-orange-background); }
+.bn-color-icon[data-background-color="yellow"]  { background-color: var(--bn-colors-highlights-yellow-background); }
+.bn-color-icon[data-background-color="green"]   { background-color: var(--bn-colors-highlights-green-background); }
+.bn-color-icon[data-background-color="blue"]    { background-color: var(--bn-colors-highlights-blue-background); }
+.bn-color-icon[data-background-color="purple"]  { background-color: var(--bn-colors-highlights-purple-background); }
+.bn-color-icon[data-background-color="pink"]    { background-color: var(--bn-colors-highlights-pink-background); }

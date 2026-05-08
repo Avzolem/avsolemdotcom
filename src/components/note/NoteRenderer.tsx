@@ -5,6 +5,7 @@ import { BlockNoteView } from '@blocknote/mantine';
 import { noteSchema } from './noteSchema';
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
+import './notePaletteNotion.css';
 
 export function NoteRenderer({ blocks }: { blocks: unknown[] }) {
   const editor = useCreateBlockNote({

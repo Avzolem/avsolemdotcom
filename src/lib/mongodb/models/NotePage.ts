@@ -10,6 +10,7 @@ export interface NotePage {
   blocks: unknown[];
   enabled: boolean;
   order: number;
+  passwordHash?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,11 +49,26 @@ export async function createNotePage(
 
 export async function updateNotePageBySlug(
   slug: string,
-  patch: Partial<Pick<NotePage, 'title' | 'blocks' | 'enabled' | 'order' | 'slug'>>
+  patch: Partial<Pick<NotePage, 'title' | 'blocks' | 'enabled' | 'order' | 'slug' | 'passwordHash'>>
 ): Promise<NotePage | null> {
   const col = await getNotePagesCollection();
   await col.updateOne({ slug }, { $set: { ...patch, updatedAt: new Date() } });
   return col.findOne({ slug: patch.slug ?? slug });
+}
+
+export async function setNotePagePassword(slug: string, passwordHash: string): Promise<boolean> {
+  const col = await getNotePagesCollection();
+  const r = await col.updateOne({ slug }, { $set: { passwordHash, updatedAt: new Date() } });
+  return r.matchedCount === 1;
+}
+
+export async function clearNotePagePassword(slug: string): Promise<boolean> {
+  const col = await getNotePagesCollection();
+  const r = await col.updateOne(
+    { slug },
+    { $set: { passwordHash: null, updatedAt: new Date() } }
+  );
+  return r.matchedCount === 1;
 }
 
 export async function deleteNotePageBySlug(slug: string): Promise<boolean> {

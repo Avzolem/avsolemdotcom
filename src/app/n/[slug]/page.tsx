@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { findNotePageBySlug } from '@/lib/mongodb/models/NotePage';
-import { isNoteAuthedServer } from '@/lib/auth/note-server';
+import { readNoteAuthCookieValue } from '@/lib/auth/note-server';
 import { NoteRenderer } from '@/components/note/NoteRenderer';
 import { NotePasswordForm } from '../NotePasswordForm';
 
@@ -11,15 +11,18 @@ export default async function NoteSlugPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  if (!(await isNoteAuthedServer())) {
-    return <NotePasswordForm />;
-  }
-
   const { slug } = await params;
   const page = await findNotePageBySlug(slug);
 
   if (!page || !page.enabled) {
     notFound();
+  }
+
+  if (page.passwordHash) {
+    const cookieValue = await readNoteAuthCookieValue(slug);
+    if (cookieValue !== page.passwordHash) {
+      return <NotePasswordForm slug={slug} />;
+    }
   }
 
   return (
