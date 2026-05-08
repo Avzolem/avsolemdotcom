@@ -16,6 +16,7 @@ import {
   ExternalLink,
   Wrench,
   KeyRound,
+  BookOpen,
 } from 'lucide-react';
 import { useDashboardAuth } from '@/contexts/DashboardAuthContext';
 import { OverviewTab } from './tabs/OverviewTab';
@@ -27,6 +28,7 @@ import { ProfileTab } from './tabs/ProfileTab';
 import { VideosTab } from './tabs/VideosTab';
 import { ToolboxTab } from './tabs/ToolboxTab';
 import { EnvVarsTab } from './tabs/EnvVarsTab';
+import { NoteTab } from './tabs/NoteTab';
 
 type TabKey =
   | 'overview'
@@ -38,6 +40,7 @@ type TabKey =
   | 'videos'
   | 'toolbox'
   | 'env'
+  | 'note'
   | 'profile';
 
 const TABS: Array<{ key: TabKey; label: string; icon: React.ComponentType<{ className?: string }>; status?: string }> = [
@@ -50,6 +53,7 @@ const TABS: Array<{ key: TabKey; label: string; icon: React.ComponentType<{ clas
   { key: 'videos', label: 'Videos', icon: Video },
   { key: 'toolbox', label: 'Toolbox', icon: Wrench },
   { key: 'env', label: 'Env Vars', icon: KeyRound },
+  { key: 'note', label: 'Notas', icon: BookOpen },
   { key: 'profile', label: 'Perfil', icon: User },
 ];
 
@@ -142,6 +146,7 @@ export function DashboardShell() {
           {active === 'videos' && <VideosTab />}
           {active === 'toolbox' && <ToolboxTab />}
           {active === 'env' && <EnvVarsTab />}
+          {active === 'note' && <NoteTab />}
           {active === 'profile' && <ProfileTab />}
         </div>
       </main>

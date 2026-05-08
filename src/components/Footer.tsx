@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Cloud, Type } from 'lucide-react';
+import { LayoutDashboard } from 'lucide-react';
 import { person, social } from '@/resources';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getIcon } from '@/lib/icons';
@@ -93,12 +93,12 @@ export const Footer = () => {
             );
           })}
 
-          {/* Cloud Storage Link */}
+          {/* Dashboard Link */}
           <a
-            href="/cloud"
+            href="/dashboard"
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = '/cloud';
+              window.location.href = '/dashboard';
             }}
             className="
               p-1.5 rounded-lg text-gray-500 dark:text-gray-400
@@ -106,27 +106,9 @@ export const Footer = () => {
               hover:text-cyan-600 dark:hover:text-cyan-400
               transition-colors duration-200
             "
-            title="Cloudsolem"
+            title="Dashboard"
           >
-            <Cloud className="w-4 h-4" />
-          </a>
-
-          {/* ASCII Studio Link */}
-          <a
-            href="/ascii"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = '/ascii';
-            }}
-            className="
-              p-1.5 rounded-lg text-gray-500 dark:text-gray-400
-              hover:bg-gray-100 dark:hover:bg-gray-800
-              hover:text-cyan-600 dark:hover:text-cyan-400
-              transition-colors duration-200
-            "
-            title="ASCII Studio"
-          >
-            <Type className="w-4 h-4" />
+            <LayoutDashboard className="w-4 h-4" />
           </a>
         </div>
       </div>

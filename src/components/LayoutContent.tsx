@@ -17,9 +17,10 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const isMagicRoute = pathname?.startsWith('/magic');
   const isDashboardRoute = pathname?.startsWith('/dashboard');
   const isEmbedRoute = pathname?.startsWith('/embed');
+  const isNotesRoute = pathname === '/n' || pathname?.startsWith('/n/');
 
-  // Yu-Gi-Oh, Pokemon, Magic, ROMs, Cloud, Diablo, CV, TCG, Dashboard, and embeds have their own layouts - no header/footer
-  if (isYugiohRoute || isPokemonRoute || isMagicRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute || isTcgRoute || isDashboardRoute || isEmbedRoute) {
+  // Yu-Gi-Oh, Pokemon, Magic, ROMs, Cloud, Diablo, CV, TCG, Dashboard, embeds, and Notes have their own layouts - no header/footer
+  if (isYugiohRoute || isPokemonRoute || isMagicRoute || isRomsRoute || isCloudRoute || isDiabloRoute || isCvRoute || isTcgRoute || isDashboardRoute || isEmbedRoute || isNotesRoute) {
     return (
       <div className="w-full min-h-screen">
         {children}
