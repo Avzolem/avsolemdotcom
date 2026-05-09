@@ -45,6 +45,33 @@ export async function listContacts(): Promise<Contact[]> {
   return docs.map((d) => ({ ...d, _id: d._id?.toString() }));
 }
 
+export async function updateContact(
+  id: string,
+  fields: Partial<Pick<Contact, 'name' | 'email' | 'phone' | 'company' | 'notes'>>
+): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
+  const col = await getContactsCollection();
+  const update: Record<string, unknown> = {};
+  if (typeof fields.name === 'string') update.name = fields.name.trim();
+  if (typeof fields.email === 'string') update.email = fields.email.trim().toLowerCase();
+  if (fields.phone !== undefined)
+    update.phone = typeof fields.phone === 'string' ? fields.phone.trim() : '';
+  if (fields.company !== undefined)
+    update.company = typeof fields.company === 'string' ? fields.company.trim() : '';
+  if (fields.notes !== undefined)
+    update.notes = typeof fields.notes === 'string' ? fields.notes.trim() : '';
+  if (Object.keys(update).length === 0) return false;
+  const res = await col.updateOne({ _id: new ObjectId(id) }, { $set: update });
+  return res.matchedCount > 0;
+}
+
+export async function deleteContact(id: string): Promise<boolean> {
+  if (!ObjectId.isValid(id)) return false;
+  const col = await getContactsCollection();
+  const res = await col.deleteOne({ _id: new ObjectId(id) });
+  return res.deletedCount > 0;
+}
+
 export async function countContactsByEmailToday(email: string): Promise<number> {
   const col = await getContactsCollection();
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000);

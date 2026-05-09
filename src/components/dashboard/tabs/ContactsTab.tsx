@@ -1,7 +1,18 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Search, Download, Mail, Phone, Building2, Loader2 } from 'lucide-react';
+import {
+  Search,
+  Download,
+  Mail,
+  Phone,
+  Building2,
+  Loader2,
+  Pencil,
+  Trash2,
+  Check,
+  X,
+} from 'lucide-react';
 
 interface Contact {
   _id?: string;
@@ -28,6 +39,10 @@ export function ContactsTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState<Contact | null>(null);
+  const [savingId, setSavingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -58,13 +73,70 @@ export function ContactsTab() {
 
   function downloadCSV() {
     const csv = toCSV(filtered);
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `contacts_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function startEdit(c: Contact) {
+    setEditingId(c._id ?? null);
+    setEditDraft({ ...c });
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditDraft(null);
+  }
+
+  async function saveEdit() {
+    if (!editDraft || !editingId) return;
+    setSavingId(editingId);
+    try {
+      const res = await fetch(`/api/dashboard/contacts/${editingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editDraft.name,
+          email: editDraft.email,
+          phone: editDraft.phone || '',
+          company: editDraft.company || '',
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || 'Error al guardar');
+      }
+      setContacts((prev) =>
+        prev.map((c) => (c._id === editingId ? { ...c, ...editDraft } : c))
+      );
+      cancelEdit();
+    } catch (err) {
+      alert((err as Error).message);
+    } finally {
+      setSavingId(null);
+    }
+  }
+
+  async function removeContact(id: string) {
+    if (!confirm('¿Eliminar este contacto? Esta acción no se puede deshacer.')) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/dashboard/contacts/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || 'Error al eliminar');
+      }
+      setContacts((prev) => prev.filter((c) => c._id !== id));
+      if (editingId === id) cancelEdit();
+    } catch (err) {
+      alert((err as Error).message);
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   if (loading) {
@@ -78,6 +150,9 @@ export function ContactsTab() {
   if (error) {
     return <div className="text-sm text-red-400">{error}</div>;
   }
+
+  const inputClass =
+    'w-full px-2 py-1 text-sm rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 text-white placeholder:text-gray-600';
 
   return (
     <div className="max-w-5xl flex flex-col gap-5">
@@ -117,64 +192,162 @@ export function ContactsTab() {
           <table className="w-full text-sm">
             <thead className="bg-gray-800/60 text-xs uppercase tracking-wider text-gray-400">
               <tr>
-                <th className="px-4 py-3 text-left font-medium">Nombre</th>
+                <th className="px-4 py-3 text-left font-medium w-[22%]">Nombre</th>
                 <th className="px-4 py-3 text-left font-medium">Correo</th>
                 <th className="px-4 py-3 text-left font-medium">Empresa</th>
                 <th className="px-4 py-3 text-left font-medium">Celular</th>
-                <th className="px-4 py-3 text-left font-medium">Fecha</th>
+                <th className="px-4 py-3 text-left font-medium w-[110px] whitespace-nowrap">Fecha</th>
+                <th className="px-4 py-3 text-right font-medium w-24">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((c) => (
-                <tr
-                  key={c._id || `${c.email}-${c.createdAt}`}
-                  className="border-t border-gray-800 hover:bg-gray-900/80"
-                >
-                  <td className="px-4 py-3 font-medium text-white">{c.name}</td>
-                  <td className="px-4 py-3">
-                    <a
-                      href={`mailto:${c.email}`}
-                      className="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300"
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      {c.email}
-                    </a>
-                  </td>
-                  <td className="px-4 py-3 text-gray-300">
-                    {c.company ? (
-                      <span className="inline-flex items-center gap-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-gray-500" />
-                        {c.company}
-                      </span>
-                    ) : (
-                      <span className="text-gray-600">—</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-gray-300">
-                    {c.phone ? (
-                      <a
-                        href={`tel:${c.phone}`}
-                        className="inline-flex items-center gap-1.5 hover:text-cyan-300"
-                      >
-                        <Phone className="w-3.5 h-3.5 text-gray-500" />
-                        {c.phone}
-                      </a>
-                    ) : (
-                      <span className="text-gray-600">—</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-gray-400 font-mono text-xs">
-                    {new Date(c.createdAt).toLocaleString('es-MX', {
-                      timeZone: 'America/Chihuahua',
-                      year: 'numeric',
-                      month: 'short',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </td>
-                </tr>
-              ))}
+              {filtered.map((c) => {
+                const isEditing = editingId === c._id;
+                const isSaving = savingId === c._id;
+                const isDeleting = deletingId === c._id;
+                return (
+                  <tr
+                    key={c._id || `${c.email}-${c.createdAt}`}
+                    className="border-t border-gray-800 hover:bg-gray-900/80"
+                  >
+                    <td className="px-4 py-3 font-medium text-white">
+                      {isEditing && editDraft ? (
+                        <input
+                          className={inputClass}
+                          value={editDraft.name}
+                          onChange={(e) =>
+                            setEditDraft({ ...editDraft, name: e.target.value })
+                          }
+                        />
+                      ) : (
+                        c.name
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {isEditing && editDraft ? (
+                        <input
+                          type="email"
+                          className={inputClass}
+                          value={editDraft.email}
+                          onChange={(e) =>
+                            setEditDraft({ ...editDraft, email: e.target.value })
+                          }
+                        />
+                      ) : (
+                        <a
+                          href={`mailto:${c.email}`}
+                          className="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                          {c.email}
+                        </a>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-gray-300">
+                      {isEditing && editDraft ? (
+                        <input
+                          className={inputClass}
+                          placeholder="—"
+                          value={editDraft.company || ''}
+                          onChange={(e) =>
+                            setEditDraft({ ...editDraft, company: e.target.value })
+                          }
+                        />
+                      ) : c.company ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-gray-500" />
+                          {c.company}
+                        </span>
+                      ) : (
+                        <span className="text-gray-600">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-gray-300">
+                      {isEditing && editDraft ? (
+                        <input
+                          className={inputClass}
+                          placeholder="—"
+                          value={editDraft.phone || ''}
+                          onChange={(e) =>
+                            setEditDraft({ ...editDraft, phone: e.target.value })
+                          }
+                        />
+                      ) : c.phone ? (
+                        <a
+                          href={`tel:${c.phone}`}
+                          className="inline-flex items-center gap-1.5 hover:text-cyan-300"
+                        >
+                          <Phone className="w-3.5 h-3.5 text-gray-500" />
+                          {c.phone}
+                        </a>
+                      ) : (
+                        <span className="text-gray-600">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-gray-400 font-mono text-xs whitespace-nowrap">
+                      {new Date(c.createdAt).toLocaleString('es-MX', {
+                        timeZone: 'America/Chihuahua',
+                        year: '2-digit',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="inline-flex items-center gap-1">
+                        {isEditing ? (
+                          <>
+                            <button
+                              onClick={saveEdit}
+                              disabled={isSaving}
+                              title="Guardar"
+                              className="p-1.5 rounded hover:bg-cyan-500/20 text-cyan-400 disabled:opacity-50"
+                            >
+                              {isSaving ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Check className="w-4 h-4" />
+                              )}
+                            </button>
+                            <button
+                              onClick={cancelEdit}
+                              disabled={isSaving}
+                              title="Cancelar"
+                              className="p-1.5 rounded hover:bg-gray-700 text-gray-400 disabled:opacity-50"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => startEdit(c)}
+                              disabled={!c._id}
+                              title="Editar"
+                              className="p-1.5 rounded hover:bg-gray-700 text-gray-400 hover:text-white disabled:opacity-30"
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => c._id && removeContact(c._id)}
+                              disabled={!c._id || isDeleting}
+                              title="Eliminar"
+                              className="p-1.5 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 disabled:opacity-30"
+                            >
+                              {isDeleting ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Trash2 className="w-4 h-4" />
+                              )}
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
