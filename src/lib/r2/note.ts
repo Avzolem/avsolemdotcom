@@ -37,3 +37,32 @@ export async function deleteNoteObject(key: string) {
   const client = getR2Client();
   await client.send(new DeleteObjectCommand({ Bucket: R2_BUCKET, Key: key }));
 }
+
+// Walk blocks JSON and collect every `note/...` R2 key referenced. Substring
+// match works because keys are unique random hex prefixes and BlockNote stores
+// media URLs verbatim in its block props.
+export function extractNoteKeysFromBlocks(blocks: unknown): string[] {
+  const json = JSON.stringify(blocks ?? []);
+  const matches = json.match(/note\/[a-f0-9]+-[\w.\-]+/g);
+  if (!matches) return [];
+  return Array.from(new Set(matches));
+}
+
+// Best-effort cleanup: delete each key, swallow individual errors so a single
+// missing/already-deleted object doesn't block the rest.
+export async function deleteNoteObjectsBulk(keys: string[]): Promise<{ deleted: number; failed: number }> {
+  let deleted = 0;
+  let failed = 0;
+  await Promise.all(
+    keys.map(async (key) => {
+      try {
+        await deleteNoteObject(key);
+        deleted += 1;
+      } catch (err) {
+        failed += 1;
+        console.error(`R2 delete failed for ${key}:`, err);
+      }
+    })
+  );
+  return { deleted, failed };
+}

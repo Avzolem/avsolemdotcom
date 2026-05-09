@@ -7,6 +7,8 @@ import {
   updateNotePageBySlug,
 } from '@/lib/mongodb/models/NotePage';
 import { hashNotePassword } from '@/lib/crypto/notePassword';
+import { isR2Configured } from '@/lib/r2';
+import { extractNoteKeysFromBlocks, deleteNoteObjectsBulk } from '@/lib/r2/note';
 
 export async function GET(
   request: NextRequest,
@@ -80,10 +82,21 @@ export async function DELETE(
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
   const { slug } = await params;
+
+  // Fetch blocks first so we can clean up R2 media after the doc is gone.
+  const note = await findNotePageBySlug(slug);
+  if (!note) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
+
+  const keys = extractNoteKeysFromBlocks(note.blocks);
   const ok = await deleteNotePageBySlug(slug);
   if (!ok) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
 
+  let mediaResult = { deleted: 0, failed: 0 };
+  if (keys.length > 0 && isR2Configured()) {
+    mediaResult = await deleteNoteObjectsBulk(keys);
+  }
+
   revalidatePath('/n');
   revalidatePath(`/n/${slug}`);
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, media: mediaResult });
 }

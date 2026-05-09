@@ -6,8 +6,10 @@ if (!process.env.MONGODB_URI) {
 
 const uri = process.env.MONGODB_URI;
 const options = {
-  serverSelectionTimeoutMS: 5000, // 5 seconds timeout instead of 30
-  connectTimeoutMS: 5000,
+  // Vercel cold start + Atlas TLS + replica set discovery can take >5s.
+  // Default is 30s; 15s is a safe middle ground that still fails fast.
+  serverSelectionTimeoutMS: 15000,
+  connectTimeoutMS: 10000,
 };
 
 let client: MongoClient;
@@ -17,18 +19,14 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-if (process.env.NODE_ENV === 'development') {
-  // In development mode, use a global variable to preserve the MongoClient across hot reloads
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // In production mode, create a new client for each connection
+// Cache the client promise on `global` in BOTH dev and prod.
+// In Vercel serverless, this lets warm invocations of the same container
+// reuse the existing connection instead of re-handshaking on every cold module load.
+if (!global._mongoClientPromise) {
   client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+  global._mongoClientPromise = client.connect();
 }
+clientPromise = global._mongoClientPromise;
 
 export async function getDatabase(): Promise<Db> {
   const client = await clientPromise;
