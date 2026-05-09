@@ -88,6 +88,7 @@ export function HomeHero({ featuredDisplay, featuredHref }: HomeHeroProps) {
                   src={person.avatar}
                   alt={person.name}
                   fill
+                  sizes="32px"
                   className="object-cover"
                 />
               </div>

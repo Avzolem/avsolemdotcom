@@ -15,8 +15,8 @@ export const en: Record<string, string> = {
 
   // About page
   'about.intro.title': 'Introduction',
-  'about.intro.description.p1': 'I am a software developer and project manager with extensive experience in creating development and logistics departments, as well as managing tasks and projects. I\'ve had the fortune to work with multinational companies such as Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr, and Intermetro, in addition to the Government of the State of Chihuahua, Digital Policy, and municipal IT liaison offices.',
-  'about.intro.description.p2': 'I\'m passionate about React+NextJS development, constantly learning new technologies, creating virtual worlds in VR, and building innovative Web3 applications. My goal is to combine my extensive project management experience with cutting-edge web development to deliver exceptional solutions.',
+  'about.intro.description.p1': 'I am a software developer and project manager with extensive experience in creating development and logistics departments, as well as managing tasks and projects. I\'ve had the fortune to work with multinational companies such as Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr, and Intermetro, in addition to the Government of the State of Chihuahua 🏛️, Digital Policy, and municipal IT liaison offices.',
+  'about.intro.description.p2': 'I\'m passionate about React ⚛️ + NextJS ▲ development, constantly learning new technologies, creating virtual worlds in VR 🥽, and building innovative Web3 applications. My goal is to combine my extensive project management experience with cutting-edge web development to deliver exceptional solutions.',
 
   'about.work.title': 'Work Experience',
   'about.studies.title': 'Education',

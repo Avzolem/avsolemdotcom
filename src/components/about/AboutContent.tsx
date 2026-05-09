@@ -145,7 +145,7 @@ export function AboutContent() {
   ];
 
   return (
-    <div className="flex flex-col max-w-3xl w-full">
+    <div className="flex flex-col max-w-5xl w-full">
       {about.tableOfContent.display && (
         <div
           className={`fixed left-0 pl-6 flex flex-col gap-8 ${styles.hideOnMobile}`}
@@ -164,6 +164,7 @@ export function AboutContent() {
                 src={avatar}
                 alt={person.name}
                 fill
+                sizes="128px"
                 className="object-cover"
                 unoptimized={avatar.startsWith('http')}
               />
@@ -208,7 +209,7 @@ export function AboutContent() {
             )}
           </div>
         )}
-        <div className={`flex flex-col flex-1 max-w-xl ${styles.blockAlign}`}>
+        <div className={`flex flex-col flex-1 max-w-[40rem] w-full ${styles.blockAlign}`}>
           <div
             id={`👋 ${t('about.intro.title')}`}
             className="flex flex-col w-full min-h-40 justify-center mb-8"
@@ -229,24 +230,24 @@ export function AboutContent() {
                 </div>
                 <Link
                   href="/work"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-[#9595951a] hover:bg-[#95959526] transition-colors"
                 >
                   <Grid3X3 className="w-4 h-4" />
                   {t('about.viewWork')}
                 </Link>
                 <Link
                   href={`mailto:${person.email}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-[#9595951a] hover:bg-[#95959526] transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                   {t('about.contactMe')}
                 </Link>
               </div>
             )}
-            <h1 className={`text-4xl md:text-5xl font-bold text-gray-900 dark:text-white ${styles.textAlign}`}>
+            <h1 className={`text-[2.75rem] md:text-[3.5rem] lg:text-[5rem] leading-[3rem] md:leading-[3.75rem] lg:leading-[5rem] font-semibold tracking-[-0.05em] text-gray-900 dark:text-white ${styles.textAlign}`}>
               {person.name}
             </h1>
-            <p className={`text-lg text-gray-600 dark:text-gray-400 mt-2 ${styles.textAlign}`}>
+            <p className={`text-[1.75rem] md:text-[2rem] leading-[2rem] md:leading-[2.5rem] font-light text-gray-600 dark:text-gray-400 mt-3 ${styles.textAlign}`}>
               {t('person.role')}
             </p>
             {social.length > 0 && (
@@ -290,7 +291,7 @@ export function AboutContent() {
             <div className="flex justify-center w-full mt-4">
               <Link
                 href="/cv"
-                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-base font-medium border-2 border-cyan-500 text-gray-900 dark:text-white rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-base font-medium rounded-full bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 hover:opacity-80 transition-all duration-300"
               >
                 <Download className="w-4 h-4" />
                 {t('about.downloadCV')}
@@ -299,7 +300,7 @@ export function AboutContent() {
           </div>
 
           {about.intro.display && (
-            <div className="flex flex-col w-full gap-4 mb-8 text-base leading-relaxed text-gray-900 dark:text-gray-300">
+            <div className="flex flex-col w-full gap-4 mb-12 text-lg leading-relaxed text-gray-900 dark:text-gray-300">
               <p>{t('about.intro.description.p1')}</p>
               <p>{t('about.intro.description.p2')}</p>
             </div>
@@ -309,7 +310,7 @@ export function AboutContent() {
             <>
               <h2
                 id={`💼 ${t('about.work.title')}`}
-                className="text-2xl font-bold text-gray-900 dark:text-white mb-4"
+                className="text-[2rem] md:text-[2.25rem] lg:text-[2.5rem] leading-[2.5rem] lg:leading-[3rem] font-semibold tracking-[-0.02em] text-gray-900 dark:text-white mb-6"
               >
                 💼 {t('about.work.title')}
               </h2>
@@ -323,7 +324,7 @@ export function AboutContent() {
                       <div className="flex w-full justify-between items-end mb-1">
                         <h3
                           id={company}
-                          className="text-lg font-semibold text-gray-900 dark:text-white"
+                          className="text-[1.33rem] leading-[1.75rem] font-semibold text-gray-900 dark:text-white"
                         >
                           {company}
                         </h3>
@@ -361,7 +362,7 @@ export function AboutContent() {
             <>
               <h2
                 id={`🎓 ${t('about.studies.title')}`}
-                className="text-2xl font-bold text-gray-900 dark:text-white mb-4"
+                className="text-[2rem] md:text-[2.25rem] lg:text-[2.5rem] leading-[2.5rem] lg:leading-[3rem] font-semibold tracking-[-0.02em] text-gray-900 dark:text-white mb-6"
               >
                 🎓 {t('about.studies.title')}
               </h2>
@@ -370,7 +371,7 @@ export function AboutContent() {
                   <div key={edu.key} className="flex flex-col w-full gap-1">
                     <h3
                       id={`${edu.emoji} ${t(`edu.${edu.key}.name`)}`}
-                      className="text-lg font-semibold text-gray-900 dark:text-white"
+                      className="text-[1.33rem] leading-[1.75rem] font-semibold text-gray-900 dark:text-white"
                     >
                       {edu.emoji} {t(`edu.${edu.key}.name`)}
                     </h3>
@@ -387,7 +388,7 @@ export function AboutContent() {
             <>
               <h2
                 id={`🛠️ ${t('about.technical.title')}`}
-                className="text-2xl font-bold text-gray-900 dark:text-white mb-10"
+                className="text-[2rem] md:text-[2.25rem] lg:text-[2.5rem] leading-[2.5rem] lg:leading-[3rem] font-semibold tracking-[-0.02em] text-gray-900 dark:text-white mb-10"
               >
                 🛠️ {t('about.technical.title')}
               </h2>
@@ -400,7 +401,7 @@ export function AboutContent() {
                 {about.technical.skills.map((skill, index) => (
                   <div
                     key={`${skill.title}-${index}`}
-                    className={`flex gap-3 items-center p-3 rounded-lg border border-gray-300 dark:border-gray-700 hover:border-cyan-500 dark:hover:border-cyan-400 transition-colors ${styles.skillCard}`}
+                    className={`flex gap-3 items-center p-3 rounded-lg bg-[#9595951a] dark:bg-[#9595951a] transition-colors ${styles.skillCard}`}
                   >
                     <span className="text-3xl">{skill.icon}</span>
                     <span

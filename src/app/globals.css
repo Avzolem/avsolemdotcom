@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./theme-overrides.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Custom CSS Variables for theme compatibility */
 @layer base {
   :root {
@@ -14,6 +16,19 @@
     --background: #000000;
     --foreground: #f3f4f6;
   }
+
+  html {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  code, kbd, samp, pre {
+    font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+}
+
+@theme inline {
+  --default-font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --default-mono-font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 @layer components {

@@ -15,8 +15,8 @@ export const es: Record<string, string> = {
 
   // About page
   'about.intro.title': 'Introduccion',
-  'about.intro.description.p1': 'Soy desarrollador de software y gerente de proyectos con amplia experiencia en la creacion de departamentos de desarrollo y logistica, asi como en la gestion de tareas y proyectos. He tenido la fortuna de trabajar con empresas multinacionales como Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr e Intermetro, ademas del Gobierno del Estado de Chihuahua, Politica Digital y enlaces de TI municipales.',
-  'about.intro.description.p2': 'Me apasiona el desarrollo con React+NextJS, aprender constantemente nuevas tecnologias, crear mundos virtuales en VR y construir aplicaciones Web3 innovadoras. Mi objetivo es combinar mi amplia experiencia en gestion de proyectos con desarrollo web de vanguardia para entregar soluciones excepcionales.',
+  'about.intro.description.p1': 'Soy desarrollador de software y gerente de proyectos con amplia experiencia en la creación de departamentos de desarrollo y logística, así como en la gestión de tareas y proyectos. He tenido la fortuna de trabajar con empresas multinacionales como Daewoo, Pemex, GHMECC Logistics, Wialon, Industrias Fehr e Intermetro, además del Gobierno del Estado de Chihuahua 🏛️, Política Digital y enlaces de TI municipales.',
+  'about.intro.description.p2': 'Me apasiona el desarrollo con React ⚛️ + NextJS ▲, aprender constantemente nuevas tecnologías, crear mundos virtuales en VR 🥽 y construir aplicaciones Web3 innovadoras. Mi objetivo es combinar mi amplia experiencia en gestión de proyectos con desarrollo web de vanguardia para entregar soluciones excepcionales.',
 
   'about.work.title': 'Experiencia Laboral',
   'about.studies.title': 'Educacion',
