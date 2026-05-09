@@ -183,8 +183,8 @@ export function VideosTab() {
           Sin videos aún. Sube el primero.
         </div>
       ) : (
-        <div className="rounded-xl border border-gray-800 bg-gray-900/40 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-xl border border-gray-800 bg-gray-900/40 overflow-x-auto">
+          <table className="w-full min-w-[600px] text-sm">
             <thead className="bg-gray-800/60 text-xs uppercase tracking-wider text-gray-400">
               <tr>
                 <th className="px-4 py-3 text-left font-medium">Archivo</th>

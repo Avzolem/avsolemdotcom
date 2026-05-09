@@ -26,8 +26,10 @@ export default async function NoteSlugPage({
   }
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-16">
-      <h1 className="text-4xl font-light text-gray-100 mb-10">{page.title}</h1>
+    <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+      <h1 className="text-3xl sm:text-4xl font-light text-gray-100 mb-8 sm:mb-10 break-words">
+        {page.title}
+      </h1>
       <div className="note-content">
         <NoteRenderer blocks={page.blocks} />
       </div>

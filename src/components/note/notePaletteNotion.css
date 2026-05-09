@@ -7,6 +7,31 @@
  *    because BlockNote does not style them based on their data attributes.
  */
 
+/* Mobile: collapse multi-column layouts to a single column.
+   BlockNote's `columnList` uses CSS grid/flex with each column flex:1.
+   Below 640px we override to stack vertically. */
+@media (max-width: 639px) {
+  .bn-block-content[data-content-type="columnList"],
+  .bn-block-group [data-content-type="columnList"] {
+    flex-direction: column !important;
+    display: flex !important;
+  }
+  .bn-block-content[data-content-type="column"],
+  .bn-block-group [data-content-type="column"] {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+/* Constrain media (images/videos) to never overflow the note container.
+   Keeps aspect ratio, prevents horizontal scroll on mobile. */
+.bn-root img,
+.bn-root video {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
 .bn-root,
 .bn-root[data-color-scheme="dark"] {
   --bn-colors-highlights-gray-text: #9b9b9b !important;

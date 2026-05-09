@@ -216,18 +216,14 @@ export function AboutContent() {
           >
             {about.calendar.display && (
               <div className="flex gap-3 flex-wrap mb-4 justify-center">
-                <div
-                  className={`flex items-center border border-cyan-500/30 bg-cyan-500/10 rounded-full p-1 gap-2 backdrop-blur ${styles.blockAlign}`}
+                <Link
+                  href={about.calendar.link}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 transition-colors"
                 >
-                  <Calendar className="w-4 h-4 ml-3 text-cyan-600 dark:text-cyan-400" />
-                  <span className="px-2">{t('about.scheduleCall')}</span>
-                  <Link
-                    href={about.calendar.link}
-                    className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
+                  <Calendar className="w-4 h-4" />
+                  {t('about.scheduleCall')}
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
                 <Link
                   href="/work"
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-[#9595951a] hover:bg-[#95959526] transition-colors"

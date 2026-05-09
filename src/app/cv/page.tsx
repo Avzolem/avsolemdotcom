@@ -335,29 +335,29 @@ export default function CVPage() {
       }`}>
 
         {/* Floating Controls - Right Side */}
-        <div className="no-print fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+        <div className="no-print fixed right-3 md:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 md:gap-3">
           {/* Download PDF */}
           <button
             onClick={handlePrint}
-            className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
+            className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
             title={t('cv.downloadButton')}
           >
-            <Download className="w-5 h-5" />
+            <Download className="w-4 h-4 md:w-5 md:h-5" />
           </button>
 
           {/* Portfolio Link */}
           <Link
             href="/"
-            className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
+            className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
             title={t('cv.portfolioButton')}
           >
-            <ExternalLink className="w-5 h-5" />
+            <ExternalLink className="w-4 h-4 md:w-5 md:h-5" />
           </Link>
 
           {/* Language Toggle */}
           <button
             onClick={toggleLanguage}
-            className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
+            className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
             title={lang === 'en' ? 'Cambiar a Español' : 'Switch to English'}
           >
             <span className="text-sm font-bold">{data.buttons.language}</span>
@@ -366,10 +366,10 @@ export default function CVPage() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
+            className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-2xl transition-all duration-300 ${liquidGlassStyle}`}
             title={theme === 'light' ? data.buttons.darkMode : data.buttons.lightMode}
           >
-            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            {theme === 'light' ? <Moon className="w-4 h-4 md:w-5 md:h-5" /> : <Sun className="w-4 h-4 md:w-5 md:h-5" />}
           </button>
         </div>
 
@@ -384,8 +384,8 @@ export default function CVPage() {
           {/* Two Column Layout */}
           <div className="cv-content flex flex-col md:flex-row print:flex-row print:bg-white">
 
-            {/* Left Sidebar */}
-            <div className={`cv-sidebar w-full md:w-72 print:w-72 p-6 print:p-4 transition-colors duration-300 print:bg-gray-100 ${
+            {/* Left Sidebar — render-order swapped on mobile so the main content (name + role + summary + experience) appears first */}
+            <div className={`cv-sidebar order-2 md:order-1 w-full md:w-72 print:w-72 p-6 print:p-4 transition-colors duration-300 print:bg-gray-100 ${
               theme === 'light'
                 ? 'bg-gray-50'
                 : 'bg-gray-800/50'
@@ -518,7 +518,7 @@ export default function CVPage() {
             </div>
 
             {/* Right Main Content */}
-            <div className="cv-main flex-1 p-6 md:p-8 print:p-4 print:bg-white">
+            <div className="cv-main order-1 md:order-2 flex-1 p-6 md:p-8 print:p-4 print:bg-white">
 
               {/* Header */}
               <header className="cv-header mb-6 border-b-2 border-cyan-500 pb-4">
