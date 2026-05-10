@@ -95,4 +95,70 @@
 .bn-root[data-color-scheme="dark"] {
   --bn-colors-editor-background: transparent !important;
   --bn-colors-editor-text: #e5e7eb !important;
+  --bn-colors-border: #3a3a3a !important;
+  --bn-colors-shadow: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Inline links: BlockNote no aplica color/underline a los <a>, quedan
+   invisibles sobre el fondo oscuro. Cyan + subrayado sutil + hover claro. */
+.bn-editor a,
+.bn-container a {
+  color: #67e8f9;
+  text-decoration: underline;
+  text-decoration-color: rgba(103, 232, 249, 0.4);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+
+.bn-editor a:hover,
+.bn-container a:hover {
+  color: #a5f3fc;
+  text-decoration-color: rgba(165, 243, 252, 0.8);
+}
+
+/* Inline <code>: BlockNote solo aplica monospace, queda indistinguible.
+   Pastilla discreta con fondo y padding. */
+.bn-root .bn-inline-content code {
+  background-color: #2e2e2e;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.875em;
+  color: #e5e7eb;
+}
+
+/* Botón "Add file": tiene background beige hardcoded (rgb(242,241,238)) que
+   solo se overrides bajo .dark, pero BlockNote/Mantine usan data-color-scheme. */
+.bn-root [data-file-block] .bn-add-file-button {
+  background-color: #2f2f2f;
+  color: #9b9b9b;
+}
+.bn-root [data-file-block] .bn-add-file-button:hover,
+.bn-root [data-file-block] .bn-file-name-with-icon:hover {
+  background-color: #3a3a3a;
+}
+
+/* Tablas: borde de celdas hardcoded #ddd (casi blanco) y drop cursor #adf. */
+.bn-root [data-content-type="table"] th,
+.bn-root [data-content-type="table"] td {
+  border-color: #3a3a3a;
+}
+.bn-root .bn-table-drop-cursor {
+  background-color: rgba(103, 232, 249, 0.5);
+}
+
+/* Blockquote, divider, page break: usan rgb(125,121,122) Notion-light cálido. */
+.bn-root [data-content-type="quote"] blockquote {
+  border-left-color: #4a4a4a !important;
+  color: #9b9b9b !important;
+}
+.bn-root [data-content-type="divider"] hr,
+.bn-root [data-content-type="pageBreak"] > div {
+  border-top-color: #4a4a4a !important;
+}
+
+/* Outline de bloque seleccionado (cortar/cut): default rgb(100,160,255) chillón. */
+.bn-root .bn-block-content.ProseMirror-selectednode > *,
+.bn-root .ProseMirror-selectednode > .bn-block-content > * {
+  outline-color: rgba(103, 232, 249, 0.6) !important;
 }
