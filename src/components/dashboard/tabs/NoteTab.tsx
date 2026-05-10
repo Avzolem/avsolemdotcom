@@ -431,7 +431,7 @@ function NoteEditView({ page, onClose }: { page: NotePageItem; onClose: () => vo
 
       {/* Negative margins cancel the DashboardShell's p-4 md:p-8 wrapper vertically,
           so the article's py-10 sm:py-16 matches the public /n/[slug] rhythm. */}
-      <article className="-my-4 md:-my-8 max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full">
+      <article className="-my-4 md:-my-8 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full">
         <input
           type="text"
           value={title}
@@ -440,10 +440,12 @@ function NoteEditView({ page, onClose }: { page: NotePageItem; onClose: () => vo
           className="w-full bg-transparent text-3xl sm:text-4xl font-light text-gray-100 mb-8 sm:mb-10 break-words focus:outline-none"
           placeholder="Título…"
         />
-        <NoteEditor
-          initialBlocks={blocks}
-          onChange={(b) => setBlocks(b as Block[])}
-        />
+        <div className="bg-gray-900 rounded-lg p-4 sm:p-6">
+          <NoteEditor
+            initialBlocks={blocks}
+            onChange={(b) => setBlocks(b as Block[])}
+          />
+        </div>
       </article>
     </div>
   );
