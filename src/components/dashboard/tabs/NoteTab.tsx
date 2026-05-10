@@ -429,20 +429,20 @@ function NoteEditView({ page, onClose }: { page: NotePageItem; onClose: () => vo
         </div>
       )}
 
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full bg-transparent text-3xl font-light text-gray-100 focus:outline-none border-b border-transparent focus:border-cyan-700 py-2"
-        placeholder="Título…"
-      />
-
-      <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+      <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full">
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          aria-label="Título de la nota"
+          className="w-full bg-transparent text-3xl sm:text-4xl font-light text-gray-100 mb-8 sm:mb-10 focus:outline-none"
+          placeholder="Título…"
+        />
         <NoteEditor
           initialBlocks={blocks}
           onChange={(b) => setBlocks(b as Block[])}
         />
-      </div>
+      </article>
     </div>
   );
 }
