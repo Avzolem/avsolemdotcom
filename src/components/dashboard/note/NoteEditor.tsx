@@ -88,14 +88,12 @@ export function NoteEditor({ initialBlocks, onChange }: NoteEditorProps) {
   }, [onChange]);
 
   return (
-    <div className="note-editor">
-      <BlockNoteView
-        editor={editor}
-        theme="dark"
-        onChange={() => {
-          onChangeRef.current(editor.document);
-        }}
-      />
-    </div>
+    <BlockNoteView
+      editor={editor}
+      theme="dark"
+      onChange={() => {
+        onChangeRef.current(editor.document);
+      }}
+    />
   );
 }

@@ -23,7 +23,7 @@ interface NotePageItem {
 
 function EditorSkeleton() {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg min-h-[400px] flex items-center justify-center">
+    <div className="min-h-[400px] flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-gray-700 border-t-cyan-400 rounded-full animate-spin" />
     </div>
   );
@@ -429,13 +429,15 @@ function NoteEditView({ page, onClose }: { page: NotePageItem; onClose: () => vo
         </div>
       )}
 
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full">
+      {/* Negative margins cancel the DashboardShell's p-4 md:p-8 wrapper vertically,
+          so the article's py-10 sm:py-16 matches the public /n/[slug] rhythm. */}
+      <article className="-my-4 md:-my-8 max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           aria-label="Título de la nota"
-          className="w-full bg-transparent text-3xl sm:text-4xl font-light text-gray-100 mb-8 sm:mb-10 focus:outline-none"
+          className="w-full bg-transparent text-3xl sm:text-4xl font-light text-gray-100 mb-8 sm:mb-10 break-words focus:outline-none"
           placeholder="Título…"
         />
         <NoteEditor
