@@ -38,16 +38,6 @@
   background-image: none !important;
 }
 
-/* Force dark text in light mode for all text elements */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4,
-[data-theme="light"] h5,
-[data-theme="light"] h6 {
-  color: #111827 !important;
-}
-
 /* Let Tailwind classes control text colors - removed inherit override */
 
 /* Ensure body text is dark in light mode */
