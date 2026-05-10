@@ -75,3 +75,24 @@
 .bn-color-icon[data-background-color="blue"]    { background-color: var(--bn-colors-highlights-blue-background); }
 .bn-color-icon[data-background-color="purple"]  { background-color: var(--bn-colors-highlights-purple-background); }
 .bn-color-icon[data-background-color="pink"]    { background-color: var(--bn-colors-highlights-pink-background); }
+
+/* ---------------------------------------------------------------------------
+ * Editor BlockNote: lienzo transparente.
+ * Anula el fondo propio que Mantine/BlockNote pinta en `.bn-container` /
+ * `.bn-editor`, para que el editor se funda con su contenedor padre. Aplica
+ * tanto a `NoteEditor` (dashboard) como a `NoteRenderer` (página pública).
+ *
+ * Fuente: @blocknote/react/src/editor/styles.css — `.bn-editor` recibe
+ * `background-color: var(--bn-colors-editor-background)` (#fff / #1f1f1f).
+ * --------------------------------------------------------------------------- */
+
+.bn-container,
+.bn-editor {
+  background: transparent !important;
+}
+
+.bn-root,
+.bn-root[data-color-scheme="dark"] {
+  --bn-colors-editor-background: transparent !important;
+  --bn-colors-editor-text: #e5e7eb !important;
+}
