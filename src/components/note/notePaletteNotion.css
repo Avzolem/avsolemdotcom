@@ -32,6 +32,42 @@
   height: auto !important;
 }
 
+/* Mobile: forzar imágenes y videos a ocupar todo el ancho disponible.
+   Sin esta regla, las imágenes con previewWidth chico (223, 294, etc.) aparecen
+   pequeñas con espacio vacío al lado en lugar de aprovechar el viewport. */
+@media (max-width: 639px) {
+  .bn-root img,
+  .bn-root video {
+    width: 100% !important;
+  }
+
+  /* Texto del cuerpo: ligeramente más grande y con mejor line-height para
+     lectura cómoda en mobile (notas largas con muchas imágenes intercaladas). */
+  .bn-root .bn-block-content[data-content-type="paragraph"],
+  .bn-root .bn-block-content[data-content-type="bulletListItem"],
+  .bn-root .bn-block-content[data-content-type="numberedListItem"],
+  .bn-root .bn-block-content[data-content-type="checkListItem"],
+  .bn-root .bn-block-content[data-content-type="quote"] {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* Headings: bajar tamaños default de BlockNote en mobile. Los h1/h2 son muy
+     grandes en notas con muchos headings cortos (estilo Notion). */
+  .bn-root .bn-block-content[data-content-type="heading"][data-level="1"] {
+    font-size: 1.625rem;
+    line-height: 1.25;
+  }
+  .bn-root .bn-block-content[data-content-type="heading"][data-level="2"] {
+    font-size: 1.375rem;
+    line-height: 1.3;
+  }
+  .bn-root .bn-block-content[data-content-type="heading"][data-level="3"] {
+    font-size: 1.125rem;
+    line-height: 1.35;
+  }
+}
+
 .bn-root,
 .bn-root[data-color-scheme="dark"] {
   --bn-colors-highlights-gray-text: #9b9b9b !important;
