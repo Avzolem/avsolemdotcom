@@ -3,7 +3,7 @@
 > Este archivo centraliza el estado de todos los proyectos dentro de avsolem.com.
 > Claude Code debe leer este archivo al inicio de cada sesión para entender el contexto.
 
-**Última actualización global**: 2026-05-01
+**Última actualización global**: 2026-05-10
 
 ---
 
@@ -412,6 +412,18 @@ src/types/gifenc.d.ts - shim de tipos para gifenc
 
 ## Development History
 
+### 2026-05-10
+- **Notas — rediseño del editor**: brainstorming + spec + plan en `docs/superpowers/{specs,plans}/2026-05-10-rediseno-editor-notas-dashboard-*.md`
+- **Notas — modo edición sin jaula** (`80b1bb7`, `c54670f`): wrapper `<div bg-gray-900 border>` alrededor del `<NoteEditor>` reemplazado por un `<article max-w-3xl mx-auto>` con padding idéntico al de `/n/[slug]`. Input de título alineado con el `<h1>` público (`text-3xl sm:text-4xl font-light mb-8 sm:mb-10`). El editor del dashboard ahora se siente como una hoja, no como un card oscuro
+- **Notas — BlockNote lienzo transparente** (`80b1bb7`): override en `notePaletteNotion.css` que neutraliza el fondo gris de `.bn-container/.bn-editor` y `--bn-colors-editor-background`. Cura la "caja gris" en `/n/[slug]` y el dashboard
+- **Notas — polish post-review** (`575e80a`): `EditorSkeleton` sin card (evita flash de jaula durante hydration), `<article>` con `-my-4 md:-my-8` para neutralizar el `p-4 md:p-8` del `DashboardShell`, `aria-label` en el input del título, removido el wrapper `<div className="note-editor">` dead en `NoteEditor.tsx`
+- **Notas — simplifica /n/* layout** (`1a75245`): quitados `<script>` inline + `<ForceDarkTheme />` del `/n/layout.tsx`. Todo el contenido de `/n/*` ya usaba clases hardcoded oscuras (`bg-gray-950`, `text-gray-100`) y BlockNote recibe `theme="dark"` directo — el forcing era redundante y disparaba warning de React 19. **Nota importante**: `ForceDarkTheme.tsx` sigue existiendo y se usa en /pokemon, /diablo, /tcg, /cloud, /magic, /yugioh
+- **Theme — fix global de h1...h6** (`8e973b2`): eliminada la regla `[data-theme="light"] h1...h6 { color: !important }` en `theme-overrides.css`. Era too-aggressive — sobrescribía clases Tailwind explícitas y dejaba títulos invisibles en `/n/<slug>` cuando el sitio estaba en light. Cada heading debe controlar su color con su clase
+- **Notas — wrapper gris + ancho amplio en dashboard** (`edf88fa`): wrap del editor en `<div bg-gray-900 rounded-lg p-4 sm:p-6>` (sin border) para visualizar el límite de escritura sin volver a la jaula. `max-w-3xl` → `max-w-6xl` en el `<article>` del dashboard (la página pública se queda en `max-w-3xl`)
+- **Notas — auditoría dark theme BlockNote** (`5632226`): 7 fixes en `notePaletteNotion.css`. Inline `<code>` con pastilla gris; botón "Add file" en gris oscuro (antes beige hardcoded); borders de tabla `#ddd` → `#3a3a3a`; drop cursor de tabla `#adf` → cyan suave; blockquote/divider/pageBreak en grises de la paleta; outline de bloque seleccionado en cyan suave; variables `--bn-colors-border/shadow` actualizadas. Plus: inline `<a>` con cyan-300 + subrayado sutil (BlockNote no estiliza links por default)
+- **Notas — responsive mobile** (sin commit en momento del status): en `@media (max-width: 639px)` imágenes/videos pasan a `width: 100%` (antes con `previewWidth` chico aparecían pequeños con espacio vacío); párrafos/listas/quotes suben a 17px con line-height 1.6; headings escalados (h1 26px / h2 22px / h3 18px). Aplica a dashboard y `/n/[slug]`
+- **Brainstorm artifacts**: spec y plan en `docs/superpowers/` (no commiteados — quedan como artefactos locales de la sesión)
+
 ### 2026-05-01
 - **ASCII Studio**: Nuevo proyecto `/ascii` — editor de imagen→ASCII en navegador, inspirado en asc11.com
 - **ASCII Studio**: Pipeline completo con sample/dither/grid/render + 4 charsets, 4 modos de dithering
@@ -602,4 +614,4 @@ npx playwright screenshot --viewport-size="1280,800" "http://localhost:3000/<rou
 
 ---
 
-*Última actualización: 2026-05-01 por Claude Code*
+*Última actualización: 2026-05-10 por Claude Code*
