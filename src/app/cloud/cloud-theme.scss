@@ -685,8 +685,9 @@ $cloud-warning: #F59E0B;
 // File grid
 .cloud-files {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
   gap: 1rem;
+  min-width: 0;
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -997,7 +998,7 @@ $cloud-warning: #F59E0B;
   }
 
   .cloud-files {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
   }
 

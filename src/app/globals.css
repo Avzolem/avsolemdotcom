@@ -18,17 +18,17 @@
   }
 
   html {
-    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", emoji;
   }
 
   code, kbd, samp, pre {
-    font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", emoji;
   }
 }
 
 @theme inline {
-  --default-font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --default-mono-font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --default-font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", emoji;
+  --default-mono-font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", emoji;
 }
 
 @layer components {
