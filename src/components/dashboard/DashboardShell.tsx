@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -63,16 +63,39 @@ export function DashboardShell() {
   const { logout } = useDashboardAuth();
   const [active, setActive] = useState<TabKey>('overview');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [desktopNavOpen, setDesktopNavOpen] = useState(true);
 
   const current = TABS.find((t) => t.key === active);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('dashboard-nav-open');
+    if (saved !== null) setDesktopNavOpen(saved === 'true');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('dashboard-nav-open', String(desktopNavOpen));
+  }, [desktopNavOpen]);
 
   function selectTab(key: TabKey) {
     setActive(key);
     setMobileNavOpen(false);
   }
 
+  function toggleNav() {
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+      setDesktopNavOpen((v) => !v);
+    } else {
+      setMobileNavOpen((v) => !v);
+    }
+  }
+
+  function closeSidebar() {
+    setMobileNavOpen(false);
+    setDesktopNavOpen(false);
+  }
+
   return (
-    <div className="dashboard-layout min-h-screen bg-gray-950 text-gray-100 flex">
+    <div className="dashboard-layout min-h-screen bg-gray-950 text-gray-100">
       {/* Backdrop (mobile only when drawer open) */}
       {mobileNavOpen && (
         <div
@@ -85,11 +108,11 @@ export function DashboardShell() {
       {/* Sidebar — drawer on mobile, fixed on md+ */}
       <aside
         className={`
-          fixed md:static top-0 left-0 z-50 h-full w-60 shrink-0
+          fixed top-0 left-0 z-50 h-full w-60 shrink-0
           border-r border-gray-800 bg-gray-900/95 md:bg-gray-900/60
           flex flex-col transform transition-transform duration-200 ease-out
           ${mobileNavOpen ? 'translate-x-0' : '-translate-x-full'}
-          md:translate-x-0
+          ${desktopNavOpen ? 'md:translate-x-0' : 'md:-translate-x-full'}
         `}
       >
         <div className="px-5 pt-6 pb-4 border-b border-gray-800 flex items-center justify-between">
@@ -107,8 +130,8 @@ export function DashboardShell() {
             </div>
           </div>
           <button
-            onClick={() => setMobileNavOpen(false)}
-            className="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-gray-100"
+            onClick={closeSidebar}
+            className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-gray-100"
             aria-label="Cerrar menú"
           >
             <X className="w-5 h-5" />
@@ -162,11 +185,17 @@ export function DashboardShell() {
       </aside>
 
       {/* Main content */}
-      <main className="dashboard-main flex-1 min-w-0 overflow-x-hidden bg-gray-950">
+      <main
+        className={`dashboard-main min-w-0 overflow-x-hidden bg-gray-950 transition-[margin] duration-200 ease-out ${
+          desktopNavOpen ? 'md:ml-60' : 'md:ml-0'
+        }`}
+      >
         <header className="px-4 md:px-8 py-4 md:py-5 border-b border-gray-800 bg-gray-900/40 flex items-center gap-3">
           <button
-            onClick={() => setMobileNavOpen(true)}
-            className="md:hidden p-1.5 -ml-1 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-gray-100"
+            onClick={toggleNav}
+            className={`p-1.5 -ml-1 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-gray-100 ${
+              desktopNavOpen ? 'md:hidden' : ''
+            }`}
             aria-label="Abrir menú"
           >
             <Menu className="w-5 h-5" />
