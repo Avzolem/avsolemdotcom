@@ -254,6 +254,20 @@ export async function deleteUser(userId: string): Promise<boolean> {
 }
 
 /**
+ * Get user count grouped by provider (used by dashboard overview)
+ */
+export async function getTcgUserStats(): Promise<{ total: number; byProvider: Record<string, number> }> {
+  const collection = await getUsersCollection();
+  const total = await collection.countDocuments();
+  const grouped = await collection
+    .aggregate<{ _id: string; count: number }>([{ $group: { _id: '$provider', count: { $sum: 1 } } }])
+    .toArray();
+  const byProvider: Record<string, number> = {};
+  for (const g of grouped) byProvider[g._id] = g.count;
+  return { total, byProvider };
+}
+
+/**
  * Get all users subscribed to newsletter
  */
 export async function getNewsletterSubscribers(): Promise<YugiohUser[]> {

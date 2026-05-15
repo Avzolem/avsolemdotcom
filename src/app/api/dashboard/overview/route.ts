@@ -5,6 +5,7 @@ import { listCampaigns } from '@/lib/mongodb/models/Campaign';
 import { listNotePages } from '@/lib/mongodb/models/NotePage';
 import { getSubscriberCount } from '@/lib/mongodb/models/Newsletter';
 import { listAllToolboxItems } from '@/lib/mongodb/models/ToolboxItem';
+import { getTcgUserStats } from '@/lib/mongodb/models/User';
 import { getR2BucketUsage, isR2Configured } from '@/lib/r2';
 import { getPosts } from '@/utils/utils';
 
@@ -18,13 +19,14 @@ export async function GET(request: NextRequest) {
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
-  const [contacts, campaigns, notes, subscribers, toolbox, r2Usage] = await Promise.all([
+  const [contacts, campaigns, notes, subscribers, toolbox, r2Usage, tcgUsers] = await Promise.all([
     listContacts().catch(() => []),
     listCampaigns().catch(() => []),
     listNotePages().catch(() => []),
     getSubscriberCount().catch(() => 0),
     listAllToolboxItems().catch(() => []),
     isR2Configured() ? getR2BucketUsage().catch(() => null) : Promise.resolve(null),
+    getTcgUserStats().catch(() => ({ total: 0, byProvider: {} as Record<string, number> })),
   ]);
 
   const posts = getPosts(['src', 'app', 'blog', 'posts']);
@@ -63,6 +65,7 @@ export async function GET(request: NextRequest) {
     posts: { total: posts.length },
     projects: { total: projects.length },
     toolbox: { total: toolbox.length, enabled: toolboxEnabled },
+    tcgUsers,
     r2: r2Usage
       ? { bytes: r2Usage.bytes, objects: r2Usage.objects, freeBytes: 10 * 1e9 }
       : null,

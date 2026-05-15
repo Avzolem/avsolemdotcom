@@ -11,6 +11,7 @@ import {
   Inbox,
   AtSign,
   HardDrive,
+  Gamepad2,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -22,6 +23,7 @@ interface Overview {
   posts: { total: number };
   projects: { total: number };
   toolbox: { total: number; enabled: number };
+  tcgUsers: { total: number; byProvider: Record<string, number> };
   r2: { bytes: number; objects: number; freeBytes: number } | null;
   recentContacts: Array<{ name: string; email: string; createdAt: string }>;
 }
@@ -130,6 +132,17 @@ export function OverviewTab() {
           ? 'sin items'
           : `${data.toolbox.enabled} visibles`,
     },
+    {
+      label: 'TCG Users',
+      value: data.tcgUsers.total,
+      icon: Gamepad2,
+      hint:
+        data.tcgUsers.total === 0
+          ? 'sin registros'
+          : Object.entries(data.tcgUsers.byProvider)
+              .map(([p, n]) => `${n} ${p}`)
+              .join(' · '),
+    },
   ];
 
   if (data.r2) {
@@ -150,7 +163,7 @@ export function OverviewTab() {
   }
 
   return (
-    <div className="max-w-5xl space-y-8">
+    <div className="max-w-5xl mx-auto space-y-8">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {tiles.map((t) => {
           const Icon = t.icon;
