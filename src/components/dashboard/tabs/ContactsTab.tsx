@@ -223,7 +223,7 @@ export function ContactsTab() {
                         c.name
                       )}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 max-w-[220px]">
                       {isEditing && editDraft ? (
                         <input
                           type="email"
@@ -236,10 +236,11 @@ export function ContactsTab() {
                       ) : (
                         <a
                           href={`mailto:${c.email}`}
-                          className="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300"
+                          className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 min-w-0"
+                          title={c.email}
                         >
-                          <Mail className="w-3.5 h-3.5" />
-                          {c.email}
+                          <Mail className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">{c.email}</span>
                         </a>
                       )}
                     </td>

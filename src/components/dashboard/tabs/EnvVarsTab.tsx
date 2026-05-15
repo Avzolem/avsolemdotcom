@@ -163,8 +163,8 @@ export function EnvVarsTab() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-4">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+        <div className="relative flex-1 sm:max-w-md">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
@@ -174,18 +174,20 @@ export function EnvVarsTab() {
             className="w-full pl-9 pr-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           />
         </div>
-        <div className="text-xs text-gray-500">
-          {filtered.length} de {items.length}
+        <div className="flex items-center gap-3">
+          <div className="text-xs text-gray-500">
+            {filtered.length} de {items.length}
+          </div>
+          <button
+            onClick={() => {
+              setCreating(true);
+              setEditing(null);
+            }}
+            className="ml-auto inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium"
+          >
+            <Plus className="w-4 h-4" /> Nueva variable
+          </button>
         </div>
-        <button
-          onClick={() => {
-            setCreating(true);
-            setEditing(null);
-          }}
-          className="ml-auto inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium"
-        >
-          <Plus className="w-4 h-4" /> Nueva variable
-        </button>
       </div>
 
       {grouped.length === 0 ? (

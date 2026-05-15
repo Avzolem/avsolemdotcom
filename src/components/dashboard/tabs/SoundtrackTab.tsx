@@ -155,14 +155,26 @@ export function SoundtrackTab() {
               key={s._id}
               className="rounded-xl border border-gray-800 bg-gray-900/40 p-4 flex items-center gap-4"
             >
-              <div className="w-32 aspect-video bg-black rounded overflow-hidden shrink-0">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${s.youtubeId}`}
-                  title={s.title}
-                  className="w-full h-full"
-                  allow="encrypted-media"
+              <a
+                href={`https://www.youtube.com/watch?v=${s.youtubeId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative w-24 sm:w-32 aspect-video bg-black rounded overflow-hidden shrink-0 group"
+                title={s.title}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`https://i.ytimg.com/vi/${s.youtubeId}/mqdefault.jpg`}
+                  alt={s.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
                 />
-              </div>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-black/70 flex items-center justify-center">
+                    <span className="text-white text-xs ml-0.5">▶</span>
+                  </div>
+                </div>
+              </a>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <Music className="w-3.5 h-3.5 text-violet-400" />
